@@ -14,11 +14,11 @@
   --font-xx: 32px;
   --font-xxl: 156px;
 
+  --font-main: "sans-serif";
 }
 
 
 *{
   box-sizing: border-box;
-
 }
 
