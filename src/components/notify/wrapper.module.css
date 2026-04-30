@@ -1,0 +1,13 @@
+/* Контейнер для списка уведомлений */
+.notifyWrapper {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999; /* Поверх всего */
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: none; /* Чтобы контейнер не мешал кликать по элементам под ним */
+}
+
+
