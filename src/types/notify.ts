@@ -13,7 +13,6 @@ export interface Notify {
 
 
 export interface NotifyContextType{
-  notifications: Notify[],
   setNotifications: Dispatch<SetStateAction<Notify[]>>
   addNotify: (msg:string,type:NotifyType,duration: number) => void
 };

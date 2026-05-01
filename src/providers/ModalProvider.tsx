@@ -14,7 +14,10 @@ export function ModalProvider({children} : {children:ReactNode}) {
      
       {modal && createPortal(
         <div className={styles.container}>
-          {modal.child} 
+          <div className={styles.content}>
+            {modal.child} 
+          </div>
+        
         </div>
         ,document.getElementById("modal-root")!
         ) 

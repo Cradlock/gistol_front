@@ -23,7 +23,7 @@ export const NotifyProvider = ({ children } : { children: ReactNode }) => {
   
 
   return (
-    <NotifyContext.Provider value={{notifications,setNotifications,addNotify}}>
+    <NotifyContext.Provider value={{setNotifications,addNotify}}>
       {notifications && createPortal(
         <div className={styles.notifyWrapper}> 
           {notifications.map((n) => 
