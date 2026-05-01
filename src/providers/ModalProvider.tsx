@@ -1,17 +1,26 @@
 import { useState, type ReactNode } from "react";
 import { ModalContext } from "./ModalContext";
 import type { Modal } from "../types/modals";
-
+import styles from "../components/modals/wrapper.module.css";
+import { createPortal } from "react-dom";
 
 export function ModalProvider({children} : {children:ReactNode}) {
   const [modal,setModal] = useState<Modal|null>(null);
+  
+  const closeModal = () => setModal(null); 
 
   return (
-    <ModalContext.Provider value={{setModal}}>
-      <div className="container">
-        {modal?.child}    
-      </div>
+    <ModalContext.Provider value={{setModal,closeModal}}>
+     
+      {modal && createPortal(
+        <div className={styles.container}>
+          {modal.child} 
+        </div>
+        ,document.getElementById("modal-root")!
+        ) 
+      }
       {children}
+    
     </ModalContext.Provider>
   )
 }

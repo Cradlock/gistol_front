@@ -4,6 +4,7 @@ import type { Notify, NotifyType } from "../types/notify";
 
 import styles from "../components/notify/wrapper.module.css";
 import NotifyCard from "../components/notify/notifyCard";
+import { createPortal } from "react-dom";
 
 
 export const NotifyProvider = ({ children } : { children: ReactNode }) => {
@@ -23,11 +24,15 @@ export const NotifyProvider = ({ children } : { children: ReactNode }) => {
 
   return (
     <NotifyContext.Provider value={{notifications,setNotifications,addNotify}}>
-      <div className={styles.notifyWrapper}> 
-        {notifications.map((n) => 
-          <NotifyCard key={n.id} type={n.type} msg={n.msg} />
-        )}
-      </div>
+      {notifications && createPortal(
+        <div className={styles.notifyWrapper}> 
+          {notifications.map((n) => 
+            <NotifyCard key={n.id} type={n.type} msg={n.msg} />
+          )}
+        </div>,document.getElementById("notify-root")! 
+      )}
+     
+
       {children}
 
     </NotifyContext.Provider>

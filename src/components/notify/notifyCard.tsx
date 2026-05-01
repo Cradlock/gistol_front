@@ -1,5 +1,5 @@
 import type { NotifyType } from "../../types/notify";
-import styles from "style.module.css";
+import styles from "./style.module.css";
 
 
 
