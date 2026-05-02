@@ -20,9 +20,6 @@ export function Header() {
       </div>
       
       <nav className={styles.nav}>
-        <a href="#courses">Курсы</a>
-        <a href="#groups">Группы</a>
-        <a href="#about">О нас</a>
       </nav>
 
       <div className={styles.actions}>
