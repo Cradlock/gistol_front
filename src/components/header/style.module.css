@@ -24,23 +24,6 @@
   color: var(--color-primary);
 }
 
-.nav {
-  display: flex;
-  gap: 30px;
-}
-
-.nav a {
-  text-decoration: none;
-  color: var(--color-side-text);
-  font-size: var(--font-x);
-  font-weight: 500;
-  transition: color 0.2s;
-}
-
-.nav a:hover {
-  color: var(--color-primary);
-}
-
 .actions {
   display: flex;
   align-items: center;

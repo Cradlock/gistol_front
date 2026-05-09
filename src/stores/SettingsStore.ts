@@ -14,8 +14,6 @@ const useSettings = create((set) => ({
   }
 }))
 
-export default useSettings
-
-
+export default useSettings;
 
 

@@ -1,4 +1,5 @@
 
+import { NavLink } from "react-router-dom";
 import { useModal } from "../../hooks/useModal";
 import { Button } from "../btn/main";
 import { LoginModal } from "../loginForm/main";
@@ -19,14 +20,18 @@ export function Header() {
         GISTOL <span>ACADEMY</span>
       </div>
       
-      <nav className={styles.nav}>
-      </nav>
+       
 
       <div className={styles.actions}>
+        
         <Button variant="primary" onClick={handleOpenLogin}>
           Войти
         </Button>
+      
       </div>
+
     </header>
   );
 }
+
+

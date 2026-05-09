@@ -1,7 +1,6 @@
 import type { User } from "../types/auth"
 
 
-
 export const getUser = async () :Promise<User> => {
   return {
     id:12312,
@@ -16,15 +15,15 @@ export const getUser = async () :Promise<User> => {
 
 
 export const loginApi = async (
-  {name,password} : {
-    name:string,password:string 
+  {email,password} : {
+    email:string,password:string 
   }
 ) : Promise<User> => {
   
   return {
     gmail: "hello@gmail.com",
     id: 12312,
-    name: name,
+    name: "Aidar",
     surname:"Negrovich",
     group: 23,
     year: 323
@@ -36,8 +35,8 @@ export const loginApi = async (
 
 
 export const signupApi = async (
-  data : Omit<User,id> 
-) : Promise<User> => {
+  data : Omit<User,'id'> 
+): Promise<User> => {
    return {
     gmail: "hello@gmail.com",
     id: 12312,
@@ -49,5 +48,14 @@ export const signupApi = async (
 
  
 }
+
+
+
+export const logoutApi = async () : Promise<void> => {
+  return;
+}
+
+
+
 
 

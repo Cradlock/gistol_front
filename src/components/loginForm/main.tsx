@@ -1,6 +1,3 @@
-
-
-
 import styles from "./style.module.css";
 
 export function LoginModal({ close }: { close: () => void }) {
@@ -9,8 +6,8 @@ export function LoginModal({ close }: { close: () => void }) {
       <h2 className={styles.title}>Вход в систему</h2>
       
       <div className={styles.field}>
-        <label>ID пользователя</label>
-        <input type="text" placeholder="Введите ID" className={styles.input} />
+        <label>gmail пользователя</label>
+        <input type="text" placeholder="Введите gmail" className={styles.input} />
       </div>
 
       <div className={styles.field}>
