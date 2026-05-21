@@ -1,20 +1,24 @@
 import type { ReactNode } from "react";
-import styles from "./style.module.css";
-
+import styles from "./style.module.css"; // или откуда берутся стили
 
 interface props {
+  type?: "button" | "submit";
   children: ReactNode;
   onClick?: () => void;
-  // Добавляем варианты
   variant?: 'primary' | 'secondary' | 'danger' | 'ghost';
+  disabled?: boolean; // Добавляем проп disabled
 }
 
-export function Button({ children, onClick, variant = 'primary' }: props) {
-  // Динамически выбираем класс из стилей
+export function Button({ children, type = "button",onClick, variant = 'primary', disabled = false }: props) {
   const btnClass = `${styles.btn} ${styles[variant]}`;
 
   return (
-    <button className={btnClass} onClick={onClick}>
+    <button 
+      type={type}
+      className={btnClass} 
+      onClick={onClick}
+      disabled={disabled} // Передаем его в HTML-элемент
+    >
       {children}
     </button>
   );

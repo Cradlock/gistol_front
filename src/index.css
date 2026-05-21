@@ -2,14 +2,17 @@
   --color-primary: #2a62bd;
   
   --color-background: #cacfdb;
-  
+
   --color-main-text: #030302;
   --color-side-text: #3b3a3a;
+  
 
   --color-success: #0ec714;
   --color-warning: #effa25;
   --color-error: #fa2d25;
   
+  --color-side: #8d8e8f;
+
   --font-x: 16px;
   --font-xx: 32px;
   --font-xxl: 156px;

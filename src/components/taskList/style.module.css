@@ -1,0 +1,28 @@
+/* style.module.css */
+
+.container {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: var(--font-xx);
+  font-family: var(--font-main, sans-serif);
+}
+
+.title {
+  font-size: var(--font-xx);
+  color: var(--color-primary);
+  margin-bottom: var(--font-x);
+}
+
+.list {
+  display: flex;
+  flex-direction: column; /* Выстраивает карточки строго вертикально */
+  gap: var(--font-x);     /* Отступ между карточками из ваших стилей (16px) */
+  width: 100%;
+  max-width: 600px;       /* Ограничим ширину списка для лучшей читаемости */
+}
+
+.emptyText {
+  color: var(--color-side-text);
+  font-size: var(--font-x);
+  font-style: italic;
+}

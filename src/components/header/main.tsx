@@ -20,7 +20,9 @@ export function Header() {
   return (
     <header className={styles.header}>
       <div className={styles.logo}>
-        <span>Gistologia</span>
+        <NavLink to={"/"}>
+          <span>Gistologia</span>
+        </NavLink>
       </div>
       
        
@@ -31,9 +33,14 @@ export function Header() {
           fallback={
               <Button variant="primary" onClick={handleOpenLogin}>Войти</Button>
           }
-        >
-          
-          <Button variant="danger" onClick={logout}>Выйти</Button>
+        > 
+          <NavLink to={"/me"}>
+            <Button variant="primary">Профиль</Button>
+          </NavLink>
+
+          <NavLink to={"/"}>
+            <Button variant="danger" onClick={logout}>Выйти</Button>
+          </NavLink>
         </AuthGuard> 
       
       </div>

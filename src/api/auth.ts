@@ -23,8 +23,8 @@ export const loginApi = async (
     id: 12312,
     name: "Азик",
     surname:"Мазмуджанов",
-    group: 23,
-    year: 323
+    group: 2,
+    year: 1
  
   }
 

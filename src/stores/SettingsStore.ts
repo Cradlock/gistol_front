@@ -1,11 +1,17 @@
 import { create } from "zustand"
 import { getGroups, getYears } from "../api/settings"
+import type { Group, Year } from "../types/settings"
 
 
 
+interface ScState{
+  groups: Group[],
+  years: Year[],
+  init: () => Promise<void>
+}
 
 
-const useSettings = create((set) => ({
+const useSettings = create<ScState>((set) => ({
   groups: [],
   years: [],
   init: async () => {

@@ -1,0 +1,71 @@
+/* styles.module.css */
+
+.card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  font-family: var(--font-main, sans-serif);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 400px;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--color-main-text);
+  margin: 0;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+}
+
+/* Динамические классы для статуса времени */
+.statusGreen {
+  color: var(--color-success);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.statusYellow {
+  color: var(--color-warning);
+  font-weight: 600;
+  font-size: 14px;
+  /* Желтый цвет из конфига очень яркий, можно добавить легкую тень для читаемости */
+  text-shadow: 0px 1px 1px rgba(0, 0, 0, 0.2); 
+}
+
+.statusRed {
+  color: var(--color-error);
+  font-weight: 600;
+  font-size: 14px;
+  animation: pulse 2s infinite; /* Опционально: пусть мигает, если дедлайн горит */
+}
+
+.button {
+  background-color: var(--color-primary);
+  color: #ffffff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.button:hover {
+  opacity: 0.9;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.6; }
+  100% { opacity: 1; }
+}
