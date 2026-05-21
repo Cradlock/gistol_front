@@ -1,3 +1,4 @@
+import { AuthGuard } from "../../components/guarders/auth";
 import { TaskList } from "../../components/taskList/main";
 
 export default function MainPage() {
@@ -5,9 +6,10 @@ export default function MainPage() {
 
   return (
       <main>
-        
-        <TaskList />
-
+      
+        <AuthGuard>
+          <TaskList />
+        </AuthGuard>
       </main> 
   )
 }
