@@ -74,3 +74,30 @@
 .cancelBtn:hover {
   color: var(--color-error);
 }
+
+
+
+
+
+/* Красный текст ошибки под инпутом */
+.errorText {
+  color: var(--color-error);
+  font-size: 13px;
+  margin-top: 4px;
+  display: block;
+  font-family: var(--font-main);
+}
+
+/* Опционально: можно подсветить сам инпут красной рамкой, если в нем ошибка */
+.inputError {
+  border-color: var(--color-error) !important;
+}
+
+
+
+
+
+
+
+
+

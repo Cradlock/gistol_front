@@ -1,0 +1,83 @@
+
+.container {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: var(--font-xx);
+  font-family: var(--font-main);
+  background-color: var(--color-background);
+  color: var(--color-main-text);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: var(--font-xx);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  max-width: 450px;
+}
+
+.header {
+  border-bottom: 2px solid var(--color-background);
+  padding-bottom: var(--font-x);
+  margin-bottom: var(--font-xx);
+  text-align: center;
+}
+
+.avatarCircle {
+  width: 80px;
+  height: 80px;
+  background-color: var(--color-primary);
+  color: #ffffff;
+  font-size: var(--font-xx);
+  font-weight: bold;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto var(--font-x) auto;
+}
+
+.title {
+  font-size: var(--font-xx);
+  margin: 0;
+  color: var(--color-primary);
+}
+
+.infoGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--font-x);
+}
+
+.infoRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.label {
+  color: var(--color-side-text);
+  font-size: var(--font-x);
+  font-weight: 500;
+}
+
+.value {
+  color: var(--color-main-text);
+  font-size: var(--font-x);
+  font-weight: 600;
+}
+
+/* На случай, если пользователя нет в системе */
+.unauthorized {
+  text-align: center;
+  color: var(--color-error);
+  font-size: var(--font-x);
+  font-weight: bold;
+}

@@ -1,4 +1,5 @@
 import type React from "react";
+import Spinner from "../spinner/main";
 
 
 interface GuardLoaderProps {
@@ -9,10 +10,11 @@ interface GuardLoaderProps {
 
 
 export default function GuardLoader (props:GuardLoaderProps){
-  
-  return (
-     
-  )
+  if(props.isLoading ) {
+    return props.fallback || <Spinner />
+  } 
+
+  return props.children;
 }
 
 

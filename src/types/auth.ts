@@ -2,12 +2,19 @@
 
 export interface User{
   id: number,
-  gmail: string,
+  email: string,
   name: string,
   surname: string,
   group: number,
   year: number
 };
+
+export interface LoginPayload {
+  email: string;
+  password: string;
+}
+
+export type SignupPayload = Omit<User, "id">;
 
 
 

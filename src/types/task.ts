@@ -4,7 +4,7 @@
 export interface Task{
   id: string,
   title: string,
-  is_answered: boolean,
+  year: number,
   start_at: Date,
   end_at: Date
 };

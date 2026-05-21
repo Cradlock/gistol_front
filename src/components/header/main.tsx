@@ -4,9 +4,12 @@ import { useModal } from "../../hooks/useModal";
 import { Button } from "../btn/main";
 import { LoginModal } from "../loginForm/main";
 import styles from "./style.module.css";
+import { AuthGuard } from "../guarders/auth";
+import useAuth from "../../stores/AuthStore";
 
 export function Header() {
   const { setModal, closeModal } = useModal();
+  const logout = useAuth((state) => state.logout);
 
   const handleOpenLogin = () => {
     setModal({ 
@@ -17,16 +20,21 @@ export function Header() {
   return (
     <header className={styles.header}>
       <div className={styles.logo}>
-        GISTOL <span>ACADEMY</span>
+        <span>Gistologia</span>
       </div>
       
        
 
       <div className={styles.actions}>
-        
-        <Button variant="primary" onClick={handleOpenLogin}>
-          Войти
-        </Button>
+      
+        <AuthGuard 
+          fallback={
+              <Button variant="primary" onClick={handleOpenLogin}>Войти</Button>
+          }
+        >
+          
+          <Button variant="danger" onClick={logout}>Выйти</Button>
+        </AuthGuard> 
       
       </div>
 

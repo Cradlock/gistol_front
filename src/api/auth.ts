@@ -1,4 +1,4 @@
-import type { User } from "../types/auth"
+import type { LoginPayload, SignupPayload, User } from "../types/auth"
 
 
 export const getUser = async () :Promise<User> => {
@@ -15,16 +15,14 @@ export const getUser = async () :Promise<User> => {
 
 
 export const loginApi = async (
-  {email,password} : {
-    email:string,password:string 
-  }
+  {email,password} : LoginPayload
 ) : Promise<User> => {
   
   return {
-    gmail: "hello@gmail.com",
+    email: email,
     id: 12312,
-    name: "Aidar",
-    surname:"Negrovich",
+    name: "Азик",
+    surname:"Мазмуджанов",
     group: 23,
     year: 323
  
@@ -35,7 +33,7 @@ export const loginApi = async (
 
 
 export const signupApi = async (
-  data : Omit<User,'id'> 
+  data : SignupPayload 
 ): Promise<User> => {
    return {
     gmail: "hello@gmail.com",
