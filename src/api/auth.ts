@@ -5,8 +5,8 @@ export const getUser = async () :Promise<User> => {
   return {
     id:12312,
     email: "hello@gmail.com",
-    name:"Aidar",
-    surname:"Negrovich",
+    name:"Азик",
+    surname:"Мазмуджанов",
     group: 23,
     year: 323
   }
@@ -39,8 +39,8 @@ export const signupApi = async (
    return {
     email: "hello@gmail.com",
     id: 12312,
-    name: "Aidar",
-    surname:"Negrovich",
+    name: "Азик",
+    surname:"Махмуджанов",
     group: 23,
     year: 323
   }
