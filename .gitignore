@@ -1,24 +1,36 @@
-# Logs
-logs
+
+# Служебные файлы Flutter и Dart (кэш, скомпилированные файлы)
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+build/
+
+# Веб-специфичные файлы (если собираете под Web)
+.ext/
+doc/api/
+generated_page.html
+
+# Файлы настроек редакторов (VS Code, Android Studio, Xcode)
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.history/
+
+# Логи и временные файлы
 *.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
+*.crash
+.crashlytics/
 
-node_modules
-dist
-dist-ssr
-*.local
-
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
+# Специфичные файлы операционных систем
 .DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+Thumbs.db
+
+# Конфиденциальные данные и файлы окружения (секретные ключи, токены)
+.env
+.env.*
+
