@@ -3,26 +3,35 @@
 
 
 
+import 'package:app_front/core/api.dart';
+import 'package:app_front/features/auth/auth.dart';
+import 'package:app_front/features/settings/provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:front/screens/home.dart';
-import 'package:front/theme/app_theme.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
-  runApp(const MainApp());
-}
+import 'package:app_front/entry/entry.dart';
 
-class MainApp extends StatelessWidget{
-  const MainApp({super.key});
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  
 
-  @override
-    Widget build(BuildContext context) {
-      return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: const HomeScreen(),
-        theme: AppTheme.darkTheme  
-      );
-    }
-}
+  await EasyLocalization.ensureInitialized();
+  await dotenv.load(fileName: ".env");  
 
+  final apiClient = ApiClient();
+  apiClient.addInterceptor(AuthInterceptor()); 
+
+  final settingsProvider = SettingsProvider();
+  final authProvider = AuthProvider();
+  
+  await settingsProvider.initSettings();
+
+  runApp( 
+    MainApp(
+      settingsProvider: settingsProvider, authProvider: authProvider
+    )
+  );
+} 
 
 

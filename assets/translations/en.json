@@ -1,0 +1,47 @@
+{
+  "navigation": {
+    "menu_title": "Menu",
+    "home_btn": "Home",
+    "tasks_btn": "Tasks",
+    "settings_btn": "Settings",
+    "account_btn": "Account"
+  },
+  
+  "auth": {
+    "login_btn": "Login",
+    "signup_btn": "Sign Up",
+    "login_telegram": "Login with telegram",
+    "sign": "Sign...",
+    "retry": "Retry"
+  },
+  
+  "documents": {
+    "terms_title": "Terms of Service",
+    "privacy_title": "Privacy Policy"
+  },
+  
+  "settings": {
+    "settings_darkmode": "Dark mode",
+    "settings_langmode": "Language"
+  },
+  
+  "errors": {
+    "system": {
+      "no_auth": "User not authorized (not tokens)",
+      "session_expired": "Auth session expired. Need login",
+      "server_trouble": "Server error"
+    },
+    "network": {
+      "no_connection": "Not internet connections",
+      "no_connection_label": "Oops! no internet"
+    },
+    "telegram": {
+      "sign_failed": "Failed to log in via Telegram",
+      "wrong_args":"Invalid arguments", 
+      "canceled": "User cancel action"
+    },
+    "platform": {
+      "unsupported":"Unsupported platform"
+    }
+  }
+}

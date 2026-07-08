@@ -1,0 +1,47 @@
+{
+  "navigation": {
+    "menu_title": "Меню",
+    "home_btn": "Главная",
+    "tasks_btn": "Задачи",
+    "settings_btn": "Настройки",
+    "account_btn": "Аккаунт"
+  },
+  
+  "auth": {
+    "login_btn": "Войти",
+    "signup_btn": "Регистрация",
+    "login_telegram": "Войти через Telegram",
+    "sign": "Вход...",
+    "retry": "Повторить"
+  },
+  
+  "documents": {
+    "terms_title": "Условия использования",
+    "privacy_title": "Политика конфиденциальности"
+  },
+  
+  "settings": {
+    "settings_darkmode": "Темная тема",
+    "settings_langmode": "Язык"
+  },
+  
+  "errors": {
+    "system": {
+      "no_auth": "Пользователь не авторизован (отсутствуют токены)",
+      "session_expired": "Сессия авторизации истекла. Необходим повторный вход",
+      "server_trouble": "Ошибка сервера"
+    },
+    "network": {
+      "no_connection": "Нет интернет-соединения",
+      "no_connection_label": "Ой! Нет интернета"
+    },
+    "telegram": {
+      "sign_failed": "Не удалось войти через Telegram",
+      "wrong_args":"Неправильные данные для Telegram",
+      "canceled":"Пользователь отменил действие"
+    },
+    "platform": {
+      "unsupported":"Платформа не поддерживается"
+    }
+  }
+}
