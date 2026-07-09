@@ -17,7 +17,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 class AuthProvider extends ChangeNotifier{
   bool _isLogged = false;
   bool _isLoading = false;
-  
+    
   bool get isLoading => _isLoading;
   bool get isLogged => _isLogged;
 

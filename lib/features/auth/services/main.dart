@@ -13,13 +13,15 @@ import 'package:app_front/features/auth/services/telegram_token_stub.dart'
 class AuthService {
   
   final ApiClient _api = ApiClient();
+  
+  String token = "not";
 
   final String _botClientId = dotenv.get("TELEGRAM_CLIENT_ID");
   final String _botRedirectUri = dotenv.get("TELEGRAM_REDIRECT_URI");
     
   Future<void> loginWithTelegram(BuildContext context) async {
-    String idToken = await getTelegramId(clientId: _botClientId, redirectUri: _botRedirectUri);      
-
+   String idToken = await getTelegramId(clientId: _botClientId, redirectUri: _botRedirectUri);      
+  
   }
 
 
