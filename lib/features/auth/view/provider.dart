@@ -59,8 +59,8 @@ class AuthProvider extends ChangeNotifier{
       final response = await _service.loginWithTelegram(context);
       
 
-      final tokens = response.data!.tokens;
-      await saveTokens(tokens.access_token, tokens.refresh_token);
+      //final tokens = response.data!.tokens;
+      //await saveTokens(tokens.access_token, tokens.refresh_token);
 
       _user = response.data!.user;
       if(!isComplete()){
@@ -73,9 +73,7 @@ class AuthProvider extends ChangeNotifier{
       
     } on AppException catch (e) {
       ErrorHandler.handle(e);
-    } catch (e) {
-      debugPrint("Erro on loginWithTelegram: ${e.toString()}");
-    } finally {
+    }finally {
       isLoading.value = false;
       notifyListeners();
     }
