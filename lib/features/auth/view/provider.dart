@@ -73,7 +73,9 @@ class AuthProvider extends ChangeNotifier{
       
     } on AppException catch (e) {
       ErrorHandler.handle(e);
-    }finally {
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {
       isLoading.value = false;
       notifyListeners();
     }
