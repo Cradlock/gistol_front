@@ -18069,7 +18069,6 @@
       t1._as(data);
       A._asString(data.$index(0, "access_token"));
       A._asString(data.$index(0, "refresh_token"));
-      A._asBool(data.$index(0, "is_new"));
       map = t1._as(data.$index(0, "user"));
       A._asString(map.$index(0, "name"));
       A._asString(map.$index(0, "surname"));
