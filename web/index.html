@@ -60,9 +60,8 @@
           redirect_uri: currentOrigin
         },
         (result) => {
-          console.log(result);
           if (result && !result.error){
-            resolve(result);
+            resolve(result.id_token);
           } else { 
             reject(result ? result.error : "Authorization cancel")
           }
