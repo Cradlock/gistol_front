@@ -60,6 +60,7 @@
           redirect_uri: currentOrigin
         },
         (result) => {
+          console.log(result);
           if (result && !result.error){
             resolve(result);
           } else { 
