@@ -62,7 +62,9 @@ class AuthProvider extends ChangeNotifier{
       final tokens = response.data!.tokens;
       await saveTokens(tokens.access_token, tokens.refresh_token);
 
-      _user = response.data!.user;
+      //_user = response.data!.user;
+      
+
       if(!isComplete()){
         final bool? res = await showAppDialog<bool>(
           context: context,

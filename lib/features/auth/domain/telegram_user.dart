@@ -6,11 +6,11 @@ import 'package:app_front/features/auth/domain/auth.dart';
 
 class TelegramAuthResponse {
   final RefreshResponse tokens;
-  final User user;
+ // final User user;
 
   TelegramAuthResponse({
     required this.tokens,
-    required this.user
+ //   required this.user
   });
 
   factory TelegramAuthResponse.converter(dynamic data){
@@ -21,7 +21,7 @@ class TelegramAuthResponse {
         access_token: map["access_token"], 
         refresh_token: map["refresh_token"]
       ),
-      user: User.converter(map['user'])
+//      user: User()
     );
   }
 
