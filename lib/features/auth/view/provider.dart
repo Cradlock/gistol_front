@@ -32,10 +32,13 @@ class AuthProvider extends ChangeNotifier{
     isLoading.value = true; 
     try{
       await _service.loginWithTelegram(context);
-      
+       
+
       
     } on AppException catch (e) {
       ErrorHandler.handle(e);
+    } catch (e) {
+      debugPrint("Erro on loginWithTelegram: ${e.toString()}");
     } finally {
       isLoading.value = false;
       notifyListeners();

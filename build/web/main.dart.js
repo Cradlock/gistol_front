@@ -96302,7 +96302,7 @@
     signWithTelegram$body$AuthProvider(context) {
       var $async$goto = 0,
         $async$completer = A._makeAsyncAwaitCompleter(type$.void),
-        $async$handler = 1, $async$errorStack = [], $async$next = [], $async$self = this, e, exception, t2, t1, $async$exception;
+        $async$handler = 1, $async$errorStack = [], $async$next = [], $async$self = this, e, e0, exception, t2, t1, $async$exception;
       var $async$signWithTelegram$1 = A._wrapJsFunctionForAsync(function($async$errorCode, $async$result) {
         if ($async$errorCode === 1) {
           $async$errorStack.push($async$result);
@@ -96331,8 +96331,10 @@
               if (t2 instanceof A.AppException) {
                 e = t2;
                 A.ErrorHandler_handle(e, null);
-              } else
-                throw $async$exception;
+              } else {
+                e0 = t2;
+                A.print__debugPrintThrottled$closure().call$1("Erro on loginWithTelegram: " + J.toString$0$(e0));
+              }
               $async$next.push(5);
               // goto finally
               $async$goto = 4;
