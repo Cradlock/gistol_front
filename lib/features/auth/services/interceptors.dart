@@ -1,11 +1,17 @@
 
 
 
+
+
 // lib/core/api/auth_interceptor.dart
 
+import 'package:app_front/core/core.dart';
+import 'package:app_front/features/auth/domain/auth.dart';
+import 'package:app_front/features/auth/domain/errors.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 
 class AuthInterceptor extends Interceptor {
   // Нам нужен отдельный чистый экземпляр Dio для запроса /refresh.
@@ -13,6 +19,8 @@ class AuthInterceptor extends Interceptor {
   // мы уйдем в бесконечную рекурсию (зациклимся).
   final Dio _refreshDio = Dio(BaseOptions(baseUrl: dotenv.get("BASE_URL")));
 
+  bool _isRefreshing = false;
+  
   @override
   Future<void> onRequest(
     RequestOptions options,
@@ -20,7 +28,7 @@ class AuthInterceptor extends Interceptor {
   ) async {
     final prefs = await SharedPreferences.getInstance();
     final accessToken = prefs.getString('access_token');
-
+    
     // Если токен есть в базе, автоматически лепим его ко всем запросам
     if (accessToken != null && accessToken.isNotEmpty) {
       options.headers['Authorization'] = 'Bearer $accessToken';
@@ -39,59 +47,78 @@ class AuthInterceptor extends Interceptor {
       return handler.next(err);
     }
 
-    final prefs = await SharedPreferences.getInstance();
-    final refreshToken = prefs.getString('refresh_token');
-
-    // Если рефреш-токена нет, то и обновлять нечего — отправляем разлогинивать юзера
-    if (refreshToken == null || refreshToken.isEmpty) {
-      _handleLogout();
-      return handler.next(err);
+    if(_isRefreshing) {
+      return _retryRequest(err, handler);
     }
+    
+    _isRefreshing = true;
 
     try {
+      final prefs = await SharedPreferences.getInstance();
+      final refreshToken = prefs.getString('refresh_token');
+
+      // Если рефреш-токена нет, то и обновлять нечего — отправляем разлогинивать юзера
+      if (refreshToken == null || refreshToken.isEmpty) {
+        _handleLogout();
+        return handler.next(err);
+      }
+
       // 1. Пытаемся обновить токены на бэкенде
-      // Важно: передаем refresh в заголовке или body, как требует твой бэк
-      final response = await _refreshDio.post(
+      final response = await _refreshDio.post<Map<String,dynamic>>(
         '/api/auth/refresh',
-        data: {'refresh_token': refreshToken},
-      );
-
+        options: Options( 
+          headers: {
+            'Authorization': 'Bearer $refreshToken'
+          }
+        ), 
+        data: RefreshRequest(refresh_token: refreshToken).toJson()
+      );     
       if (response.statusCode == 200 || response.statusCode == 201) {
-        final data = response.data as Map<String, dynamic>;
-        final newAccess = data['access_token'] as String;
-        final newRefresh = data['refresh_token'] as String;
+        final tokens = RefreshResponse.converter(response.data);
 
-        // 2. Сохраняем свежие токены в SharedPreferences
-        await prefs.setString('access_token', newAccess);
-        await prefs.setString('refresh_token', newRefresh);
+        await prefs.setString('access_token', tokens.access_token);
+        await prefs.setString('refresh_token', tokens.refresh_token);
 
-        // 3. Берем старый упавший запрос, обновляем в нем заголовок на новый токен
-        final requestOptions = err.requestOptions;
-        requestOptions.headers['Authorization'] = 'Bearer $newAccess';
-
-        // 4. Повторяем запрос заново!
-        // Создаем копию оригинального запроса через дефолтный Dio
-        final cloneDio = Dio(BaseOptions(baseUrl: requestOptions.baseUrl));
-        final clonedResponse = await cloneDio.request(
-          requestOptions.path,
-          options: Options(
-            method: requestOptions.method,
-            headers: requestOptions.headers,
-          ),
-          data: requestOptions.data,
-          queryParameters: requestOptions.queryParameters,
-        );
-
-        // Возвращаем успешный результат вместо ошибки 401! UI даже не поймет, что был сбой
-        return handler.resolve(clonedResponse);
+        // Повторяем текущий упавший запрос
+        return await _retryRequest(err, handler, newToken: tokens.access_token);
       }
     } catch (e) {
       // Если даже ручка /refresh упала (например, рефреш токен тоже устарел или отозван)
       // Значит сессия полностью мертва — принудительно разлогиниваем пользователя
       await _handleLogout();
+      return handler.next(err);
+    } finally {
+      _isRefreshing = false;
     }
 
-    return handler.next(err);
+  }
+  
+  Future<void> _retryRequest(
+    DioException err,
+    ErrorInterceptorHandler handler, {
+    String? newToken,
+  }) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = newToken ?? prefs.getString('access_token');
+
+    final requestOptions = err.requestOptions;
+    requestOptions.headers['Authorization'] = 'Bearer $token';
+
+    final cloneDio = Dio(BaseOptions(baseUrl: requestOptions.baseUrl));
+    try {
+      final response = await cloneDio.request(
+        requestOptions.path,
+        options: Options(
+          method: requestOptions.method,
+          headers: requestOptions.headers,
+        ),
+        data: requestOptions.data,
+        queryParameters: requestOptions.queryParameters,
+      );
+      return handler.resolve(response);
+    } on DioException catch (e) {
+      return handler.next(e);
+    }
   }
 
   Future<void> _handleLogout() async {
@@ -99,5 +126,7 @@ class AuthInterceptor extends Interceptor {
     await prefs.remove('access_token');
     await prefs.remove('refresh_token');
     
+    ErrorHandler.handle(SessionExpired());
   }
 }
+

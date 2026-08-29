@@ -22,7 +22,7 @@ class AppIcon extends StatelessWidget {
         color: colors.primary.withOpacity(0.1), 
         image: const DecorationImage(
           image: AssetImage('assets/app_icon.png'),
-          fit: BoxFit.cover, // Растягивает картинку, чтобы она заполнила весь круг без искажений
+          fit: BoxFit.contain, // Растягивает картинку, чтобы она заполнила весь круг без искажений
         ),
       ),
     );

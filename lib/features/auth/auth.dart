@@ -11,7 +11,6 @@ export 'screens/account_screen.dart';
 
 export 'services/interceptors.dart';
 export 'services/main.dart';
-export 'services/telegram_token_stub.dart';
 
 export 'view/provider.dart';
 export 'view/widgets/telegram_auth_btn.dart';

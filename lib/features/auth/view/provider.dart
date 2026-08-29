@@ -1,5 +1,4 @@
 
-import 'package:app_front/core/api.dart';
 import 'package:app_front/core/core.dart';
 import 'package:app_front/features/auth/domain/telegram_errors.dart';
 import 'package:app_front/features/auth/domain/user.dart';
@@ -16,35 +15,35 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class AuthProvider extends ChangeNotifier{
   bool _isLogged = false;
-  bool _isLoading = false;
+
+  AppException? currentError;
+  ValueNotifier<bool> isLoading = ValueNotifier(false);
     
-  bool get isLoading => _isLoading;
   bool get isLogged => _isLogged;
 
   final User? _user = null;
   User? get user => _user;
   
 
-  final ApiClient _api = ApiClient();
   final AuthService _service = AuthService();
 
 
   Future<void> signWithTelegram(BuildContext context) async {
-    _isLoading = true; 
+    isLoading.value = true; 
     try{
       await _service.loginWithTelegram(context);
       
       
     } on AppException catch (e) {
-      ErrorHandler.handle(e,context: context);
+      ErrorHandler.handle(e);
     } finally {
-      _isLoading = false;
+      isLoading.value = false;
       notifyListeners();
     }
   }
 
   Future<void> checkLoginStatus() async {
-    _isLoading = true;
+    isLoading.value = true;
     notifyListeners();
   } 
   
@@ -56,7 +55,10 @@ class AuthProvider extends ChangeNotifier{
   void _clearData() {
     _isLogged = false;
   }
+  
 
   AuthProvider(){}
+
+
 }
 

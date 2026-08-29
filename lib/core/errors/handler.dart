@@ -1,7 +1,7 @@
 
 
 
-import 'package:app_front/core/errors/domain.dart';
+import './domain.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
@@ -12,18 +12,16 @@ class ErrorHandler {
     
   static void handle(
     AppException error, {
-      BuildContext? context,
-      VoidCallback? onAction
+      BuildContext? context
     }
   ){
-    debugPrint('[ErrorHandler]: Caught ${error.runtimeType}. Key: ${error.localKey}');
+    debugPrint('[ErrorHandler]: Caught ${error.runtimeType}. Key: ${error.localKey}, Has on Action: ${error.onErrorAction.toString()}'); 
+    
+    error.onErrorAction?.call();
     
 
-    if(onAction != null){
-      onAction();
-    }
 
-    if (!error.shouldShowToUser || context == null) {
+    if (context == null) {
       return;
     }
     

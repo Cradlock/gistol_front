@@ -3,7 +3,7 @@
 
 
 
-import 'package:app_front/core/api.dart';
+import 'package:app_front/core/core.dart';
 import 'package:app_front/features/auth/auth.dart';
 import 'package:app_front/features/settings/provider.dart';
 import 'package:easy_localization/easy_localization.dart';

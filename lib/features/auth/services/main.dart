@@ -1,14 +1,10 @@
-
-
-
-
 import 'package:app_front/core/core.dart';
+import 'package:app_front/core/env_key.dart';
+import 'package:app_front/features/auth/auth.dart';
+import 'package:app_front/features/auth/domain/auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-import 'package:app_front/features/auth/services/telegram_token_stub.dart'
-  if(dart.library.html) 'package:app_front/features/auth/services/telegram_token_web.dart'
-  if(dart.library.io) 'package:app_front/features/auth/services/telegram_token_mobile.dart';
+import 'telegram_token.dart';
 
 class AuthService {
   
@@ -16,15 +12,20 @@ class AuthService {
   
   String token = "not";
 
-  final String _botClientId = dotenv.get("TELEGRAM_CLIENT_ID");
-  final String _botRedirectUri = dotenv.get("TELEGRAM_REDIRECT_URI");
+  final String _botClientId = envKey("TELEGRAM_CLIENT_ID");
+  final String _botRedirectUri = envKey("TELEGRAM_REDIRECT_URI");
     
-  Future<void> loginWithTelegram(BuildContext context) async {
-   String idToken = await getTelegramId(clientId: _botClientId, redirectUri: _botRedirectUri);      
-  
+  Future<WrResponse<RefreshResponse>> loginWithTelegram(BuildContext context) async {
+    String idToken = await getTelegramId(clientId: _botClientId, redirectUri: _botRedirectUri);      
+      
+     
+
   }
 
 
+  Future<WrResponse<User>> me() async {
+    return await _api.get<User>("student/me", converter: User.converter);
+  }
 
 }
 
