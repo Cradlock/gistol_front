@@ -20,10 +20,11 @@ class AuthService {
   final String _botRedirectUri = envKey("TELEGRAM_REDIRECT_URI");
     
   Future<WrResponse<TelegramAuthResponse>> loginWithTelegram(BuildContext context) async {
-    String idToken = await getTelegramId(
-      clientId: _botClientId, redirectUri: _botRedirectUri);
+//    String idToken = await getTelegramId(
+//      clientId: _botClientId, redirectUri: _botRedirectUri);
     
-    debugPrint(idToken);
+// debugPrint(idToken);
+    
 
     TelegramAuthRequest data = TelegramAuthRequest(idToken: "");
     return  _api.post<TelegramAuthResponse>("auth/telegram",data: data, converter: TelegramAuthResponse.converter);
