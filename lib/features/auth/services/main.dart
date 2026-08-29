@@ -5,7 +5,10 @@ import 'package:app_front/features/auth/domain/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_telegram_auth/flutter_telegram_auth.dart';
 
-import 'telegram_token.dart';
+
+import 'telegram_token_stub.dart'
+    if (dart.library.html) 'telegram_token_web.dart'
+    if (dart.library.io) 'telegram_token_mobile.dart';
 
 class AuthService {
   
