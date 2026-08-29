@@ -22,8 +22,6 @@ class AuthService {
   Future<WrResponse<TelegramAuthResponse>> loginWithTelegram(BuildContext context) async {
     String idToken = await getTelegramId(
       clientId: _botClientId, redirectUri: _botRedirectUri);
-    
-
     TelegramAuthRequest data = TelegramAuthRequest(idToken: idToken);
     return  _api.post<TelegramAuthResponse>("auth/telegram",data: data, converter: TelegramAuthResponse.converter);
   }
@@ -32,6 +30,12 @@ class AuthService {
   Future<WrResponse<User>> me() async {
     return await _api.get<User>("student/me", converter: User.converter);
   }
+  
+  
+  Future<WrResponse<YearsResponse>> getYears() async {
+    return await _api.get("years/", converter: YearsResponse.converter);
+  }
+  
 
 }
 

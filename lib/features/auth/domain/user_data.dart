@@ -2,17 +2,19 @@
 class Group{
   int id;
   String title;
-  final DateTime createdDate;
   int year;
   
-  Group({required this.year,required this.id,required this.title,required this.createdDate});
+  Group({
+  required this.year,
+  required this.id,
+  required this.title
+  });
   
   factory Group.converter(dynamic json) {
     return Group(
       id: json['id'] as int,
       title: json['title'] as String,
       year: json['year'] as int,
-      createdDate: DateTime.parse(json['created_date'] as String) 
     );
   }
 }
@@ -36,4 +38,18 @@ class GroupResponse {
           .toList(),
     );
   }
+}
+
+
+class YearsResponse {
+  final List<int> years;
+  
+  const YearsResponse({required this.years});
+
+  factory YearsResponse.converter(dynamic json ){
+    return YearsResponse( 
+      years:(json['years'] as List<dynamic>).cast<int>()
+    );
+  }
+
 }
