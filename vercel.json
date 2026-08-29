@@ -2,7 +2,6 @@
   "buildCommand": "",
   "outputDirectory": "build/web",
   "framework": null,
-  "cleanUrl":true,
   "rewrites": [
     {
       "source": "/(.*)",
