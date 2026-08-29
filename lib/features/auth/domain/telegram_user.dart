@@ -17,7 +17,6 @@ class TelegramAuthResponse {
   factory TelegramAuthResponse.converter(dynamic data){
     final map = data as Map<String,dynamic>;
     
-    debugPrint(map['user'].toString());
 
     return TelegramAuthResponse(
       tokens: RefreshResponse(

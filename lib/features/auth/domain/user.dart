@@ -38,7 +38,7 @@ class User {
       surname: map['surname'] as String?,
       scores: map['scores'] as int? ?? 0,
       year: map['year'] as int?,
-      group: Group.converter(map['group'])
+      group:map['group'] != null ? Group.converter(map['group']) : null
     );  }
 }
 

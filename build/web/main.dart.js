@@ -18099,7 +18099,6 @@
       var t2, t3, map, t4, t5, t6,
         t1 = type$.Map_String_dynamic;
       t1._as(data);
-      A.print__debugPrintThrottled$closure().call$1(J.toString$0$(data.$index(0, "user")));
       t2 = A._asString(data.$index(0, "access_token"));
       t3 = A._asString(data.$index(0, "refresh_token"));
       map = t1._as(data.$index(0, "user"));
@@ -18107,12 +18106,16 @@
       t4 = A._asStringQ(map.$index(0, "surname"));
       A._asIntQ(map.$index(0, "scores"));
       A._asIntQ(map.$index(0, "year"));
-      t5 = map.$index(0, "group");
-      t6 = J.getInterceptor$asx(t5);
-      A._asInt(t6.$index(t5, "id"));
-      A._asString(t6.$index(t5, "title"));
-      A._asInt(t6.$index(t5, "year"));
-      return new A.TelegramAuthResponse(new A.RefreshResponse(t2, t3), new A.User(new A.Group(), t1, t4));
+      if (map.$index(0, "group") != null) {
+        t5 = map.$index(0, "group");
+        t6 = J.getInterceptor$asx(t5);
+        A._asInt(t6.$index(t5, "id"));
+        A._asString(t6.$index(t5, "title"));
+        A._asInt(t6.$index(t5, "year"));
+        t5 = new A.Group();
+      } else
+        t5 = null;
+      return new A.TelegramAuthResponse(new A.RefreshResponse(t2, t3), new A.User(t5, t1, t4));
     },
     TelegramAuthResponse: function TelegramAuthResponse(t0, t1) {
       this.tokens = t0;
@@ -98944,10 +98947,7 @@
       if (t1 != null)
         if (t1.length !== 0) {
           t1 = user._surname;
-          if (t1 != null)
-            t1 = t1.length !== 0;
-          else
-            t1 = t2;
+          t1 = t1 != null && t1.length !== 0 && user._group != null;
         } else
           t1 = t2;
       else
