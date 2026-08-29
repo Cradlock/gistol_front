@@ -96240,7 +96240,7 @@
     loginWithTelegram$1(context) {
       var $async$goto = 0,
         $async$completer = A._makeAsyncAwaitCompleter(type$.WrResponse_TelegramAuthResponse),
-        $async$returnValue, $async$self = this, $async$temp1, $async$temp2, $async$temp3, $async$temp4;
+        $async$returnValue, $async$self = this, $async$temp1;
       var $async$loginWithTelegram$1 = A._wrapJsFunctionForAsync(function($async$errorCode, $async$result) {
         if ($async$errorCode === 1)
           return A._asyncRethrow($async$result, $async$completer);
@@ -96248,15 +96248,13 @@
           switch ($async$goto) {
             case 0:
               // Function start
-              $async$temp1 = $async$self._api;
-              $async$temp2 = "auth/telegram";
-              $async$temp3 = A.telegram_user_TelegramAuthResponse___converter_tearOff$closure();
-              $async$temp4 = A;
+              $async$temp1 = A.print__debugPrintThrottled$closure();
               $async$goto = 3;
               return A._asyncAwait(A.getTelegramId($async$self._botClientId, $async$self._botRedirectUri), $async$loginWithTelegram$1);
             case 3:
               // returning from await.
-              $async$returnValue = $async$temp1.post$1$3$converter$data($async$temp2, $async$temp3, new $async$temp4.TelegramAuthRequest($async$result), type$.TelegramAuthResponse);
+              $async$temp1.call$1($async$result);
+              $async$returnValue = $async$self._api.post$1$3$converter$data("auth/telegram", A.telegram_user_TelegramAuthResponse___converter_tearOff$closure(), new A.TelegramAuthRequest(""), type$.TelegramAuthResponse);
               // goto return
               $async$goto = 1;
               break;
