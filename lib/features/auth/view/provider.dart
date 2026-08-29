@@ -62,7 +62,8 @@ class AuthProvider extends ChangeNotifier{
       final tokens = response.data!.tokens;
       await saveTokens(tokens.access_token, tokens.refresh_token);
 
-      //_user = response.data!.user;
+      isLoading.value = false;
+      _user = response.data!.user;
       
 
       if(!isComplete()){
@@ -78,8 +79,6 @@ class AuthProvider extends ChangeNotifier{
     } catch (e) {
       debugPrint(e.toString());
     } finally {
-      isLoading.value = false;
-      notifyListeners();
     }
   }
   
