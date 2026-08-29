@@ -34,10 +34,10 @@ class User {
     final map = json as Map<String, dynamic>;
 
     return User(
-      name: map['name'] as String,
-      surname: map['surname'] as String,
-      scores: map['scores'] as int,
-      year: map['year'] as int,
+      name: map['name'] as String?,
+      surname: map['surname'] as String?,
+      scores: map['scores'] as int? ?? 0,
+      year: map['year'] as int?,
       group: Group.converter(map['group'])
     );  }
 }

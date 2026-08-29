@@ -18096,25 +18096,26 @@
       this.onErrorAction = t1;
     },
     TelegramAuthResponse___converter_tearOff(data) {
-      var map, t2, t3, t4,
+      var t2, t3, map, t4, t5, t6,
         t1 = type$.Map_String_dynamic;
       t1._as(data);
-      A._asString(data.$index(0, "access_token"));
-      A._asString(data.$index(0, "refresh_token"));
+      t2 = A._asString(data.$index(0, "access_token"));
+      t3 = A._asString(data.$index(0, "refresh_token"));
       map = t1._as(data.$index(0, "user"));
-      t1 = A._asString(map.$index(0, "name"));
-      t2 = A._asString(map.$index(0, "surname"));
-      A._asInt(map.$index(0, "scores"));
-      A._asInt(map.$index(0, "year"));
-      t3 = map.$index(0, "group");
-      t4 = J.getInterceptor$asx(t3);
-      A._asInt(t4.$index(t3, "id"));
-      A._asString(t4.$index(t3, "title"));
-      A._asInt(t4.$index(t3, "year"));
-      return new A.TelegramAuthResponse(new A.User(new A.Group(), t1, t2));
+      t1 = A._asStringQ(map.$index(0, "name"));
+      t4 = A._asStringQ(map.$index(0, "surname"));
+      A._asIntQ(map.$index(0, "scores"));
+      A._asIntQ(map.$index(0, "year"));
+      t5 = map.$index(0, "group");
+      t6 = J.getInterceptor$asx(t5);
+      A._asInt(t6.$index(t5, "id"));
+      A._asString(t6.$index(t5, "title"));
+      A._asInt(t6.$index(t5, "year"));
+      return new A.TelegramAuthResponse(new A.RefreshResponse(t2, t3), new A.User(new A.Group(), t1, t4));
     },
-    TelegramAuthResponse: function TelegramAuthResponse(t0) {
-      this.user = t0;
+    TelegramAuthResponse: function TelegramAuthResponse(t0, t1) {
+      this.tokens = t0;
+      this.user = t1;
     },
     TelegramAuthRequest: function TelegramAuthRequest(t0) {
       this.idToken = t0;
@@ -94249,11 +94250,11 @@
     call$2$viewInsets$viewPadding($0, $1) {
       return this.noSuchMethod$1(this, A.createInvocationMirror("call", "call$2$viewInsets$viewPadding", 0, [$0, $1], ["viewInsets", "viewPadding"], 0));
     },
-    call$1$4$data$options$queryParameters($0, $1, $2, $3, $T1) {
-      return this.noSuchMethod$1(this, A.createInvocationMirror("call", "call$1$4$data$options$queryParameters", 0, [$0, $1, $2, $3, $T1], ["data", "options", "queryParameters"], 1));
-    },
     call$2$0($T1, $T2) {
       return this.noSuchMethod$1(this, A.createInvocationMirror("call", "call$2$0", 0, [$T1, $T2], [], 2));
+    },
+    call$1$4$data$options$queryParameters($0, $1, $2, $3, $T1) {
+      return this.noSuchMethod$1(this, A.createInvocationMirror("call", "call$1$4$data$options$queryParameters", 0, [$0, $1, $2, $3, $T1], ["data", "options", "queryParameters"], 1));
     },
     call$2$3$timeout($0, $1, $2, $T1, $T2) {
       return this.noSuchMethod$1(this, A.createInvocationMirror("call", "call$2$3$timeout", 0, [$0, $1, $2, $T1, $T2], ["timeout"], 2));
@@ -98933,14 +98934,54 @@
   };
   A.AuthProvider.prototype = {
     isComplete$0() {
-      var t1,
+      var t1, t2,
         user = this._user;
       if (user == null)
         return false;
-      t1 = false;
-      if (user._user$_name.length !== 0)
-        t1 = user._surname.length !== 0;
+      t1 = user._user$_name;
+      t2 = false;
+      if (t1 != null)
+        if (t1.length !== 0) {
+          t1 = user._surname;
+          if (t1 != null)
+            t1 = t1.length !== 0;
+          else
+            t1 = t2;
+        } else
+          t1 = t2;
+      else
+        t1 = t2;
       return t1;
+    },
+    saveTokens$2(access, refresh) {
+      var $async$goto = 0,
+        $async$completer = A._makeAsyncAwaitCompleter(type$.void),
+        prefs;
+      var $async$saveTokens$2 = A._wrapJsFunctionForAsync(function($async$errorCode, $async$result) {
+        if ($async$errorCode === 1)
+          return A._asyncRethrow($async$result, $async$completer);
+        for (;;)
+          switch ($async$goto) {
+            case 0:
+              // Function start
+              $async$goto = 2;
+              return A._asyncAwait(A.SharedPreferences_getInstance(), $async$saveTokens$2);
+            case 2:
+              // returning from await.
+              prefs = $async$result;
+              $async$goto = 3;
+              return A._asyncAwait(prefs._shared_preferences_legacy$_setValue$3("String", "access_token", access), $async$saveTokens$2);
+            case 3:
+              // returning from await.
+              $async$goto = 4;
+              return A._asyncAwait(prefs._shared_preferences_legacy$_setValue$3("String", "refresh_token", refresh), $async$saveTokens$2);
+            case 4:
+              // returning from await.
+              // implicit return
+              return A._asyncReturn(null, $async$completer);
+          }
+      });
+      return A._asyncStartSync($async$saveTokens$2, $async$completer);
     },
     signWithTelegram$1(context) {
       return this.signWithTelegram$body$AuthProvider(context);
@@ -98948,7 +98989,7 @@
     signWithTelegram$body$AuthProvider(context) {
       var $async$goto = 0,
         $async$completer = A._makeAsyncAwaitCompleter(type$.void),
-        $async$handler = 1, $async$errorStack = [], $async$next = [], $async$self = this, response, e, exception, t2, t1, $async$exception;
+        $async$handler = 1, $async$errorStack = [], $async$next = [], $async$self = this, response, tokens, e, exception, t2, t1, $async$exception;
       var $async$signWithTelegram$1 = A._wrapJsFunctionForAsync(function($async$errorCode, $async$result) {
         if ($async$errorCode === 1) {
           $async$errorStack.push($async$result);
@@ -98966,16 +99007,21 @@
             case 6:
               // returning from await.
               response = $async$result;
-              $async$self._user = response.data.user;
-              $async$goto = !$async$self.isComplete$0() ? 7 : 8;
-              break;
+              tokens = response.data.tokens;
+              $async$goto = 7;
+              return A._asyncAwait($async$self.saveTokens$2(tokens._access_token, tokens._refresh_token), $async$signWithTelegram$1);
             case 7:
-              // then
-              $async$goto = 9;
-              return A._asyncAwait(A.showAppDialog(new A.CompleteProfileCard(null), context, type$.bool), $async$signWithTelegram$1);
-            case 9:
               // returning from await.
+              $async$self._user = response.data.user;
+              $async$goto = !$async$self.isComplete$0() ? 8 : 9;
+              break;
             case 8:
+              // then
+              $async$goto = 10;
+              return A._asyncAwait(A.showAppDialog(new A.CompleteProfileCard(null), context, type$.bool), $async$signWithTelegram$1);
+            case 10:
+              // returning from await.
+            case 9:
               // join
               $async$next.push(5);
               // goto finally

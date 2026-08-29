@@ -54,8 +54,6 @@ class ApiClient {
       final response = await request();
       final rawData = response.data;
 
-      // Ошибки парсинга теперь намеренно выкидывают Error, 
-      // чтобы приложение сразу подсветило баг в коде/контракте
       T parsedData;
       try {
         parsedData = converter(rawData);

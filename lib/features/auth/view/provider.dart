@@ -59,8 +59,8 @@ class AuthProvider extends ChangeNotifier{
       final response = await _service.loginWithTelegram(context);
       
 
-      //final tokens = response.data!.tokens;
-      //await saveTokens(tokens.access_token, tokens.refresh_token);
+      final tokens = response.data!.tokens;
+      await saveTokens(tokens.access_token, tokens.refresh_token);
 
       _user = response.data!.user;
       if(!isComplete()){
