@@ -23,10 +23,8 @@ class AuthService {
     String idToken = await getTelegramId(
       clientId: _botClientId, redirectUri: _botRedirectUri);
     
-    debugPrint(idToken);
-    
 
-    TelegramAuthRequest data = TelegramAuthRequest(idToken: "");
+    TelegramAuthRequest data = TelegramAuthRequest(idToken: idToken);
     return  _api.post<TelegramAuthResponse>("auth/telegram",data: data, converter: TelegramAuthResponse.converter);
   }
 
