@@ -3,6 +3,7 @@ import 'package:app_front/core/env_key.dart';
 import 'package:app_front/features/auth/auth.dart';
 import 'package:app_front/features/auth/domain/auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_telegram_auth/flutter_telegram_auth.dart';
 
 import 'telegram_token.dart';
 
@@ -15,11 +16,11 @@ class AuthService {
   final String _botClientId = envKey("TELEGRAM_CLIENT_ID");
   final String _botRedirectUri = envKey("TELEGRAM_REDIRECT_URI");
     
-  Future<WrResponse<RefreshResponse>> loginWithTelegram(BuildContext context) async {
+  Future<WrResponse<TelegramAuthResponse>> loginWithTelegram(BuildContext context) async {
     String idToken = await getTelegramId(clientId: _botClientId, redirectUri: _botRedirectUri);      
-      
-     
+    TelegramAuthRequest data = TelegramAuthRequest(idToken: idToken);
 
+    return  _api.post<TelegramAuthResponse>("auth/telegram",data: data, converter: TelegramAuthResponse.converter);
   }
 
 

@@ -1,5 +1,6 @@
 
 
+import 'package:app_front/core/api/domain.dart';
 import 'package:app_front/features/auth/auth.dart';
 import 'package:app_front/features/auth/domain/auth.dart';
 
@@ -25,4 +26,17 @@ class TelegramAuthResponse {
   }
 
 }
+
+class TelegramAuthRequest extends ToJsonable {
+  final String idToken;
+
+  TelegramAuthRequest({required this.idToken});
+
+  Map<String,dynamic> toJson(){
+    return {
+      "id_token":idToken
+    };
+  }
+}
+
 
