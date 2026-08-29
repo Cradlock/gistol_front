@@ -57292,6 +57292,7 @@
               $async$handler = 3;
               $async$exception = $async$errorStack.pop();
               e = A.unwrapException($async$exception);
+              A.print__debugPrintThrottled$closure().call$1("Error on telegram : " + J.toString$0$(e));
               if (e instanceof A.TelegramAuthCanceledException)
                 throw $async$exception;
               J.toString$0$(e);

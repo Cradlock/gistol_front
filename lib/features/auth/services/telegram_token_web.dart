@@ -4,6 +4,7 @@
 import 'dart:js_interop';
 
 import 'package:app_front/features/auth/domain/telegram_errors.dart';
+import 'package:flutter/cupertino.dart';
 @JS('loginWithTelegram')
 external JSPromise<JSAny?> _loginWithTelegram(JSString clientId);
 
@@ -25,8 +26,11 @@ Future<String> getTelegramId({
     
     // Либо если JS возвращает объект, здесь нужно распарсить его поля через package:web
   } catch (e) {
+    debugPrint("Error on telegram : ${e.toString()}");
     if (e is TelegramAuthCanceledException) rethrow;
-    throw TelegramInternalException(e.toString());
+      
+      throw TelegramInternalException(e.toString());
+
   }
 }
 
