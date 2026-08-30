@@ -33,12 +33,9 @@ class CardResponsive extends StatelessWidget {
               color: colorScheme.outline,
             ),
           ),
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24.0),
-            child: child,
+          child: child,
           ),
         ),
-      ),
     );
   }
 }

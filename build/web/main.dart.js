@@ -98485,8 +98485,7 @@
           t2 = colorScheme.onSurface;
       }
       side = new A.BorderSide(t2, 1, B.BorderStyle_1, -1);
-      t1 = A.BoxDecoration$(new A.Border(side, side, side, side), t1, _null, colorScheme.surface, _null, _null, B.BoxShape_0);
-      return A.Center$(A.ConstrainedBox$(A.Container$(A.SingleChildScrollView$(this.child, B.EdgeInsets_24_24_24_24, _null), B.Clip_0, _null, t1, _null, _null, _null, _null), new A.BoxConstraints(0, width, 0, 1 / 0)), _null, _null);
+      return A.Center$(A.ConstrainedBox$(A.Container$(this.child, B.Clip_0, _null, A.BoxDecoration$(new A.Border(side, side, side, side), t1, _null, colorScheme.surface, _null, _null, B.BoxShape_0), _null, _null, _null, _null), new A.BoxConstraints(0, width, 0, 1 / 0)), _null, _null);
     }
   };
   A.FormActionButtons.prototype = {
