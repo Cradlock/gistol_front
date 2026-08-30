@@ -22,11 +22,9 @@ class CardResponsive extends StatelessWidget {
 
   Widget _buildCardContainer(BuildContext context, ColorScheme colorScheme, {required double width}) {
     return Center(
-      child: ConstrainedBox( 
-        constraints: BoxConstraints(maxWidth: width),
-        child:Card(
+      child: Card(
         child: child,
-      ))
+      )
     );
     
   }
