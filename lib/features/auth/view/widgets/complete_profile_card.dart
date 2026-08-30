@@ -1,11 +1,14 @@
+import 'package:app_front/core/core.dart';
 import 'package:app_front/core/widgets/app_btn.dart';
 import 'package:app_front/core/widgets/app_dropdown.dart';
 import 'package:app_front/core/widgets/app_input.dart';
 import 'package:app_front/core/widgets/loader_wrapper.dart';
 import 'package:app_front/features/auth/auth.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+// Выбор : имя фамилия курс группа
 class CompleteProfileCard extends StatefulWidget {
   const CompleteProfileCard({super.key});
 
@@ -14,17 +17,85 @@ class CompleteProfileCard extends StatefulWidget {
 }
 
 class _CompleteProfileCardState extends State<CompleteProfileCard> {
-  // Контроллеры для полей ввода
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _surnameController = TextEditingController();
 
-  // Выбранные значения
-  String? _selectedCourse;
-  String? _selectedGroup;
+  int? _selectedCourse;
+  int? _selectedGroupId;
+  
+  String? errorName;
+  String? errorSurname;
+  String? errorCourse;
+  String? errorGroupId;
 
-  // Фейковые данные (в будущем можно заменить на данные из провайдера/сервиса)
-  final List<String> _mockCourses = ['1 курс', '2 курс', '3 курс', '4 курс'];
-  final List<String> _mockGroups = ['ПИ-1-23', 'ПИ-2-23', 'ИВТ-1-23', 'ПМ-1-23'];
+  List<int> _courses = [];
+  List<Group> _groups = [];
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _initData();
+    });
+  }
+  
+  Future<void> _initData() async {
+    final provider = context.read<AuthProvider>();
+    await provider.initDataComplete();
+    if (mounted) {
+      setState(() {
+        _courses = provider.years;
+      });
+    }
+  }
+
+  // Загрузка групп при изменении курса
+  Future<void> _onCourseChanged(int? course) async {
+    setState(() {
+      _selectedCourse = course;
+      _selectedGroupId = null; // Сбрасываем выбранную группу при смене курса
+      _groups = [];
+      errorCourse = null;
+    });
+
+    if (course != null) {
+      final provider = context.read<AuthProvider>();
+      await provider.getGroups(course);
+      if (mounted) {
+        setState(() {
+          _groups = provider.groups.value; // Берем группы из провайдера
+        });
+      }
+    }
+  }
+
+  bool _check() {
+    bool isValid = true;
+    setState(() {
+      errorName = _nameController.text.trim().isEmpty ? "field_required".tr() : null;
+      errorSurname = _surnameController.text.trim().isEmpty ? "field_required".tr() : null;
+      errorCourse = _selectedCourse == null ? "field_required".tr() : null;
+      errorGroupId = _selectedGroupId == null ? "field_required".tr() : null;
+    });
+
+    if (errorName != null || errorSurname != null || errorCourse != null || errorGroupId != null) {
+      isValid = false;
+    }
+
+    return isValid;
+  }
+
+  Future<void> _submit() async {  
+    if (!_check()) return;
+    
+    final provider = context.read<AuthProvider>();
+    await provider.completeProfile(
+      _nameController.text.trim(),
+      _surnameController.text.trim(),
+      _selectedGroupId!,
+      _selectedCourse!,
+    );
+  }
 
   @override
   void dispose() {
@@ -36,108 +107,79 @@ class _CompleteProfileCardState extends State<CompleteProfileCard> {
   @override
   Widget build(BuildContext context) {
     final pr = context.watch<AuthProvider>();
-    final mediaQuery = MediaQuery.of(context);
 
-    return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(24.0),
-      ),
-      insetPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(
-          maxWidth: 440, // Ограничение ширины для больших экранов и планшетов
-        ),
-        child: LoaderWrapper(
-          loading: pr.isLoading,
-          child: SingleChildScrollView(
-            // Делает контент прокручиваемым, защищая от переполнения при появлении клавиатуры
-            padding: const EdgeInsets.all(24.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const Text(
-                  'Завершение профиля',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 24),
-                
-                // Поле Имя
-                AppInput(
-                  controller: _nameController,
-                  placeholder: 'Имя',
-                ),
-                const SizedBox(height: 16),
-                
-                // Поле Фамилия
-                AppInput(
-                  controller: _surnameController,
-                  placeholder: 'Фамилия',
-                ),
-                const SizedBox(height: 16),
-                
-                // Выбор курса
-                AppDropdown<String>(
-                  items: _mockCourses,
-                  itemAsString: (item) => item,
-                  placeholder: 'Курс',
-                  onChanged: (val) {
-                    setState(() {
-                      _selectedCourse = val;
-                    });
-                  },
-                ),
-                const SizedBox(height: 16),
-                
-                // Выбор группы
-                AppDropdown<String>(
-                  items: _mockGroups,
-                  itemAsString: (item) => item,
-                  placeholder: 'Группа',
-                  onChanged: (val) {
-                    setState(() {
-                      _selectedGroup = val;
-                    });
-                  },
-                ),
-                const SizedBox(height: 32),
-                
-                // Кнопки управления (на мобилках в портретной ориентации лучше сделать их на всю ширину или через Wrap/Row)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Expanded(
-                      child: AppBtn(
-                        text: 'Отмена',
-                        type: AppButtonType.text,
-                        onPressed: () {
-                          Navigator.pop(context, false);
-                        },
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: AppBtn(
-                        text: 'Сохранить',
-                        type: AppButtonType.filled,
-                        onPressed: () {
-                          // Здесь можно передать собранные данные назад через Navigator.pop
-                          // или вызвать метод провайдера
-                          Navigator.pop(context, true);
-                        },
-                      ),
-                    ),
-                  ],
-                )
-              ],
+    return CardResponsive(
+      child: LoaderWrapper(  
+        loading: pr.isLoading,
+        child: Column(  
+          children: [
+            // Имя
+            AppInput(
+              controller: _nameController,
+              placeholder: "name".tr(),
+              errorText: errorName,
+              onChanged: (_) => setState(() => errorName = null),
             ),
-          ),
+            const SizedBox(height: 12),
+
+            // Фамилия  
+            AppInput(
+              controller: _surnameController,
+              placeholder: "surname".tr(),
+              errorText: errorSurname,
+              onChanged: (_) => setState(() => errorSurname = null),
+            ),
+            const SizedBox(height: 12),
+
+            // Курс  
+            AppDropdown<int>(
+              items: _courses,  
+              itemAsString: (value) => "$value ${"course_label".tr()}", 
+              onChanged: _onCourseChanged,
+            ),
+            if (errorCourse != null)
+              Padding(
+                padding: const EdgeInsets.only(top: 4, left: 12),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(errorCourse!, style: const TextStyle(color: Colors.red, fontSize: 12)),
+                ),
+              ),
+            const SizedBox(height: 12),
+
+            // Группы
+            LoaderWrapper(
+              loading: pr.isGroupsLoading,  
+              child: AppDropdown<Group>(
+                items: _groups,  
+                itemAsString: (value) => value.title,
+                onChanged: (value) {
+                  setState(() {
+                    _selectedGroupId = value?.id;
+                    errorGroupId = null;
+                  });
+                },
+              ),
+            ),
+            if (errorGroupId != null)
+              Padding(
+                padding: const EdgeInsets.only(top: 4, left: 12),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(errorGroupId!, style: const TextStyle(color: Colors.red, fontSize: 12)),
+                ),
+              ),
+            const SizedBox(height: 24),
+            
+            FormActionButtons(
+              cancelText: "cancel".tr(),
+              saveText: "save".tr(),
+              onCancel: () => Navigator.pop(context, false),
+              onSave: _submit,
+            ),
+          ],
         ),
       ),
-    );
+    );  
   }
 }

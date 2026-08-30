@@ -1,68 +1,44 @@
-
-
+import 'package:app_front/core/widgets/responsive_layout.dart';
 import 'package:flutter/material.dart';
-import 'responsive_layout.dart';
 
-class BlockContainer extends StatelessWidget {
-  final double? maxWidth;
-  final double? minWidth;
-  final double? maxHeight;
-  final double? minHeight;
+class CardResponsive extends StatelessWidget {
+  final Widget child; // Содержимое формы (инпуты, кнопки и т.д.)
 
-  final Widget navBar;
-  final Widget content;
-  
-  const BlockContainer({super.key,
-    required this.navBar,
-    required this.content,
-    this.maxWidth , 
-    this.minWidth , 
-    this.maxHeight ,
-    this.minHeight
+  const CardResponsive({
+    super.key,
+    required this.child,
   });
 
-
   @override
-    Widget build(BuildContext context) {
-      Widget innerContent = content;
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
 
-      final colorScheme = Theme.of(context).colorScheme;
-      return Center(
-        child: ConstrainedBox(
-          constraints: BoxConstraints( 
-            minWidth: minWidth ?? 0.0,
-            maxWidth: maxWidth ?? double.infinity,
-            minHeight: minHeight ?? 0.0,
-            maxHeight: maxHeight ?? double.infinity
+    return ResponsiveLayout(
+      mobile: _buildCardContainer(context, colorScheme, width: double.infinity),
+      tablet: _buildCardContainer(context, colorScheme, width: 440),
+      desktop: _buildCardContainer(context, colorScheme, width: 480),
+    );
+  }
+
+  Widget _buildCardContainer(BuildContext context, ColorScheme colorScheme, {required double width}) {
+    return Center(
+      child: ConstrainedBox(
+        constraints: BoxConstraints(maxWidth: width),
+        child: Container(
+          decoration: BoxDecoration(
+            color: colorScheme.surface,
+            borderRadius: BorderRadius.circular(24.0),
+            border: Border.all(
+              width: 1.0,
+              color: colorScheme.outline,
+            ),
           ),
-          child: Container( 
-            decoration: BoxDecoration(
-              color: colorScheme.surface,
-              borderRadius: BorderRadius.circular(24),
-              border: Border.all( 
-                width: 1.0,
-                color: colorScheme.outline
-              )
-            ),
-            child: Padding( 
-            padding: EdgeInsets.all(16),
-            child:Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                navBar,
-                const SizedBox(height:12),
-                Flexible(child: ClipRRect(
-                  borderRadius: const BorderRadius.vertical( 
-                    bottom: Radius.circular(24)
-                  ),
-                  child: innerContent,
-                ))
-              ]
-            )
-            ),
-          )
-        )
-      ); 
-    }
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(24.0),
+            child: child,
+          ),
+        ),
+      ),
+    );
+  }
 }

@@ -1,6 +1,8 @@
 
 
+import 'package:app_front/core/core.dart';
 import 'package:app_front/features/auth/auth.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class User {
   final int? _year;

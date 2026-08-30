@@ -36,6 +36,16 @@ class AuthService {
     return await _api.get("years/", converter: YearsResponse.converter);
   }
   
+  Future<WrResponse<GroupResponse>> getGroups(int year) async  {
+    return await _api.get("groups/by-course", converter: GroupResponse.converter,
+      queryParameters: {"year": year});
+  }
+
+  Future<WrResponse<User>> completeStudent(UserCompleteRequest data) async {
+    return await _api.post(
+      "student/complete", 
+      converter: User.converter,data: data);
+  }
 
 }
 

@@ -1,4 +1,6 @@
 
+import 'package:app_front/core/core.dart';
+
 class Group{
   int id;
   String title;
@@ -51,5 +53,33 @@ class YearsResponse {
       years:(json['years'] as List<dynamic>).cast<int>()
     );
   }
+
+}
+
+
+
+class UserCompleteRequest implements ToJsonable{
+  final String name;
+  final String surname;
+  final int groupId;
+  final int year;
+
+  const UserCompleteRequest({
+    required this.name,
+    required this.surname,
+    required this.groupId,
+    required this.year
+  });
+  
+  @override
+  Map<String,dynamic> toJson(){
+    return {
+      "name": name,
+      "surname": surname,
+      "group_id": groupId,
+      "year": year
+    };
+  }
+
 
 }
