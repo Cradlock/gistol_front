@@ -142,23 +142,23 @@ class _CompleteProfileCardState extends State<CompleteProfileCard> {
             const SizedBox(height: 12),
 
             // Группы
-            LoaderWrapper(
-              loading: pr.isGroupsLoading,  
-              child: AppDropdown<Group>(
-                items: _groups,  
-                itemAsString: (value) => value.title,
-                errorText: errorGroupId,
-                onChanged: (value) {
-                  setState(() {
-                    _selectedGroupId = value?.id;
-                    errorGroupId = null;
-                  });
-                },
-              ),
-            ),
-            
+           // LoaderWrapper(
+           //   loading: pr.isGroupsLoading,  
+           //   child: AppDropdown<Group>(
+           //     items: _groups,  
+           //     itemAsString: (value) => value.title,
+           //     errorText: errorGroupId,
+           //     onChanged: (value) {
+           //       setState(() {
+           //         _selectedGroupId = value?.id;
+           //         errorGroupId = null;
+           //       });
+           //     },
+           //   ),
+           // ),
+           // 
 
-            const SizedBox(height: 24),
+           // const SizedBox(height: 24),
             
             FormActionButtons(
               cancelText: "cancel".tr(),
