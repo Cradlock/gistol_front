@@ -19,21 +19,17 @@ class FormActionButtons extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Expanded(
-          child: AppBtn(
+          AppBtn(
             text: cancelText,
             type: AppButtonType.text,
             onPressed: onCancel,
           ),
-        ),
         const SizedBox(width: 12),
-        Expanded(
-          child: AppBtn(
+          AppBtn(
             text: saveText,
             type: AppButtonType.filled,
             onPressed: onSave,
           ),
-        ),
       ],
     );
   }
