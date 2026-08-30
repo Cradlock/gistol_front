@@ -49,7 +49,6 @@ class _CompleteProfileCardState extends State<CompleteProfileCard> {
     }
   }
 
-  // Загрузка групп при изменении курса
   Future<void> _onCourseChanged(int? course) async {
     setState(() {
       _selectedCourse = course;
@@ -111,7 +110,9 @@ class _CompleteProfileCardState extends State<CompleteProfileCard> {
     return CardResponsive(
       child: LoaderWrapper(  
         loading: pr.isLoading,
-        child: Column(  
+        child: Column( 
+          mainAxisSize: MainAxisSize.min,
+
           children: [
             // Имя
             AppInput(
@@ -135,16 +136,9 @@ class _CompleteProfileCardState extends State<CompleteProfileCard> {
             AppDropdown<int>(
               items: _courses,  
               itemAsString: (value) => "$value ${"course_label".tr()}", 
+              errorText: errorCourse,
               onChanged: _onCourseChanged,
             ),
-            if (errorCourse != null)
-              Padding(
-                padding: const EdgeInsets.only(top: 4, left: 12),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(errorCourse!, style: const TextStyle(color: Colors.red, fontSize: 12)),
-                ),
-              ),
             const SizedBox(height: 12),
 
             // Группы
@@ -153,6 +147,7 @@ class _CompleteProfileCardState extends State<CompleteProfileCard> {
               child: AppDropdown<Group>(
                 items: _groups,  
                 itemAsString: (value) => value.title,
+                errorText: errorGroupId,
                 onChanged: (value) {
                   setState(() {
                     _selectedGroupId = value?.id;
@@ -161,14 +156,8 @@ class _CompleteProfileCardState extends State<CompleteProfileCard> {
                 },
               ),
             ),
-            if (errorGroupId != null)
-              Padding(
-                padding: const EdgeInsets.only(top: 4, left: 12),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(errorGroupId!, style: const TextStyle(color: Colors.red, fontSize: 12)),
-                ),
-              ),
+            
+
             const SizedBox(height: 24),
             
             FormActionButtons(

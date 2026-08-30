@@ -17933,16 +17933,17 @@
       _.type = t2;
       _.key = t3;
     },
-    AppDropdown$(itemAsString, items, onChanged, $T) {
-      return new A.AppDropdown(items, itemAsString, onChanged, null, $T._eval$1("AppDropdown<0>"));
+    AppDropdown$(errorText, itemAsString, items, onChanged, $T) {
+      return new A.AppDropdown(items, itemAsString, onChanged, errorText, null, $T._eval$1("AppDropdown<0>"));
     },
-    AppDropdown: function AppDropdown(t0, t1, t2, t3, t4) {
+    AppDropdown: function AppDropdown(t0, t1, t2, t3, t4, t5) {
       var _ = this;
       _.items = t0;
       _.itemAsString = t1;
       _.onChanged = t2;
-      _.key = t3;
-      _.$ti = t4;
+      _.errorText = t3;
+      _.key = t4;
+      _.$ti = t5;
     },
     AppDropdown_build_closure1: function AppDropdown_build_closure1(t0) {
       this.$this = t0;
@@ -98411,7 +98412,7 @@
   A.AppDropdown_build_closure.prototype = {
     call$4(context, controller, focusNode, onFieldSubmitted) {
       type$.void_Function._as(onFieldSubmitted);
-      return A.AppInput$(controller, null, focusNode, null, null, B.Icon_RVZ);
+      return A.AppInput$(controller, this.$this.errorText, focusNode, null, null, B.Icon_RVZ);
     },
     $signature: 293
   };
@@ -99779,25 +99780,18 @@
       this.super$State$dispose();
     },
     build$1(context) {
-      var t3, _this = this, _null = null,
+      var t3, t4, t5, t6, _this = this, _null = null,
         pr = A.Provider_of(context, true, type$.AuthProvider),
         t1 = pr.isLoading,
         t2 = A.StringTranslateExtension_tr("name");
       t2 = A.AppInput$(_this._nameController, _this.errorName, _null, new A._CompleteProfileCardState_build_closure(_this), t2, _null);
       t3 = A.StringTranslateExtension_tr("surname");
-      t3 = A._setArrayType([t2, B.SizedBox_null_12_null_null, A.AppInput$(_this._surnameController, _this.errorSurname, _null, new A._CompleteProfileCardState_build_closure0(_this), t3, _null), B.SizedBox_null_12_null_null, A.AppDropdown$(new A._CompleteProfileCardState_build_closure1(), _this._courses, _this.get$_onCourseChanged(), type$.int)], type$.JSArray_Widget);
-      t2 = _this.errorCourse;
-      if (t2 != null)
-        t3.push(new A.Padding(B.EdgeInsets_12_4_0_0, A.Align$(B.Alignment_m1_0, A.Text$(t2, _null, _null, _null, B.TextStyle_uu9, _null, _null), _null, _null, _null), _null));
-      t3.push(B.SizedBox_null_12_null_null);
-      t2 = pr.isGroupsLoading;
-      t3.push(A.LoaderWrapper$(A.AppDropdown$(new A._CompleteProfileCardState_build_closure2(), _this._groups, new A._CompleteProfileCardState_build_closure3(_this), type$.Group), t2));
-      t2 = _this.errorGroupId;
-      if (t2 != null)
-        t3.push(new A.Padding(B.EdgeInsets_12_4_0_0, A.Align$(B.Alignment_m1_0, A.Text$(t2, _null, _null, _null, B.TextStyle_uu9, _null, _null), _null, _null, _null), _null));
-      t3.push(B.SizedBox_null_24_null_null);
-      t3.push(new A.FormActionButtons(new A._CompleteProfileCardState_build_closure4(context), _this.get$_submit(), A.StringTranslateExtension_tr("cancel"), A.StringTranslateExtension_tr("save"), _null));
-      return new A.CardResponsive(A.LoaderWrapper$(A.Column$(t3, B.CrossAxisAlignment_2, B.MainAxisAlignment_0, B.MainAxisSize_1), t1), _null);
+      t3 = A.AppInput$(_this._surnameController, _this.errorSurname, _null, new A._CompleteProfileCardState_build_closure0(_this), t3, _null);
+      t4 = _this._courses;
+      t4 = A.AppDropdown$(_this.errorCourse, new A._CompleteProfileCardState_build_closure1(), t4, _this.get$_onCourseChanged(), type$.int);
+      t5 = pr.isGroupsLoading;
+      t6 = _this._groups;
+      return new A.CardResponsive(A.LoaderWrapper$(A.Column$(A._setArrayType([t2, B.SizedBox_null_12_null_null, t3, B.SizedBox_null_12_null_null, t4, B.SizedBox_null_12_null_null, A.LoaderWrapper$(A.AppDropdown$(_this.errorGroupId, new A._CompleteProfileCardState_build_closure2(), t6, new A._CompleteProfileCardState_build_closure3(_this), type$.Group), t5), B.SizedBox_null_24_null_null, new A.FormActionButtons(new A._CompleteProfileCardState_build_closure4(context), _this.get$_submit(), A.StringTranslateExtension_tr("cancel"), A.StringTranslateExtension_tr("save"), _null)], type$.JSArray_Widget), B.CrossAxisAlignment_2, B.MainAxisAlignment_0, B.MainAxisSize_0), t1), _null);
     }
   };
   A._CompleteProfileCardState_initState_closure.prototype = {
@@ -239865,7 +239859,6 @@
     B.EdgeInsets_0_0_0_0 = new A.EdgeInsets(0, 0, 0, 0);
     B.EdgeInsets_0_0_0_14 = new A.EdgeInsets(0, 0, 0, 14);
     B.EdgeInsets_0_14_0_14 = new A.EdgeInsets(0, 14, 0, 14);
-    B.EdgeInsets_12_4_0_0 = new A.EdgeInsets(12, 4, 0, 0);
     B.EdgeInsets_12_8_12_8 = new A.EdgeInsets(12, 8, 12, 8);
     B.EdgeInsets_15_5_15_10 = new A.EdgeInsets(15, 5, 15, 10);
     B.EdgeInsets_16_0_16_0 = new A.EdgeInsets(16, 0, 16, 0);
@@ -242880,8 +242873,6 @@
     B.TextStyle_ndW = new A.TextStyle(true, null, null, null, null, null, 16, B.FontWeight_700, null, 1, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
     B.TextStyle_r1v = new A.TextStyle(false, B.CupertinoDynamicColor_b5s, null, "CupertinoSystemDisplay", null, null, 21, B.FontWeight_400, null, 0.4, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
     B.TextStyle_ufQ = new A.TextStyle(false, B.CupertinoDynamicColor_QkJ, null, "CupertinoSystemText", null, null, 15, null, null, -0.23, null, null, null, null, null, null, null, B.TextDecoration_0, null, null, null, null, null, null, null, null);
-    B.MaterialColor_nI1 = new A.MaterialColor(B.Map_tFKwC, 1, 0.9568627450980393, 0.2627450980392157, 0.21176470588235294, B.ColorSpace_0);
-    B.TextStyle_uu9 = new A.TextStyle(true, B.MaterialColor_nI1, null, null, null, null, 12, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
     B.TextStyle_nQK = new A.TextStyle(false, null, null, null, null, null, 57, B.FontWeight_400, null, -0.25, null, B.TextBaseline_0, 1.12, B.TextLeadingDistribution_1, null, null, null, null, null, null, null, "englishLike displayLarge 2021", null, null, null, null);
     B.TextStyle_Juw = new A.TextStyle(false, null, null, null, null, null, 45, B.FontWeight_400, null, 0, null, B.TextBaseline_0, 1.16, B.TextLeadingDistribution_1, null, null, null, null, null, null, null, "englishLike displayMedium 2021", null, null, null, null);
     B.TextStyle_zkL = new A.TextStyle(false, null, null, null, null, null, 36, B.FontWeight_400, null, 0, null, B.TextBaseline_0, 1.22, B.TextLeadingDistribution_1, null, null, null, null, null, null, null, "englishLike displaySmall 2021", null, null, null, null);
