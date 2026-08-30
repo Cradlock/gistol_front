@@ -107,7 +107,7 @@ class _CompleteProfileCardState extends State<CompleteProfileCard> {
   Widget build(BuildContext context) {
     final pr = context.watch<AuthProvider>();
 
-    return CardResponsive(
+    return Card(
       child: LoaderWrapper(  
         loading: pr.isLoading,
         child: Column( 
