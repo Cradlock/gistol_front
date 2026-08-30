@@ -107,7 +107,7 @@ class _CompleteProfileCardState extends State<CompleteProfileCard> {
   Widget build(BuildContext context) {
     final pr = context.watch<AuthProvider>();
 
-    return Card(
+    return CardResponsive(
       child: LoaderWrapper(  
         loading: pr.isLoading,
         child: Column( 
@@ -136,31 +136,32 @@ class _CompleteProfileCardState extends State<CompleteProfileCard> {
             AppDropdown<int>(
               items: _courses,  
               itemAsString: (value) => "$value ${"course_label".tr()}", 
+              placeholder: "select_year_label".tr(),
               errorText: errorCourse,
               onChanged: _onCourseChanged,
             ),
             const SizedBox(height: 12),
 
             // Группы
-           // LoaderWrapper(
-           //   loading: pr.isGroupsLoading,  
-           //   child: AppDropdown<Group>(
-           //     items: _groups,  
-           //     itemAsString: (value) => value.title,
-           //     errorText: errorGroupId,
-           //     onChanged: (value) {
-           //       setState(() {
-           //         _selectedGroupId = value?.id;
-           //         errorGroupId = null;
-           //       });
-           //     },
-           //   ),
-           // ),
-           // 
-
-           // const SizedBox(height: 24),
+            LoaderWrapper(
+              loading: pr.isGroupsLoading,  
+              child: AppDropdown<Group>(
+                items: _groups,  
+                itemAsString: (value) => value.title,
+                errorText: errorGroupId,
+                onChanged: (value) {
+                  setState(() {
+                    _selectedGroupId = value?.id;
+                    errorGroupId = null;
+                  });
+                },
+              ),
+            ),
             
-            FormActionButtons(
+
+            const SizedBox(height: 24),
+            
+           FormActionButtons(
               cancelText: "cancel".tr(),
               saveText: "save".tr(),
               onCancel: () => Navigator.pop(context, false),
