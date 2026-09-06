@@ -20,9 +20,8 @@ class AuthProvider extends ChangeNotifier{
   bool _isLogged = false;
 
   AppException? currentError;
+
   ValueNotifier<bool> isLoading = ValueNotifier(false);
-  ValueNotifier<bool> isGroupsLoading = ValueNotifier(false);
-    
 
   bool get isLogged => _isLogged;
 
@@ -139,15 +138,15 @@ class AuthProvider extends ChangeNotifier{
         if (response.statusCode == 500) {
           currentError = NoConnectionException();
         }
-        
+         
         isLoading.value = false;
         return ; // Ошибка — пользователя на логин!
       }      
 
       _user = response.data;
+      _isLogged = true;
       isLoading.value = false;
       return ;
-    
 
     } catch (e) {
       debugPrint(e.toString()); 
@@ -156,15 +155,7 @@ class AuthProvider extends ChangeNotifier{
     }
   } 
   
-  Future<void> Logout() async {
-    _isLogged = false;
-    notifyListeners();
-  }
-  
-  void _clearData() {
-    _isLogged = false;
-  }
-  
+ 
 
   AuthProvider(){}
 

@@ -11,48 +11,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart'; 
 
 
-class SplashScreen extends StatefulWidget{
-
-  const SplashScreen({super.key});
-
-  @override
-    State<SplashScreen> createState() => _SplashScreenState();
-}
-
-
-
-class _SplashScreenState extends State<SplashScreen>{
-  @override
-    void initState() {
-      super.initState();
-
-      WidgetsBinding.instance.addPostFrameCallback((_){
-        _startAppInit();
-      });
-    } 
-
-  Future<void> _startAppInit() async { 
-    final AuthProvider authProvider = context.read<AuthProvider>();
- 
-    debugPrint("SPlash screen start ");
-    try{
-      await authProvider.checkLoginStatus();
-    } on TelegramNetworkException {
-      context.go("/no-internet");
-    } on TelegramAuthCanceledException {
-      context.go("/login");
-    } on AppException catch (error) {
-      ErrorHandler.handle(error,context: context);
-    }
-
-    if(!authProvider.isLogged) {
-      context.go("/login");
-    } else {
-      context.go("/home");
-    }
-  }
-
-
+class SplashScreen extends StatelessWidget{
 @override
 Widget build(BuildContext context) {
   final theme = Theme.of(context);
