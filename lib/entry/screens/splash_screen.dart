@@ -34,7 +34,6 @@ class _SplashScreenState extends State<SplashScreen>{
   Future<void> _startAppInit() async { 
     final AuthProvider authProvider = context.read<AuthProvider>();
  
-    if(!mounted) return;
 
     try{
       await authProvider.checkLoginStatus();
