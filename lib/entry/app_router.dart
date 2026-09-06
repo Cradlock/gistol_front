@@ -3,8 +3,8 @@
 import 'package:app_front/entry/screens/home_screen.dart';
 import 'package:app_front/entry/screens/layout.dart';
 import 'package:app_front/entry/screens/no_internet_screen.dart';
+import 'package:app_front/entry/screens/splash_screen.dart';
 import 'package:app_front/features/auth/screens/login_screen.dart';
-import 'package:app_front/features/auth/screens/splash_screen.dart';
 import 'package:app_front/features/legal/screens/policy_screen.dart';
 import 'package:app_front/features/legal/screens/service_screen.dart';
 import 'package:app_front/features/settings/screens/settings_screen.dart';

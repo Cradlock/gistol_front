@@ -31,7 +31,6 @@ class AuthProvider extends ChangeNotifier{
   User? _user = null;
   User? get user => _user;
   
-
   
   
   final AuthService _service = AuthService();
@@ -90,6 +89,8 @@ class AuthProvider extends ChangeNotifier{
           context: context,
           content: CompleteProfileCard() 
         );
+        
+        
 
       }
       

@@ -5,6 +5,8 @@
 
 // lib/core/api/auth_interceptor.dart
 
+import 'dart:async';
+
 import 'package:app_front/core/core.dart';
 import 'package:app_front/features/auth/domain/auth.dart';
 import 'package:app_front/features/auth/domain/errors.dart';
@@ -36,6 +38,8 @@ class AuthInterceptor extends Interceptor {
 
     return handler.next(options); // Пускаем запрос дальше
   }
+    
+  Completer<void>? _refreshCompleter;
 
   @override
   Future<void> onError(
@@ -47,10 +51,14 @@ class AuthInterceptor extends Interceptor {
       return handler.next(err);
     }
 
-    if(_isRefreshing) {
+ if (_isRefreshing) {
+    // Если комплитер еще жив — ждем его завершения
+    if (_refreshCompleter != null) {
+      await _refreshCompleter!.future;
       return _retryRequest(err, handler);
     }
-    
+    return handler.next(err);
+  }   
     _isRefreshing = true;
 
     try {
