@@ -130,7 +130,30 @@ class AuthProvider extends ChangeNotifier{
 
   Future<void> checkLoginStatus() async {
     isLoading.value = true;
-    notifyListeners();
+    currentError = null;
+
+    try {
+      final response = await _service.me();
+      
+      if (response.statusCode != 200 || response.data == null) {
+        if (response.statusCode == 500) {
+          currentError = NoConnectionException();
+        }
+        
+        isLoading.value = false;
+        return ; // Ошибка — пользователя на логин!
+      }      
+
+      _user = response.data;
+      isLoading.value = false;
+      return ;
+    
+
+    } catch (e) {
+      debugPrint(e.toString()); 
+      isLoading.value = false;
+      return ;
+    }
   } 
   
   Future<void> Logout() async {
