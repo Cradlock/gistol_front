@@ -51,7 +51,7 @@ class _CompleteProfileCard extends State<CompleteProfileCard> {
 
   List<Group> _groups = [];
 
-  late List<int> years;
+  List<int> years = [];
 
   Future<void> updateGroups() async {
     setState(() {
