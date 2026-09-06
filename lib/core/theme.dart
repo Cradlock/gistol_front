@@ -1,40 +1,25 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AppTheme {
-
-
   static ThemeData get lightTheme {
     return ThemeData(
       useMaterial3: true,
-      colorScheme: const ColorScheme(
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: const Color(0xFF415f91),
         brightness: Brightness.light,
-        primary: Color(0xFF415f91),
-        onPrimary: Color(0xFFffffff),
-        secondary: Color(0xFF565f71),
-        onSecondary: Color(0xFFffffff),
-        error: Color(0xFFba1a1a),
-        onError: Color(0xFFffffff),
-        surface: Color(0xFFf9f9ff),
-        onSurface: Color(0xFF191c20),
       ),
       textTheme: _buildTextTheme(),
       elevatedButtonTheme: _buildButtonTheme(isDark: false),
     );
-  }  static ThemeData get darkTheme {
+  }
+
+  static ThemeData get darkTheme {
     return ThemeData(
       useMaterial3: true,
-      colorScheme: const ColorScheme(
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: const Color(0xFFaaccff),
         brightness: Brightness.dark,
-        primary: Color(0xFFaaccff), // Более мягкий светлый оттенок для темной темы
-        onPrimary: Color(0xFF0a305f),
-        secondary: Color(0xFFbfc7da),
-        onSecondary: Color(0xFF283141),
-        error: Color(0xFFffb4ab),
-        onError: Color(0xFF690005),
-        surface: Color(0xFF111318),   // Темный фон
-        onSurface: Color(0xFFe2e2e9), // Светлый текст на темном фоне
       ),
       textTheme: _buildTextTheme(isDark: true),
       elevatedButtonTheme: _buildButtonTheme(isDark: true),
@@ -54,7 +39,6 @@ class AppTheme {
     );
   }
 
-  // Выносим стиль кнопок
   static ElevatedButtonThemeData _buildButtonTheme({required bool isDark}) {
     return ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(

@@ -23,7 +23,8 @@ class CommonStrings {
   String get save => _k("save"); 
   String get create => _k("create");
   String get errorBlankInput => _k("error_blank_input");
-  
+  String get submit => _k("submit");
+
   String get from => _k("from");
   String get to => _k("to");
 }
@@ -53,6 +54,8 @@ class AuthStrings {
   String get surname_label => _k("surname_label");
   String get year_label => _k("yesr_label");
   String get please_select_other_year => _k("please_select_other_year");
+  
+  
 
   String get comp_name_error => _k("complete_name_error");
   String get comp_surname_error => _k("complete_surname_error");

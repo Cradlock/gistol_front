@@ -149,17 +149,22 @@ class _CompleteProfileCard extends State<CompleteProfileCard> {
             LabelWrapper(
               label: AppStrings.auth.name_label.tr(), 
               child: AppInput( 
+                controller: _nameC,
                 errorText: _errors.name?.tr(),
               )
             ),
+            const SizedBox(height: 16),
             // Surname 
             LabelWrapper(
               label: AppStrings.auth.surname_label.tr(), 
               child: AppInput( 
+                controller: _surnameC,
                 errorText: _errors.surname?.tr()
               )
             ),
             // Course 
+const SizedBox(height: 16),
+
             LabelWrapper(
               label: AppStrings.auth.year_label.tr(), 
               child: AppDropdown(
@@ -173,7 +178,9 @@ class _CompleteProfileCard extends State<CompleteProfileCard> {
                 } 
               )
             ),
-            // Group 
+const SizedBox(height: 16),
+
+// Group 
             LocalLoaderWrapper(
               isLoading: _isGroupsLoading, 
               child: AppDropdown<Group>(
@@ -185,8 +192,13 @@ class _CompleteProfileCard extends State<CompleteProfileCard> {
                   });
                 }
               )
-            )
-
+            ),
+            const SizedBox(height: 16),
+            AppBtn(
+              type: AppButtonType.text,
+              onPressed: _submit,
+              
+            ) 
           ]
         )
       ));  
