@@ -36,7 +36,7 @@ class _SplashScreenState extends State<SplashScreen>{
  
     if(!mounted) return;
 
-    try{ 
+    try{
       await authProvider.checkLoginStatus();
     } on TelegramNetworkException {
       context.go("/no-internet");

@@ -23,15 +23,11 @@ class AuthProvider extends ChangeNotifier{
   ValueNotifier<bool> isLoading = ValueNotifier(false);
   ValueNotifier<bool> isGroupsLoading = ValueNotifier(false);
     
-  List<int> years = [];
-  ValueNotifier<List<Group>> groups = ValueNotifier([]);
 
   bool get isLogged => _isLogged;
 
   User? _user = null;
   User? get user => _user;
-  
-  
   
   final AuthService _service = AuthService();
   Future<void> _safeExecute(
@@ -56,7 +52,7 @@ class AuthProvider extends ChangeNotifier{
   final user = _user;
   if (user == null) return false;
 
-  return user.name != null && 
+  return user.year != null && user.name != null && 
          user.name!.isNotEmpty &&
          user.surname != null &&
          user.surname!.isNotEmpty &&
@@ -85,12 +81,11 @@ class AuthProvider extends ChangeNotifier{
       
 
       if(!isComplete()){
-        final bool? res = await showAppDialog<bool>(
+        final res = await showAppDialog<bool>(
           context: context,
           content: CompleteProfileCard() 
-        );
-        
-        
+        ); 
+         
 
       }
       
@@ -102,33 +97,32 @@ class AuthProvider extends ChangeNotifier{
     }
   }
   
-  Future<void> initDataComplete() async {
-    await _safeExecute(() async {
+  Future<List<int>> initDataComplete() async {
       final result = await _service.getYears();
       
       if (result.statusCode == 0) {
         throw NoConnectionException();
       }
-      years = result.data!.years;
-    });
+      return result.data!.years;
   } 
   
-  Future<void> getGroups(int year) async {
-    await _safeExecute(() async {
-      final result = await _service.getGroups(year);
+  Future<List<Group>?> getGroups(int year) async { 
       
-      groups.value = result.data!.groups;
-
-    },customLoader: isGroupsLoading);
+      try{ 
+        final result = await _service.getGroups(year);
+      
+        return result.data!.groups;
+      } on AppException catch(e) {
+        ErrorHandler.handle(e);
+      } 
   }
 
 
   Future<void> completeProfile(
-    String name,String surname,int groupId,int year 
+    UserCompleteRequest data 
   ) async {
     
     await _safeExecute(() async {
-      final data = UserCompleteRequest(name: name, surname: surname, groupId: groupId, year: year);
       final response = await _service.completeStudent(data); 
       
     });

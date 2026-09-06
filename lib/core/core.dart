@@ -14,7 +14,8 @@ export 'widgets/app_dropdown.dart';
 export 'widgets/loader_wrapper.dart';
 export 'widgets/confirm_dialog.dart';
 export 'widgets/responsive_layout.dart';
-export 'widgets/block_container.dart';
 export 'widgets/form_action_btn.dart';
+export 'widgets/label_wrapper.dart';
+export 'widgets/local_loader_wrapper.dart';
 export 'utils.dart';
 

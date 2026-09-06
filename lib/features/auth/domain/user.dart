@@ -12,14 +12,16 @@ class User {
   final String? _surname;
 
   final int? _scores;
-
+  
+  final bool? _confirmed;
   
   const User({
     required this._name,
     required this._surname,
     required this._scores,
     required this._group,
-    required this._year
+    required this._year,
+    required this._confirmed
   });
 
 
@@ -28,7 +30,7 @@ class User {
   String? get name => _name;
   String? get surname => _surname;
   int? get scores => _scores;
-
+  bool? get confirmed => _confirmed;
 
 
   factory User.converter(dynamic json) {
@@ -40,8 +42,10 @@ class User {
       surname: map['surname'] as String?,
       scores: map['scores'] as int? ?? 0,
       year: map['year'] as int?,
-      group:map['group'] != null ? Group.converter(map['group']) : null
-    );  }
+      group:map['group'] != null ? Group.converter(map['group']) : null, 
+      confirmed: map['confirmed'] != null ? map['confirmed'] as bool : false
+    );  
+    }
 }
 
 

@@ -48,7 +48,16 @@ class AuthStrings {
   
   // Вспомогательный метод для склейки
   static String _k(String key) => "$_ns$key";
- 
+  
+  String get name_label => _k("name_label");
+  String get surname_label => _k("surname_label");
+  String get year_label => _k("yesr_label");
+  String get please_select_other_year => _k("please_select_other_year");
+
+  String get comp_name_error => _k("complete_name_error");
+  String get comp_surname_error => _k("complete_surname_error");
+  String get comp_year_error => _k("complete_year_error");
+  String get comp_group_error => _k("complete_group_error");
 }
 
 class GroupStrings {

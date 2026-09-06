@@ -1,175 +1,224 @@
+
+
 import 'package:app_front/core/core.dart';
-import 'package:app_front/core/widgets/app_btn.dart';
+import 'package:app_front/core/strings.dart';
 import 'package:app_front/core/widgets/app_dropdown.dart';
 import 'package:app_front/core/widgets/app_input.dart';
+import 'package:app_front/core/widgets/label_wrapper.dart';
 import 'package:app_front/core/widgets/loader_wrapper.dart';
 import 'package:app_front/features/auth/auth.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-// Выбор : имя фамилия курс группа
-class CompleteProfileCard extends StatefulWidget {
-  const CompleteProfileCard({super.key});
 
+class _UpperCaseTextFormatter extends TextInputFormatter {
   @override
-  State<CompleteProfileCard> createState() => _CompleteProfileCardState();
-}
-
-class _CompleteProfileCardState extends State<CompleteProfileCard> {
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _surnameController = TextEditingController();
-
-  int? _selectedCourse;
-  int? _selectedGroupId;
-  
-  String? errorName;
-  String? errorSurname;
-  String? errorCourse;
-  String? errorGroupId;
-
-  List<int> _courses = [];
-  List<Group> _groups = [];
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _initData();
-    });
-  }
-  
-  Future<void> _initData() async {
-    final provider = context.read<AuthProvider>();
-    await provider.initDataComplete();
-    if (mounted) {
-      setState(() {
-        _courses = provider.years;
-      });
-    }
-  }
-
-  Future<void> _onCourseChanged(int? course) async {
-    setState(() {
-      _selectedCourse = course;
-      _selectedGroupId = null; // Сбрасываем выбранную группу при смене курса
-      _groups = [];
-      errorCourse = null;
-    });
-
-    if (course != null) {
-      final provider = context.read<AuthProvider>();
-      await provider.getGroups(course);
-      if (mounted) {
-        setState(() {
-          _groups = provider.groups.value; // Берем группы из провайдера
-        });
-      }
-    }
-  }
-
-  bool _check() {
-    bool isValid = true;
-    setState(() {
-      errorName = _nameController.text.trim().isEmpty ? "field_required".tr() : null;
-      errorSurname = _surnameController.text.trim().isEmpty ? "field_required".tr() : null;
-      errorCourse = _selectedCourse == null ? "field_required".tr() : null;
-      errorGroupId = _selectedGroupId == null ? "field_required".tr() : null;
-    });
-
-    if (errorName != null || errorSurname != null || errorCourse != null || errorGroupId != null) {
-      isValid = false;
-    }
-
-    return isValid;
-  }
-
-  Future<void> _submit() async {  
-    if (!_check()) return;
-    
-    final provider = context.read<AuthProvider>();
-    await provider.completeProfile(
-      _nameController.text.trim(),
-      _surnameController.text.trim(),
-      _selectedGroupId!,
-      _selectedCourse!,
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    return TextEditingValue(
+      text: newValue.text.toUpperCase(),
+      selection: newValue.selection,
     );
   }
+}
 
+
+
+class CompleteProfileCard extends StatefulWidget {
+  
   @override
-  void dispose() {
-    _nameController.dispose();
-    _surnameController.dispose();
-    super.dispose();
+    State<CompleteProfileCard> createState() {
+      return _CompleteProfileCard();
+    }
+
+}
+
+class _CompleteProfileCard extends State<CompleteProfileCard> {
+  ProfileErrors _errors = const ProfileErrors();  
+  
+  bool _isGroupsLoading = false;
+  bool _isDataLoading = false;
+
+  // Data 
+  final _nameC = TextEditingController();
+  final _surnameC = TextEditingController();
+  int? _year;
+  int? _groupId;
+
+  List<Group> _groups = [];
+
+  late List<int> years;
+
+  Future<void> updateGroups() async {
+    setState(() {
+      _isGroupsLoading = true;
+    }); 
+  
+    final res = await context.read<AuthProvider>().getGroups(_year!);
+    
+    if(res != null){
+      setState(() {        
+        _groups = res;
+      });
+    } else {
+      await showActionConfirmDialog(
+        context: context, 
+        message: AppStrings.auth.please_select_other_year.tr(),
+        isCancel: false
+      );
+
+
+    }
+
+    setState(() {
+      _isGroupsLoading = false;
+    });
+  } 
+  
+  bool _validate() {
+    ProfileErrors newErrors = const ProfileErrors();
+
+    if (_nameC.text.trim().isEmpty) {
+      newErrors = newErrors.copyWith(name: AppStrings.auth.comp_name_error);
+    }
+    
+    if (_surnameC.text.trim().isEmpty) {
+      newErrors = newErrors.copyWith(surname: AppStrings.auth.comp_surname_error);
+    }
+    setState(() {
+      _errors = newErrors;
+    });
+
+    return _errors.name == null && 
+           _errors.surname == null && 
+           _errors.group == null && 
+           _errors.year == null;
+  }
+  
+  @override
+    void initState() {
+      super.initState();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+              _init();
+      });
+      
+    }
+
+  Future<void> _init() async {
+    final provider = context.read<AuthProvider>();
+    try{ 
+    years = await provider.initDataComplete();
+    } on AppException catch (e) {
+      ErrorHandler.handle(e);
+    }
+  }
+    
+  Future<void> _submit() async {
+    if(!_validate()) return;
+    setState(() {
+      _isDataLoading = true;             
+    });
+    final data = UserCompleteRequest(
+      name: _nameC.text, 
+      surname: _surnameC.text, 
+      groupId: _groupId!, year: _year!
+    );
+    
+    await context.read<AuthProvider>().completeProfile(data);
+
+    setState(() {
+      _isDataLoading = false;
+    });
+    
   }
 
   @override
-  Widget build(BuildContext context) {
-    final pr = context.watch<AuthProvider>();
+    Widget build(BuildContext context) {
 
-    return CardResponsive(
-      child: LoaderWrapper(  
-        loading: pr.isLoading,
+      return PopScope(
+        child: LocalLoaderWrapper(
+        isLoading: _isDataLoading,
         child: Column( 
           mainAxisSize: MainAxisSize.min,
-
           children: [
-            // Имя
-            AppInput(
-              controller: _nameController,
-              placeholder: "name".tr(),
-              errorText: errorName,
-              onChanged: (_) => setState(() => errorName = null),
+            // Name 
+            LabelWrapper(
+              label: AppStrings.auth.name_label.tr(), 
+              child: AppInput( 
+                errorText: _errors.name?.tr(),
+              )
             ),
-            const SizedBox(height: 12),
-
-            // Фамилия  
-            AppInput(
-              controller: _surnameController,
-              placeholder: "surname".tr(),
-              errorText: errorSurname,
-              onChanged: (_) => setState(() => errorSurname = null),
+            // Surname 
+            LabelWrapper(
+              label: AppStrings.auth.surname_label.tr(), 
+              child: AppInput( 
+                errorText: _errors.surname?.tr()
+              )
             ),
-            const SizedBox(height: 12),
-
-            // Курс  
-            AppDropdown<int>(
-              items: _courses,  
-              itemAsString: (value) => "$value ${"course_label".tr()}", 
-              placeholder: "select_year_label".tr(),
-              errorText: errorCourse,
-              onChanged: _onCourseChanged,
-            ),
-            const SizedBox(height: 12),
-
-            // Группы
-            LoaderWrapper(
-              loading: pr.isGroupsLoading,  
-              child: AppDropdown<Group>(
-                items: _groups,  
-                itemAsString: (value) => value.title,
-                errorText: errorGroupId,
-                onChanged: (value) {
+            // Course 
+            LabelWrapper(
+              label: AppStrings.auth.year_label.tr(), 
+              child: AppDropdown(
+                items: years, 
+                itemAsString:(i) => i.toString(), 
+                onChanged: (i) async {
                   setState(() {
-                    _selectedGroupId = value?.id;
-                    errorGroupId = null;
+                    _year = i;
                   });
-                },
-              ),
+                  await updateGroups();
+                } 
+              )
             ),
-            
+            // Group 
+            LocalLoaderWrapper(
+              isLoading: _isGroupsLoading, 
+              child: AppDropdown<Group>(
+                items: _groups, 
+                itemAsString: (i) => i.title, 
+                onChanged: (val) {
+                  setState(() {
+                    _groupId = val!.id;                   
+                  });
+                }
+              )
+            )
 
-            const SizedBox(height: 24),
-            
-           FormActionButtons(
-              cancelText: "cancel".tr(),
-              saveText: "save".tr(),
-              onCancel: () => Navigator.pop(context, false),
-              onSave: _submit,
-            ),
-          ],
-        ),
-      ),
-    );  
+          ]
+        )
+      ));  
+    }
+}
+
+
+
+class ProfileErrors {
+  final String? name;
+  final String? surname;
+  final String? group;
+  final String? year;
+
+  const ProfileErrors({
+    this.name,
+    this.surname,
+    this.group,
+    this.year,
+  });
+
+  ProfileErrors copyWith({
+    String? name,
+    String? surname,
+    String? group,
+    String? year,
+  }) {
+    return ProfileErrors(
+      name: name ?? this.name,
+      surname: surname ?? this.surname,
+      group: group ?? this.group,
+      year: year ?? this.year,
+    );
   }
 }
