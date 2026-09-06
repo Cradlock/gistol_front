@@ -50,14 +50,7 @@ class _MaterialAppCore extends StatelessWidget {
     // Читаем тему из настроек
     final settings = context.watch<SettingsProvider>();
 
-    // 3. Оборачиваем MaterialApp в ScreenUtilInit
-    return ScreenUtilInit(
-      designSize: const Size(360, 690), // Твой базовый размер экрана из дизайна Figma
-      minTextAdapt: true,               // Защита от кривых шрифтов
-      splitScreenMode: true,            // Поддержка разделенного экрана
-      builder: (context, child) {
-        // 4. И только теперь безопасно возвращаем MaterialApp.router
-        return MaterialApp.router(
+       return MaterialApp.router(
           routerConfig: AppRouter.router,
           debugShowCheckedModeBanner: false,
           theme: settings.isDarkMode ? AppTheme.darkTheme : AppTheme.lightTheme,
@@ -65,8 +58,6 @@ class _MaterialAppCore extends StatelessWidget {
           supportedLocales: context.supportedLocales,
           locale: context.locale,
           themeMode: settings.isDarkMode ? ThemeMode.dark : ThemeMode.light,
-        );
-      },
     );
   }
 }

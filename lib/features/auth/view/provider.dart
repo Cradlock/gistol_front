@@ -22,6 +22,7 @@ class AuthProvider extends ChangeNotifier{
   AppException? currentError;
 
   ValueNotifier<bool> isLoading = ValueNotifier(false);
+  ValueNotifier<bool> isLoadingTgSign = ValueNotifier(false);
 
   bool get isLogged => _isLogged;
 
@@ -67,10 +68,12 @@ class AuthProvider extends ChangeNotifier{
   
 
   Future<void> signWithTelegram(BuildContext context) async {
-    isLoading.value = true; 
+    isLoading.value = true;
+    isLoadingTgSign.value = true;
     try{
       final response = await _service.loginWithTelegram(context);
-      
+      isLoadingTgSign.value = false;
+
 
       final tokens = response.data!.tokens;
       await saveTokens(tokens.access_token, tokens.refresh_token);

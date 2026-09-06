@@ -23,7 +23,7 @@ class TelegramAuthBtn extends StatelessWidget {
         : () async {
             authProvider.signWithTelegram(context);
           },
-      icon: LoaderWrapper(loading: authProvider.isLoading, 
+      icon: LoaderWrapper(loading: authProvider.isLoadingTgSign, 
         child: const Icon(Icons.telegram)),
       label: const Text('Войти через Telegram'),
     );
