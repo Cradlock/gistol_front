@@ -131,23 +131,27 @@ class _CompleteProfileCard extends State<CompleteProfileCard> {
       surname: _surnameC.text, 
       groupId: _groupId!, year: _year!
     );
+      final res = await context.read<AuthProvider>().completeProfile(data);
+      setState(() {
+        _isDataLoading = false;
+      });
     
-    await context.read<AuthProvider>().completeProfile(data);
-
-    setState(() {
-      _isDataLoading = false;
-    });
     
   }
 
   @override
     Widget build(BuildContext context) {
-
+final screenWidth = MediaQuery.of(context).size.width;
+  final isDesktop = screenWidth > 600;
+ 
       return PopScope(
         child: LocalLoaderWrapper(
         isLoading: _isDataLoading,
-        child: Card( 
-        child:Column( 
+        child: ConstrainedBox(
+        constraints: BoxConstraints( 
+          maxWidth: isDesktop ? 450 : double.infinity,
+        ),
+        child:SingleChildScrollView(child: Column( 
           mainAxisSize: MainAxisSize.min,
           children: [
             //Title 
@@ -212,7 +216,7 @@ const SizedBox(height: 16),
               )
           ]
         )
-      )));  
+      ))));  
     }
 }
 

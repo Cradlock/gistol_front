@@ -11,6 +11,7 @@ import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -96,12 +97,19 @@ class AuthProvider extends ChangeNotifier{
        final context = AppRouter.navigatorKey.currentContext;
 
 if (context != null) {
-  showAppDialog(
+  await showAppDialog<bool>(
     context: context,
     content: CompleteProfileCard(),
   );
+  if(isComplete()){
+    context.pushReplacement("/home");
+    return;
+  } else {
+    completedProfileCheck();
+  } 
+
 }
-    }
+    } 
   } 
 
 
@@ -131,6 +139,12 @@ if (context != null) {
   ) async {
     await _safeExecute(() async {
       final response = await _service.completeStudent(data); 
+      switch (response.statusCode) {
+              case 0:
+                throw NoConnectionException();
+            } 
+      _user = response.data!;
+      notifyListeners();
     });
   }
 
