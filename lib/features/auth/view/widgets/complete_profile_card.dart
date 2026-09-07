@@ -51,7 +51,7 @@ class _CompleteProfileCard extends State<CompleteProfileCard> {
 
   List<Group> _groups = [];
 
-  List<int> years = [];
+  late List<int> years = [];
 
   Future<void> updateGroups() async {
     setState(() {
@@ -146,8 +146,8 @@ class _CompleteProfileCard extends State<CompleteProfileCard> {
           mainAxisSize: MainAxisSize.min,
           children: [
             //Title 
-            Text(AppStrings.auth.complete_data_please,style: Theme.of(context).textTheme.titleMedium),
-
+            Text(AppStrings.auth.complete_data_please,style: Theme.of(context).textTheme.titleLarge),
+            const SizedBox(height: 20),
 
             // Name 
             LabelWrapper(
@@ -199,10 +199,12 @@ const SizedBox(height: 16),
               )
             ),
             const SizedBox(height: 16),
-            AppBtn(
-              type: AppButtonType.text,
-              onPressed: _submit,
-              
+            
+            LocalLoaderWrapper(isLoading: _isDataLoading, 
+              child: AppBtn(
+                type: AppButtonType.filled,
+                onPressed: _submit,
+              )
             ) 
           ]
         )
