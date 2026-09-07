@@ -11,6 +11,7 @@ export 'widgets/app_icon.dart';
 export 'widgets/app_btn.dart';
 export 'widgets/app_input.dart';
 export 'widgets/app_dropdown.dart';
+export 'widgets/app_dropdown_inp.dart';
 export 'widgets/loader_wrapper.dart';
 export 'widgets/confirm_dialog.dart';
 export 'widgets/responsive_layout.dart';

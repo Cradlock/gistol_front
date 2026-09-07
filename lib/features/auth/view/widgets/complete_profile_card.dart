@@ -145,7 +145,10 @@ class _CompleteProfileCard extends State<CompleteProfileCard> {
         child: Column( 
           mainAxisSize: MainAxisSize.min,
           children: [
-            
+            //Title 
+            Text(AppStrings.auth.complete_data_please,style: Theme.of(context).textTheme.titleMedium),
+
+
             // Name 
             LabelWrapper(
               label: AppStrings.auth.name_label.tr(), 
@@ -169,7 +172,8 @@ const SizedBox(height: 16),
             LabelWrapper(
               label: AppStrings.auth.year_label.tr(), 
               child: AppDropdown(
-                items: years, 
+                items: years,
+                value: _year,
                 itemAsString:(i) => i.toString(), 
                 onChanged: (i) async {
                   setState(() {
@@ -184,8 +188,8 @@ const SizedBox(height: 16),
 // Group 
             LocalLoaderWrapper(
               isLoading: _isGroupsLoading, 
-              child: AppDropdown<Group>(
-                items: _groups, 
+              child: AppDropdownInput<Group>(
+                items: _groups,
                 itemAsString: (i) => i.title, 
                 onChanged: (val) {
                   setState(() {

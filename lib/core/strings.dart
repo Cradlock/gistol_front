@@ -55,7 +55,7 @@ class AuthStrings {
   String get year_label => _k("yesr_label");
   String get please_select_other_year => _k("please_select_other_year");
   
-  
+  String get complete_data_please => _k("complete_data_please"); 
 
   String get comp_name_error => _k("complete_name_error");
   String get comp_surname_error => _k("complete_surname_error");

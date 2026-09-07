@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'app_input.dart'; // Убедись, что путь к твоему AppInput верный
 
 class AppDropdown<T extends Object> extends StatelessWidget {
   final List<T> items;
+  final T? value;
   final String Function(T item) itemAsString;
   final ValueChanged<T?> onChanged;
   final String? placeholder;
@@ -13,6 +13,7 @@ class AppDropdown<T extends Object> extends StatelessWidget {
     required this.items,
     required this.itemAsString,
     required this.onChanged,
+    this.value,
     this.placeholder,
     this.errorText,
   });
@@ -21,56 +22,41 @@ class AppDropdown<T extends Object> extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Autocomplete<T>(
-      optionsBuilder: (TextEditingValue textEditingValue) {
-        if (textEditingValue.text.isEmpty) {
-          return items;
-        }
-        return items.where((item) {
-          return itemAsString(item)
-              .toLowerCase()
-              .contains(textEditingValue.text.toLowerCase());
-        });
-      },
-      displayStringForOption: itemAsString,
-      onSelected: (T selection) {
-        onChanged(selection);
-      },
-      fieldViewBuilder: (context, controller, focusNode, onFieldSubmitted) {
-        // Используем твой фирменный AppInput
-        return AppInput(
-          controller: controller,
-          focusNode: focusNode,
-          placeholder: placeholder,
-          errorText: errorText,
-          suffixIcon: const Icon(Icons.arrow_drop_down),
-        );
-      },
-      optionsViewBuilder: (context, onSelected, options) {
-        return Align(
-          alignment: Alignment.topLeft,
-          child: Material(
-            elevation: 4,
-            borderRadius: BorderRadius.circular(16),
-            color: theme.colorScheme.surface,
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxHeight: 200),
-              child: ListView.builder(
-                padding: EdgeInsets.zero,
-                shrinkWrap: true,
-                itemCount: options.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final option = options.elementAt(index);
-                  return ListTile(
-                    title: Text(itemAsString(option)),
-                    onTap: () => onSelected(option),
-                  );
-                },
-              ),
-            ),
+    return DropdownButtonFormField<T>(
+      value: value,
+      items: items.map((item) {
+        return DropdownMenuItem<T>(
+          value: item,
+          child: Text(
+            itemAsString(item),
+            style: theme.textTheme.bodyMedium,
           ),
         );
-      },
+      }).toList(),
+      onChanged: onChanged,
+      // Используем стиль твоего AppInput через decoration, чтобы дизайн сохранялся единым
+      decoration: InputDecoration(
+        hintText: placeholder,
+        errorText: errorText,
+        filled: true,
+        fillColor: theme.colorScheme.surface,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: BorderSide(color: theme.colorScheme.outline.withOpacity(0.5)),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: BorderSide(color: theme.colorScheme.outline.withOpacity(0.5)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: BorderSide(color: theme.colorScheme.primary, width: 2),
+        ),
+      ),
+      icon: const Icon(Icons.arrow_drop_down),
+      dropdownColor: theme.colorScheme.surface,
+      isExpanded: true,
     );
   }
 }
