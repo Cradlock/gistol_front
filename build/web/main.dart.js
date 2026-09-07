@@ -25340,6 +25340,9 @@
     },
     _ButtonThemeData_Object_Diagnosticable: function _ButtonThemeData_Object_Diagnosticable() {
     },
+    Card$(child, clipBehavior, elevation) {
+      return new A.Card(elevation, clipBehavior, child, null);
+    },
     _CardVariant: function _CardVariant(t0, t1) {
       this.index = t0;
       this._name = t1;
@@ -100403,7 +100406,7 @@
         value = _this.___CompleteProfileCard_years_AI = A._setArrayType([], type$.JSArray_int);
       t5 = A.LabelWrapper$(new A.AppDropdown(value, _this._complete_profile_card$_year, new A._CompleteProfileCard_build_closure(), new A._CompleteProfileCard_build_closure0(_this), _null, type$.AppDropdown_int), t5);
       t6 = _this._isGroupsLoading;
-      return A.PopScope$(true, A.LocalLoaderWrapper$(A.Column$(A._setArrayType([t2, B.SizedBox_null_20_null_null, t3, B.SizedBox_null_16_null_null, t4, B.SizedBox_null_16_null_null, t5, B.SizedBox_null_16_null_null, A.LocalLoaderWrapper$(new A.AppDropdownInput(_this._groups, new A._CompleteProfileCard_build_closure1(), new A._CompleteProfileCard_build_closure2(_this), _null, type$.AppDropdownInput_Group), t6), B.SizedBox_null_16_null_null, new A.AppBtn("common.submit", _this.get$_submit(), B.AppButtonType_0, _null)], type$.JSArray_Widget), B.CrossAxisAlignment_2, B.MainAxisAlignment_0, B.MainAxisSize_0), t1), _null, type$.dynamic);
+      return A.PopScope$(true, A.LocalLoaderWrapper$(A.Card$(A.Column$(A._setArrayType([t2, B.SizedBox_null_20_null_null, t3, B.SizedBox_null_16_null_null, t4, B.SizedBox_null_16_null_null, t5, B.SizedBox_null_16_null_null, A.LocalLoaderWrapper$(new A.AppDropdownInput(_this._groups, new A._CompleteProfileCard_build_closure1(), new A._CompleteProfileCard_build_closure2(_this), _null, type$.AppDropdownInput_Group), t6), B.SizedBox_null_16_null_null, new A.AppBtn("common.submit", _this.get$_submit(), B.AppButtonType_0, _null)], type$.JSArray_Widget), B.CrossAxisAlignment_2, B.MainAxisAlignment_0, B.MainAxisSize_0), _null, _null), t1), _null, type$.dynamic);
     }
   };
   A._CompleteProfileCard_updateGroups_closure.prototype = {
@@ -100729,8 +100732,7 @@
       t1 = A.Text$(A.StringTranslateExtension_tr("settings.settings_darkmode"), _null, _null, _null, _null, _null, _null);
       t2 = settingsProvider._themeMode;
       t3 = type$.JSArray_Widget;
-      t1 = A.Column$(A._setArrayType([new A.SwitchListTile(t2 === B.ThemeMode_2, new A.SettingsScreen_build_closure(settingsProvider), t1, B.Icon_4UL, _null), A.ListTile$(false, _null, _null, _null, true, _null, _null, _null, true, _null, B.Icon_Yw5, _null, _null, _null, _null, new A.SettingsScreen_build_closure0(this, context), false, _null, _null, _null, _null, _null, _null, A.Text$(A.StringTranslateExtension_tr("settings.settings_langmode"), _null, _null, _null, _null, _null, _null), A.Text$(currentLanguageName, _null, _null, _null, A.Theme_of(context).textTheme.titleMedium, _null, _null), _null)], t3), B.CrossAxisAlignment_2, B.MainAxisAlignment_0, B.MainAxisSize_1);
-      return A.SingleChildScrollView$(A.Column$(A._setArrayType([new A.Card(5, B.Clip_2, t1, _null)], t3), B.CrossAxisAlignment_0, B.MainAxisAlignment_0, B.MainAxisSize_1), B.EdgeInsets_16_16_16_16, _null);
+      return A.SingleChildScrollView$(A.Column$(A._setArrayType([A.Card$(A.Column$(A._setArrayType([new A.SwitchListTile(t2 === B.ThemeMode_2, new A.SettingsScreen_build_closure(settingsProvider), t1, B.Icon_4UL, _null), A.ListTile$(false, _null, _null, _null, true, _null, _null, _null, true, _null, B.Icon_Yw5, _null, _null, _null, _null, new A.SettingsScreen_build_closure0(this, context), false, _null, _null, _null, _null, _null, _null, A.Text$(A.StringTranslateExtension_tr("settings.settings_langmode"), _null, _null, _null, _null, _null, _null), A.Text$(currentLanguageName, _null, _null, _null, A.Theme_of(context).textTheme.titleMedium, _null, _null), _null)], t3), B.CrossAxisAlignment_2, B.MainAxisAlignment_0, B.MainAxisSize_1), B.Clip_2, 5)], t3), B.CrossAxisAlignment_0, B.MainAxisAlignment_0, B.MainAxisSize_1), B.EdgeInsets_16_16_16_16, _null);
     }
   };
   A.SettingsScreen__showLangDialog_closure.prototype = {
@@ -119479,7 +119481,7 @@
   };
   A.Card.prototype = {
     build$1(context) {
-      var cardTheme, t1, defaults, t2, t3, t4, t5, _null = null;
+      var cardTheme, t1, defaults, t2, t3, t4, t5, t6, t7, _null = null;
       context.dependOnInheritedWidgetOfExactType$1$0(type$.CardTheme);
       cardTheme = A.Theme_of(context).cardTheme;
       A.Theme_of(context);
@@ -119503,10 +119505,24 @@
       t4 = cardTheme.surfaceTintColor;
       if (t4 == null)
         t4 = defaults.get$surfaceTintColor();
-      t5 = cardTheme.shape;
+      t5 = this.elevation;
       if (t5 == null)
-        t5 = defaults.get$shape();
-      return A.Semantics$(_null, new A.Padding(t1, A.Material$(false, B.Duration_200000, true, _null, A.Semantics$(_null, this.child, false, _null, _null, false, _null, false, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, B.SemanticsValidationResult_0, _null), this.clipBehavior, t2, this.elevation, _null, t3, t5, t4, _null, B.MaterialType_1), _null), true, _null, _null, false, _null, false, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, B.SemanticsValidationResult_0, _null);
+        t5 = cardTheme.elevation;
+      if (t5 == null) {
+        t5 = defaults.elevation;
+        t5.toString;
+      }
+      t6 = cardTheme.shape;
+      if (t6 == null)
+        t6 = defaults.get$shape();
+      t7 = this.clipBehavior;
+      if (t7 == null)
+        t7 = cardTheme.clipBehavior;
+      if (t7 == null) {
+        t7 = defaults.clipBehavior;
+        t7.toString;
+      }
+      return A.Semantics$(_null, new A.Padding(t1, A.Material$(false, B.Duration_200000, true, _null, A.Semantics$(_null, this.child, false, _null, _null, false, _null, false, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, B.SemanticsValidationResult_0, _null), t7, t2, t5, _null, t3, t6, t4, _null, B.MaterialType_1), _null), true, _null, _null, false, _null, false, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, _null, B.SemanticsValidationResult_0, _null);
     }
   };
   A._CardDefaultsM3.prototype = {

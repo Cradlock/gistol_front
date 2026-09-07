@@ -9,6 +9,7 @@ import 'package:app_front/core/widgets/loader_wrapper.dart';
 import 'package:app_front/features/auth/auth.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
@@ -145,7 +146,8 @@ class _CompleteProfileCard extends State<CompleteProfileCard> {
       return PopScope(
         child: LocalLoaderWrapper(
         isLoading: _isDataLoading,
-        child: Column( 
+        child: Card( 
+        child:Column( 
           mainAxisSize: MainAxisSize.min,
           children: [
             //Title 
@@ -210,7 +212,7 @@ const SizedBox(height: 16),
               )
           ]
         )
-      ));  
+      )));  
     }
 }
 
