@@ -81,15 +81,7 @@ class AuthProvider extends ChangeNotifier{
       isLoading.value = false;
       _user = response.data!.user;
       
-
-      if(!isComplete()){
-        final res = await showAppDialog<bool>(
-          context: context,
-          content: CompleteProfileCard() 
-        ); 
-         
-
-      }
+      await completedProfileCheck();
       
     } on AppException catch (e) {
       ErrorHandler.handle(e);
@@ -99,6 +91,20 @@ class AuthProvider extends ChangeNotifier{
     }
   }
   
+  Future<void> completedProfileCheck() async {
+    if(!isComplete() ){
+       final context = AppRouter.navigatorKey.currentContext;
+
+if (context != null) {
+  showAppDialog(
+    context: context,
+    content: CompleteProfileCard(),
+  );
+}
+    }
+  } 
+
+
   Future<List<int>> initDataComplete() async {
       final result = await _service.getYears();
       
@@ -123,39 +129,23 @@ class AuthProvider extends ChangeNotifier{
   Future<void> completeProfile(
     UserCompleteRequest data 
   ) async {
-    
     await _safeExecute(() async {
       final response = await _service.completeStudent(data); 
-      
     });
   }
 
   Future<void> checkLoginStatus() async {
-    isLoading.value = true;
-    currentError = null;
-
-    try {
+     
+    await _safeExecute(() async {
       final response = await _service.me();
-      
-      if (response.statusCode != 200 || response.data == null) {
-        if (response.statusCode == 500) {
-          currentError = NoConnectionException();
-        }
-         
-        isLoading.value = false;
-        return ; // Ошибка — пользователя на логин!
-      }      
-
-      _user = response.data;
-      _isLogged = true;
-      isLoading.value = false;
-      return ;
-
-    } catch (e) {
-      debugPrint(e.toString()); 
-      isLoading.value = false;
-      return ;
-    }
+      switch (response.statusCode) {
+          case 0:
+            throw NoConnectionException(); 
+          default:
+      }
+      await completedProfileCheck();
+    },customLoader: isLoading);
+     
   } 
   
  
