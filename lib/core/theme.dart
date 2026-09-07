@@ -31,11 +31,11 @@ class AppTheme {
     final secondaryColor = isDark ? Colors.white54 : Colors.black54;
 
     return TextTheme(
-      displayLarge: TextStyle(fontSize: 46.sp, fontWeight: FontWeight.bold),
-      titleLarge: TextStyle(fontSize: 22.sp, fontWeight: FontWeight.normal, letterSpacing: 0.5),
-      bodyLarge: TextStyle(fontSize: 16.sp, color: baseColor, height: 1.5),
-      bodyMedium: TextStyle(fontSize: 14.sp, color: secondaryColor),
-      labelLarge: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold),
+      displayLarge: TextStyle(fontSize: 46, fontWeight: FontWeight.bold),
+      titleLarge: TextStyle(fontSize: 22, fontWeight: FontWeight.normal, letterSpacing: 0.5),
+      bodyLarge: TextStyle(fontSize: 16, color: baseColor, height: 1.5),
+      bodyMedium: TextStyle(fontSize: 14, color: secondaryColor),
+      labelLarge: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
     );
   }
 

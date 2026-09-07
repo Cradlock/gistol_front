@@ -145,6 +145,7 @@ class _CompleteProfileCard extends State<CompleteProfileCard> {
         child: Column( 
           mainAxisSize: MainAxisSize.min,
           children: [
+            
             // Name 
             LabelWrapper(
               label: AppStrings.auth.name_label.tr(), 
