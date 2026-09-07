@@ -111,7 +111,10 @@ class _CompleteProfileCard extends State<CompleteProfileCard> {
   Future<void> _init() async {
     final provider = context.read<AuthProvider>();
     try{ 
-    years = await provider.initDataComplete();
+      final lyears = await provider.initDataComplete();
+      setState(() {
+              years = lyears;
+            }); 
     } on AppException catch (e) {
       ErrorHandler.handle(e);
     }
@@ -167,7 +170,7 @@ class _CompleteProfileCard extends State<CompleteProfileCard> {
               )
             ),
             // Course 
-const SizedBox(height: 16),
+            const SizedBox(height: 16),
 
             LabelWrapper(
               label: AppStrings.auth.year_label.tr(), 
@@ -200,12 +203,11 @@ const SizedBox(height: 16),
             ),
             const SizedBox(height: 16),
             
-            LocalLoaderWrapper(isLoading: _isDataLoading, 
-              child: AppBtn(
+               AppBtn(
                 type: AppButtonType.filled,
+                text: AppStrings.common.submit,
                 onPressed: _submit,
               )
-            ) 
           ]
         )
       ));  
