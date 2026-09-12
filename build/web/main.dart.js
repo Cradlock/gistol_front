@@ -24706,14 +24706,17 @@
       this.index = t0;
       this._name = t1;
     },
-    MaterialApp: function MaterialApp(t0, t1, t2, t3, t4, t5) {
+    MaterialApp: function MaterialApp(t0, t1, t2, t3, t4, t5, t6, t7, t8) {
       var _ = this;
       _.routerConfig = t0;
-      _.locale = t1;
-      _.localizationsDelegates = t2;
-      _.supportedLocales = t3;
-      _.debugShowCheckedModeBanner = t4;
-      _.key = t5;
+      _.theme = t1;
+      _.darkTheme = t2;
+      _.themeMode = t3;
+      _.locale = t4;
+      _.localizationsDelegates = t5;
+      _.supportedLocales = t6;
+      _.debugShowCheckedModeBanner = t7;
+      _.key = t8;
     },
     MaterialApp_createMaterialHeroController_closure: function MaterialApp_createMaterialHeroController_closure() {
     },
@@ -25488,8 +25491,8 @@
       _.height = t1;
       _.textTheme = t2;
       _.layoutBehavior = t3;
-      _._padding = t4;
-      _._shape = t5;
+      _._button_theme$_padding = t4;
+      _._button_theme$_shape = t5;
       _.alignedDropdown = t6;
       _._buttonColor = t7;
       _._disabledColor = t8;
@@ -39136,7 +39139,7 @@
     },
     RenderPhysicalModel: function RenderPhysicalModel(t0, t1, t2, t3, t4, t5, t6, t7, t8, t9) {
       var _ = this;
-      _._proxy_box$_shape = t0;
+      _._shape = t0;
       _._proxy_box$_borderRadius = t1;
       _._proxy_box$_elevation = t2;
       _._proxy_box$_shadowColor = t3;
@@ -40019,7 +40022,7 @@
     RenderPadding: function RenderPadding(t0, t1, t2, t3, t4) {
       var _ = this;
       _._resolvedPaddingCache = null;
-      _._shifted_box$_padding = t0;
+      _._padding = t0;
       _._shifted_box$_textDirection = t1;
       _.RenderObjectWithChildMixin__child = t2;
       _._layoutCacheStorage = t3;
@@ -95222,9 +95225,6 @@
     call$1$brightness($0) {
       return this.noSuchMethod$1(this, A.createInvocationMirror("call", "call$1$brightness", 0, [$0], ["brightness"], 0));
     },
-    call$3$bodyColor$decorationColor$displayColor($0, $1, $2) {
-      return this.noSuchMethod$1(this, A.createInvocationMirror("call", "call$3$bodyColor$decorationColor$displayColor", 0, [$0, $1, $2], ["bodyColor", "decorationColor", "displayColor"], 0));
-    },
     call$3$cancel$down$reason($0, $1, $2) {
       return this.noSuchMethod$1(this, A.createInvocationMirror("call", "call$3$cancel$down$reason", 0, [$0, $1, $2], ["cancel", "down", "reason"], 0));
     },
@@ -95321,9 +95321,6 @@
     call$11$borderRadius$color$containedInkWell$controller$customBorder$onRemoved$position$radius$rectCallback$referenceBox$textDirection($0, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10) {
       return this.noSuchMethod$1(this, A.createInvocationMirror("call", "call$11$borderRadius$color$containedInkWell$controller$customBorder$onRemoved$position$radius$rectCallback$referenceBox$textDirection", 0, [$0, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10], ["borderRadius", "color", "containedInkWell", "controller", "customBorder", "onRemoved", "position", "radius", "rectCallback", "referenceBox", "textDirection"], 0));
     },
-    call$2$duration($0, $1) {
-      return this.noSuchMethod$1(this, A.createInvocationMirror("call", "call$2$duration", 0, [$0, $1], ["duration"], 0));
-    },
     call$1$context($0) {
       return this.noSuchMethod$1(this, A.createInvocationMirror("call", "call$1$context", 0, [$0], ["context"], 0));
     },
@@ -95335,6 +95332,12 @@
     },
     call$1$padding($0) {
       return this.noSuchMethod$1(this, A.createInvocationMirror("call", "call$1$padding", 0, [$0], ["padding"], 0));
+    },
+    call$3$bodyColor$decorationColor$displayColor($0, $1, $2) {
+      return this.noSuchMethod$1(this, A.createInvocationMirror("call", "call$3$bodyColor$decorationColor$displayColor", 0, [$0, $1, $2], ["bodyColor", "decorationColor", "displayColor"], 0));
+    },
+    call$2$duration($0, $1) {
+      return this.noSuchMethod$1(this, A.createInvocationMirror("call", "call$2$duration", 0, [$0, $1], ["duration"], 0));
     },
     call$5$arguments$child$key$name$restorationId($0, $1, $2, $3, $4) {
       return this.noSuchMethod$1(this, A.createInvocationMirror("call", "call$5$arguments$child$key$name$restorationId", 0, [$0, $1, $2, $3, $4], ["arguments", "child", "key", "name", "restorationId"], 0));
@@ -99578,15 +99581,19 @@
       _this.___MyAppState__router_F = t1;
     },
     build$1(context) {
-      var t2, t3, t4,
+      var t2, t3, t4, t5, t6, t7,
+        settingsProvider = A.Provider_of(context, true, type$.SettingsProvider),
         t1 = this.___MyAppState__router_F;
       t1 === $ && A.throwLateFieldNI("_router");
-      t2 = type$._EasyLocalizationProvider;
-      t3 = A._setArrayType([context.dependOnInheritedWidgetOfExactType$1$0(t2).delegate, B.C__MaterialLocalizationsDelegate, B.C__WidgetsLocalizationsDelegate, B.C__GlobalCupertinoLocalizationsDelegate], type$.JSArray_LocalizationsDelegate_dynamic);
-      t4 = context.dependOnInheritedWidgetOfExactType$1$0(t2).parent;
-      t2 = context.dependOnInheritedWidgetOfExactType$1$0(t2)._localeState.__EasyLocalizationController__locale_A;
-      t2 === $ && A.throwLateFieldNI("_locale");
-      return new A.MaterialApp(t1, t2, t3, t4.supportedLocales, false, null);
+      t2 = settingsProvider._themeMode;
+      t3 = A.ThemeData_ThemeData(B.Brightness_1, null, true);
+      t4 = A.ThemeData_ThemeData(B.Brightness_0, null, true);
+      t5 = type$._EasyLocalizationProvider;
+      t6 = A._setArrayType([context.dependOnInheritedWidgetOfExactType$1$0(t5).delegate, B.C__MaterialLocalizationsDelegate, B.C__WidgetsLocalizationsDelegate, B.C__GlobalCupertinoLocalizationsDelegate], type$.JSArray_LocalizationsDelegate_dynamic);
+      t7 = context.dependOnInheritedWidgetOfExactType$1$0(t5).parent;
+      t5 = context.dependOnInheritedWidgetOfExactType$1$0(t5)._localeState.__EasyLocalizationController__locale_A;
+      t5 === $ && A.throwLateFieldNI("_locale");
+      return new A.MaterialApp(t1, t3, t4, t2, t5, t6, t7.supportedLocales, false, null);
     }
   };
   A.AppProvider.prototype = {
@@ -118030,33 +118037,44 @@
       return new A._MaterialInspectorButton(this._isDarkTheme$1(context), onPressed, semanticsLabel, B.IconData_128842_null_null_false, null, B.InspectorButtonVariant_1, selectionOnTapEnabled, null);
     },
     _isDarkTheme$1(context) {
-      var t1;
-      this._widget.toString;
-      t1 = A.MediaQuery__maybeOf(context, B._MediaQueryAspect_7);
-      t1 = t1 == null ? null : t1.platformBrightness;
-      t1 = (t1 == null ? B.Brightness_1 : t1) === B.Brightness_0;
+      var t1 = this._widget.themeMode;
+      if (t1 !== B.ThemeMode_2)
+        if (t1 === B.ThemeMode_0) {
+          t1 = A.MediaQuery__maybeOf(context, B._MediaQueryAspect_7);
+          t1 = t1 == null ? null : t1.platformBrightness;
+          t1 = (t1 == null ? B.Brightness_1 : t1) === B.Brightness_0;
+        } else
+          t1 = false;
+      else
+        t1 = true;
       return t1;
     },
     _materialBuilder$2(context, child) {
-      var t1, platformBrightness, useDarkTheme, highContrast, theme, t2, effectiveSelectionColor, effectiveCursorColor, childWidget, _this = this, _null = null;
-      _this._widget.toString;
-      t1 = A.MediaQuery__maybeOf(context, B._MediaQueryAspect_7);
-      platformBrightness = t1 == null ? _null : t1.platformBrightness;
+      var useDarkTheme, highContrast, theme, t2, effectiveSelectionColor, effectiveCursorColor, childWidget, _this = this, _null = null,
+        mode = _this._widget.themeMode,
+        t1 = A.MediaQuery__maybeOf(context, B._MediaQueryAspect_7),
+        platformBrightness = t1 == null ? _null : t1.platformBrightness;
       if (platformBrightness == null)
         platformBrightness = B.Brightness_1;
-      useDarkTheme = platformBrightness === B.Brightness_0;
+      if (mode !== B.ThemeMode_2)
+        useDarkTheme = mode === B.ThemeMode_0 && platformBrightness === B.Brightness_0;
+      else
+        useDarkTheme = true;
       t1 = A.MediaQuery__maybeOf(context, B._MediaQueryAspect_15);
       t1 = t1 == null ? _null : t1.highContrast;
       highContrast = t1 === true;
       if (useDarkTheme)
         if (highContrast)
           _this._widget.toString;
+      theme = _null;
       if (useDarkTheme)
         _this._widget.toString;
-      if (highContrast)
+      if (useDarkTheme)
+        theme = _this._widget.darkTheme;
+      else if (highContrast)
         _this._widget.toString;
-      _this._widget.toString;
-      theme = A.ThemeData_ThemeData(_null, _null, _null);
+      if (theme == null)
+        theme = _this._widget.theme;
       t1 = theme.colorScheme;
       A.SystemChrome_setSystemUIOverlayStyle(t1.brightness === B.Brightness_0 ? B.SystemUiOverlayStyle_PSv : B.SystemUiOverlayStyle_4qY);
       t2 = theme.textSelectionTheme;
@@ -118073,10 +118091,15 @@
       return childWidget;
     },
     _buildWidgetApp$1(context) {
-      var _this = this, _null = null,
+      var materialColor, _this = this, _null = null,
         t1 = _this._widget,
-        t2 = t1.routerConfig;
-      t2 = A.WidgetsApp$router(_null, _null, _this.get$_materialBuilder(), B.MaterialColor_45F, false, _this.get$_exitWidgetSelectionButtonBuilder(), new A.GlobalObjectKey(_this, type$.GlobalObjectKey_State_StatefulWidget), t1.locale, _null, _null, _this.get$_localizationsDelegates(), _this.get$_moveExitWidgetSelectionButtonBuilder(), _null, _null, _null, _null, _null, t2, _null, _null, false, false, _this._widget.supportedLocales, _this.get$_tapBehaviorButtonBuilder(), B.TextStyle_V7Q, _null);
+        t2 = t1.theme;
+      t2 = t2.primaryColor;
+      materialColor = t2;
+      if (materialColor == null)
+        materialColor = B.MaterialColor_45F;
+      t2 = t1.routerConfig;
+      t2 = A.WidgetsApp$router(_null, _null, _this.get$_materialBuilder(), materialColor, false, _this.get$_exitWidgetSelectionButtonBuilder(), new A.GlobalObjectKey(_this, type$.GlobalObjectKey_State_StatefulWidget), t1.locale, _null, _null, _this.get$_localizationsDelegates(), _this.get$_moveExitWidgetSelectionButtonBuilder(), _null, _null, _null, _null, _null, t2, _null, _null, false, false, _this._widget.supportedLocales, _this.get$_tapBehaviorButtonBuilder(), B.TextStyle_V7Q, _null);
       return t2;
     },
     build$1(context) {
@@ -120086,7 +120109,7 @@
   };
   A.ButtonThemeData.prototype = {
     get$padding() {
-      var t1 = this._padding;
+      var t1 = this._button_theme$_padding;
       if (t1 == null)
         switch (this.textTheme.index) {
           case 0:
@@ -120105,7 +120128,7 @@
     },
     get$shape() {
       var _0_0,
-        t1 = this._shape;
+        t1 = this._button_theme$_shape;
       if (t1 == null) {
         _0_0 = this.textTheme;
         $label0$0: {
@@ -160102,9 +160125,9 @@
   };
   A.RenderPhysicalModel.prototype = {
     set$shape(value) {
-      if (this._proxy_box$_shape === value)
+      if (this._shape === value)
         return;
-      this._proxy_box$_shape = value;
+      this._shape = value;
       this._markNeedsClip$0();
     },
     set$borderRadius(value) {
@@ -160119,7 +160142,7 @@
       t1 = _this.get$size();
       t2 = 0 + t1._dx;
       t1 = 0 + t1._dy;
-      switch (_this._proxy_box$_shape.index) {
+      switch (_this._shape.index) {
         case 0:
           t3 = _this._proxy_box$_borderRadius;
           if (t3 == null)
@@ -160195,7 +160218,7 @@
     debugFillProperties$1(description) {
       var _null = null;
       this.super$_RenderPhysicalModelBase$debugFillProperties(description);
-      description.add$1(0, A.DiagnosticsProperty$("shape", this._proxy_box$_shape, true, B.C__NoDefaultValue, _null, false, _null, _null, B.DiagnosticLevel_3, _null, false, true, true, B.DiagnosticsTreeStyle_8, _null, type$.BoxShape));
+      description.add$1(0, A.DiagnosticsProperty$("shape", this._shape, true, B.C__NoDefaultValue, _null, false, _null, _null, B.DiagnosticLevel_3, _null, false, true, true, B.DiagnosticsTreeStyle_8, _null, type$.BoxShape));
       description.add$1(0, A.DiagnosticsProperty$("borderRadius", this._proxy_box$_borderRadius, true, B.C__NoDefaultValue, _null, false, _null, _null, B.DiagnosticLevel_3, _null, false, true, true, B.DiagnosticsTreeStyle_8, _null, type$.BorderRadius));
     }
   };
@@ -162081,16 +162104,16 @@
       var _this = this,
         $returnValue = _this._resolvedPaddingCache;
       if ($returnValue == null)
-        $returnValue = _this._resolvedPaddingCache = _this._shifted_box$_padding.resolve$1(_this._shifted_box$_textDirection);
+        $returnValue = _this._resolvedPaddingCache = _this._padding.resolve$1(_this._shifted_box$_textDirection);
       A.assertHelper($returnValue.get$isNonNegative());
       return $returnValue;
     },
     set$padding(value) {
       var _this = this;
       A.assertHelper(value.get$isNonNegative());
-      if (_this._shifted_box$_padding.$eq(0, value))
+      if (_this._padding.$eq(0, value))
         return;
-      _this._shifted_box$_padding = value;
+      _this._padding = value;
       _this._resolvedPaddingCache = null;
       _this.markNeedsLayout$0();
     },
@@ -162184,7 +162207,7 @@
     debugFillProperties$1(properties) {
       var _null = null;
       this.super$RenderBox$debugFillProperties(properties);
-      properties.add$1(0, A.DiagnosticsProperty$("padding", this._shifted_box$_padding, true, B.C__NoDefaultValue, _null, false, _null, _null, B.DiagnosticLevel_3, _null, false, true, true, B.DiagnosticsTreeStyle_8, _null, type$.EdgeInsetsGeometry));
+      properties.add$1(0, A.DiagnosticsProperty$("padding", this._padding, true, B.C__NoDefaultValue, _null, false, _null, _null, B.DiagnosticLevel_3, _null, false, true, true, B.DiagnosticsTreeStyle_8, _null, type$.EdgeInsetsGeometry));
       properties.add$1(0, A.EnumProperty$("textDirection", this._shifted_box$_textDirection, _null, B.DiagnosticLevel_3, type$.TextDirection));
     }
   };

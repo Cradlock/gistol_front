@@ -47,20 +47,27 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    // Создаем роутер ЕДИНОЖДЫ при запуске
     final authProvider = context.read<AuthProvider>();
     final appProvider = context.read<AppProvider>();
-    
-    
+
     _router = AppRouter.createRouter(authProvider, appProvider);
   }
 
   @override
   Widget build(BuildContext context) {
-    // При смене языка/темы перестраивается MaterialApp, но _router остаётся тем же!
+    // Подписываемся на изменения SettingsProvider для реактивной смены темы
+    final settingsProvider = context.watch<SettingsProvider>();
+
     return MaterialApp.router(
       routerConfig: _router,
       debugShowCheckedModeBanner: false,
+
+      // Подключение темы
+      themeMode: settingsProvider.themeMode,
+      theme: ThemeData.light(useMaterial3: true), // Ваша светлая тема
+      darkTheme: ThemeData.dark(useMaterial3: true), // Ваша тёмная тема
+
+      // Локализация
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
       locale: context.locale,
