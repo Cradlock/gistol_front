@@ -41,66 +41,62 @@ class AuthInterceptor extends Interceptor {
     
   Completer<void>? _refreshCompleter;
 
-  @override
-  Future<void> onError(
-    DioException err,
-    ErrorInterceptorHandler handler,
-  ) async {
-    // Если ошибка НЕ связана с авторизацией (не 401), просто прокидываем её дальше
-    if (err.response?.statusCode != 401) {
-      return handler.next(err);
-    }
+@override
+Future<void> onError(
+  DioException err,
+  ErrorInterceptorHandler handler,
+) async {
+  if (err.response?.statusCode != 401) {
+    return handler.next(err);
+  }
 
- if (_isRefreshing) {
-    // Если комплитер еще жив — ждем его завершения
+  // Если обновление уже идет другим запросом — встаем в очередь ожидания
+  if (_isRefreshing) {
     if (_refreshCompleter != null) {
       await _refreshCompleter!.future;
       return _retryRequest(err, handler);
     }
     return handler.next(err);
   }   
-    _isRefreshing = true;
 
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      final refreshToken = prefs.getString('refresh_token');
+  _isRefreshing = true;
+  _refreshCompleter = Completer<void>(); // Инициализируем барьер для остальных запросов
 
-      // Если рефреш-токена нет, то и обновлять нечего — отправляем разлогинивать юзера
-      if (refreshToken == null || refreshToken.isEmpty) {
-        _handleLogout();
-        return handler.next(err);
-      }
+  try {
+    final prefs = await SharedPreferences.getInstance();
+    final refreshToken = prefs.getString('refresh_token');
 
-      // 1. Пытаемся обновить токены на бэкенде
-      final response = await _refreshDio.post<Map<String,dynamic>>(
-        '/api/auth/refresh',
-        options: Options( 
-          headers: {
-            'Authorization': 'Bearer $refreshToken'
-          }
-        ), 
-        data: RefreshRequest(refresh_token: refreshToken).toJson()
-      );     
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        final tokens = RefreshResponse.converter(response.data);
-
-        await prefs.setString('access_token', tokens.access_token);
-        await prefs.setString('refresh_token', tokens.refresh_token);
-
-        // Повторяем текущий упавший запрос
-        return await _retryRequest(err, handler, newToken: tokens.access_token);
-      }
-    } catch (e) {
-      // Если даже ручка /refresh упала (например, рефреш токен тоже устарел или отозван)
-      // Значит сессия полностью мертва — принудительно разлогиниваем пользователя
+    if (refreshToken == null || refreshToken.isEmpty) {
       await _handleLogout();
       return handler.next(err);
-    } finally {
-      _isRefreshing = false;
     }
 
+    final response = await _refreshDio.post<Map<String, dynamic>>(
+      '/api/auth/refresh',
+      options: Options(headers: {'Authorization': 'Bearer $refreshToken'}), 
+      data: RefreshRequest(refresh_token: refreshToken).toJson(),
+    );      
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      final tokens = RefreshResponse.converter(response.data);
+
+      await prefs.setString('access_token', tokens.access_token);
+      await prefs.setString('refresh_token', tokens.refresh_token);
+
+      // Разблокируем все ожидающие запросы
+      _refreshCompleter?.complete();
+
+      return await _retryRequest(err, handler, newToken: tokens.access_token);
+    }
+  } catch (e) {
+    _refreshCompleter?.completeError(e);
+    await _handleLogout();
+    return handler.next(err);
+  } finally {
+    _isRefreshing = false;
+    _refreshCompleter = null; // Сбрасываем барьер
   }
-  
+} 
   Future<void> _retryRequest(
     DioException err,
     ErrorInterceptorHandler handler, {
@@ -134,7 +130,6 @@ class AuthInterceptor extends Interceptor {
     await prefs.remove('access_token');
     await prefs.remove('refresh_token');
     
-    ErrorHandler.handle(SessionExpired());
   }
 }
 

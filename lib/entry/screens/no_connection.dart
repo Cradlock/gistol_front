@@ -45,16 +45,6 @@ class _NoInternetScreenState extends State<NoConnectiontScreen>{
           _isRetrying = true;
     });
     
-    final authProvider = context.read<AuthProvider>();
-    
-
-    final isLogged = await authProvider.checkLoginStatus();
-    
-    if(authProvider.currentError != null) {
-      ErrorHandler.handle(authProvider.currentError!); 
-    } else {
-      AppRouter.router.go("/");
-    }
 
     setState(() {
       _isRetrying = false;

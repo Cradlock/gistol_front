@@ -1,63 +1,59 @@
 import 'package:app_front/core/core.dart';
+import 'package:app_front/core/widgets/errors/overlay.dart';
+import 'package:app_front/entry/app_provider.dart';
 import 'package:app_front/entry/entry.dart';
 import 'package:app_front/features/auth/auth.dart';
 import 'package:app_front/features/settings/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart'; // Добавили импорт пакета
 
 class MainApp extends StatelessWidget {
   final SettingsProvider settingsProvider;
   final AuthProvider authProvider;
-
+  final AppProvider appProvider;
+  
   const MainApp({
     super.key,
     required this.settingsProvider,
     required this.authProvider,
+    required this.appProvider
   });
 
   @override
   Widget build(BuildContext context) {
-    // 1. Слой локализации лежит на самом верху интерфейса
-    return EasyLocalization(
-      supportedLocales: const [Locale('ru'), Locale('en')],
-      path: 'assets/translations',
-      fallbackLocale: const Locale('ru'),
-      child: Builder(
-        builder: (context) {
-          // 2. Внедряем глобальные провайдеры
           return MultiProvider(
             providers: [
+              ChangeNotifierProvider<AppProvider>.value(value: appProvider),
               ChangeNotifierProvider<SettingsProvider>.value(value: settingsProvider),
               ChangeNotifierProvider<AuthProvider>.value(value: authProvider),
             ],
             // Передаем управление в ядро приложения
             child: const _MaterialAppCore(),
           );
-        },
-      ),
-    );
   }
 }
 
-// Выносим сам MaterialApp пониже, чтобы внутри него уже работал .tr(), Provider.of и ScreenUtil
 class _MaterialAppCore extends StatelessWidget {
   const _MaterialAppCore();
 
   @override
   Widget build(BuildContext context) {
-    // Читаем тему из настроек
+    final app = context.watch<AppProvider>();
     final settings = context.watch<SettingsProvider>();
+    final auth = context.watch<AuthProvider>();
+
 
        return MaterialApp.router(
-          routerConfig: AppRouter.router,
+          routerConfig: AppRouter.createRouter(auth, app),
           debugShowCheckedModeBanner: false,
-          theme: settings.isDarkMode ? AppTheme.darkTheme : AppTheme.lightTheme,
+          theme: AppTheme.lightTheme,
+          darkTheme: AppTheme.darkTheme,
           localizationsDelegates: context.localizationDelegates,
           supportedLocales: context.supportedLocales,
           locale: context.locale,
           themeMode: settings.isDarkMode ? ThemeMode.dark : ThemeMode.light,
+          
     );
   }
 }

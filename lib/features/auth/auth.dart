@@ -1,7 +1,5 @@
 
 
-export 'domain/telegram_errors.dart';
-export 'domain/telegram_user.dart';
 export 'domain/user.dart';
 export 'domain/user_data.dart';
 

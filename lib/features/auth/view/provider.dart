@@ -3,10 +3,8 @@ import 'package:app_front/core/core.dart';
 import 'package:app_front/entry/entry.dart';
 import 'package:app_front/features/auth/auth.dart';
 import 'package:app_front/features/auth/domain/errors.dart';
-import 'package:app_front/features/auth/domain/telegram_errors.dart';
 import 'package:app_front/features/auth/domain/user.dart';
 import 'package:app_front/features/auth/services/main.dart';
-import 'package:app_front/features/auth/view/widgets/complete_profile_card.dart';
 import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
@@ -18,47 +16,26 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 
 class AuthProvider extends ChangeNotifier{
-  bool _isLogged = false;
-
-  AppException? currentError;
-
-  ValueNotifier<bool> isLoading = ValueNotifier(false);
-  ValueNotifier<bool> isLoadingTgSign = ValueNotifier(false);
-
-  bool get isLogged => _isLogged;
-
   User? _user = null;
+  AppException? currentError;
+  bool _isLoading = false; 
+
+  bool get isLoading => _isLoading;
+  bool get isLogged => _user != null;
   User? get user => _user;
   
   final AuthService _service = AuthService();
-  Future<void> _safeExecute(
-    Future<void> Function() action, {
-      ValueNotifier<bool>? customLoader, 
-      bool globalLoader = true
-  }) async {
-    final loader = globalLoader ? isLoading : (customLoader ?? ValueNotifier(false));
-    loader.value = true;
-    try {
-      await action();
-    } on AppException catch (e) {
-      ErrorHandler.handle(e);
-    } catch (e) {
-      debugPrint("[Auth Provider] $e");
-    } finally {
-
-      loader.value = false;
-    }
-  }
+  
   bool isComplete() {
-  final user = _user;
-  if (user == null) return false;
+    final user = _user;
+    if (user == null) return false;
 
-  return user.year != null && user.name != null && 
+    return user.year != null && user.name != null && 
          user.name!.isNotEmpty &&
          user.surname != null &&
          user.surname!.isNotEmpty &&
          user.group != null;
-}
+  }
   
 
   Future<void> saveTokens(String access,String refresh) async {
@@ -69,101 +46,51 @@ class AuthProvider extends ChangeNotifier{
   
 
   Future<void> signWithTelegram(BuildContext context) async {
-    isLoading.value = true;
-    isLoadingTgSign.value = true;
-    try{
-      final response = await _service.loginWithTelegram(context);
-      isLoadingTgSign.value = false;
+    final response = await _service.loginWithTelegram(context);
 
+    final tokens = response.data!.tokens;
+    await saveTokens(tokens.access_token, tokens.refresh_token);
 
-      final tokens = response.data!.tokens;
-      await saveTokens(tokens.access_token, tokens.refresh_token);
-
-      isLoading.value = false;
-      _user = response.data!.user;
-      
-      await completedProfileCheck();
-      
-    } on AppException catch (e) {
-      ErrorHandler.handle(e);
-    } catch (e) {
-      debugPrint(e.toString());
-    } finally {
-    }
+    _user = response.data!.user;
   }
   
-  Future<void> completedProfileCheck() async {
-    if(!isComplete() ){
-       final context = AppRouter.navigatorKey.currentContext;
-
-if (context != null) {
-  await showAppDialog<bool>(
-    context: context,
-    content: CompleteProfileCard(),
-  );
-  if(isComplete()){
-    context.pushReplacement("/home");
-    return;
-  } else {
-    completedProfileCheck();
-  } 
-
-}
-    } 
-  } 
-
 
   Future<List<int>> initDataComplete() async {
       final result = await _service.getYears();
-      
-      if (result.statusCode == 0) {
-        throw NoConnectionException();
-      }
       return result.data!.years;
   } 
   
   Future<List<Group>?> getGroups(int year) async { 
-      
-      try{ 
-        final result = await _service.getGroups(year);
-      
-        return result.data!.groups;
-      } on AppException catch(e) {
-        ErrorHandler.handle(e);
-      } 
+      final result = await _service.getGroups(year);
+      return result.data!.groups;
   }
 
-
-  Future<void> completeProfile(
-    UserCompleteRequest data 
-  ) async {
-    await _safeExecute(() async {
-      final response = await _service.completeStudent(data); 
-      switch (response.statusCode) {
-              case 0:
-                throw NoConnectionException();
-            } 
-      _user = response.data!;
-      notifyListeners();
-    });
-  }
 
   Future<void> checkLoginStatus() async {
-     
-    await _safeExecute(() async {
+      _isLoading = true;
+      try{
       final response = await _service.me();
-      switch (response.statusCode) {
-          case 0:
-            throw NoConnectionException(); 
-          default:
+      _user = response.data;
+      } catch (e) {
+        rethrow;
+      } finally {
+      _isLoading = false;
       }
-      await completedProfileCheck();
-    },customLoader: isLoading);
-     
-  } 
+  }
   
- 
+  
+ Future<void> completeProfile(UserCompleteRequest data) async {
+  _isLoading = true;
+  notifyListeners(); // 1. GoRouter узнает о старте загрузки
 
+  try {
+    final response = await _service.completeStudent(data);
+    _user = response.data; // 2. Теперь _user заполнена (isComplete() вернет true)
+  } finally {
+    _isLoading = false;
+    notifyListeners(); // 3. GoRouter повторно вызывает redirect!
+  }
+}
   AuthProvider(){}
 
 

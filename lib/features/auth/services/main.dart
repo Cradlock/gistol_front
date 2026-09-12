@@ -1,7 +1,10 @@
 import 'package:app_front/core/core.dart';
 import 'package:app_front/core/env_key.dart';
+import 'package:app_front/entry/app_router.dart';
 import 'package:app_front/features/auth/auth.dart';
 import 'package:app_front/features/auth/domain/auth.dart';
+import 'package:app_front/features/auth/domain/errors.dart';
+import 'package:app_front/features/auth/domain/telegram_user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_telegram_auth/flutter_telegram_auth.dart';
 
@@ -20,15 +23,32 @@ class AuthService {
   final String _botRedirectUri = envKey("TELEGRAM_REDIRECT_URI");
     
   Future<WrResponse<TelegramAuthResponse>> loginWithTelegram(BuildContext context) async {
+    
     String idToken = await getTelegramId(
       clientId: _botClientId, redirectUri: _botRedirectUri);
+
+
     TelegramAuthRequest data = TelegramAuthRequest(idToken: idToken);
-    return  _api.post<TelegramAuthResponse>("auth/telegram",data: data, converter: TelegramAuthResponse.converter);
+    
+    final res = await _api.post<TelegramAuthResponse>("auth/telegram",data: data, converter: TelegramAuthResponse.converter);
+    
+    if(res.statusCode == 400 || res.statusCode == 401){
+      throw InvalidTelegramTokens();  
+    }
+
+    return res;
+  
   }
 
 
   Future<WrResponse<User>> me() async {
-    return await _api.get<User>("student/me", converter: User.converter);
+    final response = await _api.get<User>("student/me", converter: User.converter);
+    
+    if(response.statusCode == 401){
+      throw UnauthenticatedException(); 
+    }
+    
+    return response;
   }
   
   
@@ -40,13 +60,20 @@ class AuthService {
     return await _api.get("groups/by-course", converter: GroupResponse.converter,
       queryParameters: {"year": year});
   }
+  
 
   Future<WrResponse<User>> completeStudent(UserCompleteRequest data) async {
-    return await _api.post(
-      "student/complete", 
-      converter: User.converter,data: data);
-  }
+    final response = await _api.post(
+      "student/complete",
+      converter: User.converter,
+      data: data,
+    );
 
-}
+      if (response.statusCode == 400 || response.statusCode == 422) {
+        throw InvalidProfileDataException();
+      }
+
+    return response;
+  }}
 
 

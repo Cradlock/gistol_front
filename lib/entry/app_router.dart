@@ -1,10 +1,12 @@
 
 
+import 'package:app_front/entry/app_provider.dart';
 import 'package:app_front/entry/screens/home_screen.dart';
 import 'package:app_front/entry/screens/layout.dart';
 import 'package:app_front/entry/screens/no_internet_screen.dart';
 import 'package:app_front/entry/screens/splash_screen.dart';
 import 'package:app_front/features/auth/auth.dart';
+import 'package:app_front/features/auth/screens/complete_profile_screen.dart';
 import 'package:app_front/features/auth/screens/login_screen.dart';
 import 'package:app_front/features/legal/screens/policy_screen.dart';
 import 'package:app_front/features/legal/screens/service_screen.dart';
@@ -17,12 +19,18 @@ class AppRouter {
   // Глобальный ключ навигации
   static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-  static final GoRouter router = GoRouter(
+
+  static GoRouter createRouter( 
+    AuthProvider authProvider,
+    AppProvider appProvider
+  ) { 
+    return GoRouter(
     navigatorKey: navigatorKey, // Передаем ключ сюда
     initialLocation: '/',
+    debugLogDiagnostics: true,
+    refreshListenable: authProvider,
     routes: [
-      GoRoute(path: '/', builder: (context, child) => SplashScreen()),
-      GoRoute(path: '/no-internet', builder: (context, child) => NoInternetScreen()),
+      GoRoute(path: '/', builder: (context, state) => SplashScreen()),
       ShellRoute(
         builder: (context, state, child) => Mainlayout(child: child),
         routes: [
@@ -33,35 +41,47 @@ class AppRouter {
       GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
       GoRoute(path: '/service', builder: (context, state) => const ServiceScreen()),
       GoRoute(path: '/policy', builder: (context, state) => const PolicyScreen()),
+      GoRoute(path: '/complete', builder: (context,state) => const CompleteProfileScreen())
     ],
-    redirect: (context,state) async {
-     final authProvider = context.read<AuthProvider>();
-      
-      // Допустим, мы еще не проверяли статус при старте
-      // Здесь можно вызвать разовую проверку токенов из SharedPreferences / API
-      // bool isLoggedIn = authProvider.isLogged;
-      
-      // Пример логики перенаправления:
-      final isLoggingIn = state.uri.path == '/login';
-      final isSplash = state.uri.path == '/';
+  redirect: (BuildContext context, GoRouterState state) {
+  final isLoading = authProvider.isLoading;
+  final isLoggedIn = authProvider.isLogged;
+  final isProfileComplete = authProvider.isComplete();
+  
+  final currentLocation = state.matchedLocation;
 
-      // Если пользователь на корне, отправляем его проверять статус или сразу на home/login
-      if (isSplash) {
-        // Здесь можно выполнить твой запрос checkLoginStatus()
-        try {
-          await authProvider.checkLoginStatus();
-        } catch (_) {}
+  // 1. Пока идет асинхронная проверка — не дергаем навигацию
+  if (isLoading) return null;
 
-        return authProvider.isLogged ? '/home' : '/login';
-      }
+  // Белый список публичных путей и путь экрана авторизации
+  final isLoggingIn = currentLocation == '/login';
+  final isCompletingProfile = currentLocation == '/complete'; // Убедитесь, что путь точно совпадает с GoRoute(path: '/complete')
+  final isPublicRoute = currentLocation == '/service' || currentLocation == '/policy';
 
-      // Если не залогинен и пытается зайти куда-то кроме логина
-      if (!authProvider.isLogged && !isLoggingIn && state.uri.path != '/no-internet') {
-        return '/login';
-      }
-
-      return null; // О
-
+  // 2. НЕ авторизован -> только на /login
+  if (!isLoggedIn) {
+    if (!isLoggingIn && !isPublicRoute) {
+      return '/login';
     }
+    return null;
+  }
+
+  // 3. Авторизован, НО профиль НЕ заполнен -> только на /complete
+  if (!isProfileComplete) {
+    if (!isCompletingProfile) {
+      return '/complete';
+    }
+    return null; // Уже на /complete — останавливаем редирект!
+  }
+
+  // 4. Авторизован И профиль ЗАПОЛНЕН -> не пускаем на /login, /complete и /
+  if (isLoggingIn || isCompletingProfile || currentLocation == '/') {
+    return '/home';
+  }
+
+  return null;
+  }
   );
+  }
+
 }

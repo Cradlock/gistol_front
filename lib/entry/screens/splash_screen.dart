@@ -10,8 +10,35 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart'; 
 
+class SplashScreen extends StatefulWidget {
+  
+  @override
+    State<SplashScreen> createState() {
+      return _SplashScreen();
+    }
+}
 
-class SplashScreen extends StatelessWidget{
+class _SplashScreen extends State<SplashScreen>{
+
+@override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      init();
+    });
+  }
+
+Future<void> init() async {
+  final provider = context.read<AuthProvider>();  
+  
+  try{
+    await provider.checkLoginStatus();
+  } on AppException catch (error) {
+    ErrorHandler.handle(error);
+  }
+}
+
+
 @override
 Widget build(BuildContext context) {
   final theme = Theme.of(context);
