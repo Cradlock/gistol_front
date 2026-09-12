@@ -100979,6 +100979,7 @@
             case 0:
               // Function start
               $async$self._isLoading = true;
+              $async$self.notifyListeners$0();
               $async$handler = 2;
               $async$goto = 5;
               return A._asyncAwait($async$self._service.loginWithTelegram$1(context), $async$signWithTelegram$1);
@@ -101083,6 +101084,7 @@
             case 0:
               // Function start
               $async$self._isLoading = true;
+              $async$self.notifyListeners$0();
               $async$handler = 3;
               $async$goto = 6;
               return A._asyncAwait($async$self._service.me$0(), $async$checkLoginStatus$0);
@@ -101110,6 +101112,7 @@
               // finally
               $async$handler = 1;
               $async$self._isLoading = false;
+              $async$self.notifyListeners$0();
               // goto the next finally handler
               $async$goto = $async$next.pop();
               break;
