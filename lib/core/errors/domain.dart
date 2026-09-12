@@ -38,7 +38,9 @@ abstract class AppException implements Exception {
         return const SizedBox.shrink();
 
       case ExceptDisplayType.modal:
-        return Column(
+        return Padding( 
+        padding: const EdgeInsets.all(16),
+        child:Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(localKey.tr(), style: theme.textTheme.bodyLarge),
@@ -52,7 +54,7 @@ abstract class AppException implements Exception {
                 child: Text(AppStrings.common.retry.tr()),
               ),
           ],
-        );
+        ));
 
       case ExceptDisplayType.toast:
         return Row(

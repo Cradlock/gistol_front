@@ -99194,7 +99194,7 @@
           t1 = A._setArrayType([A.Text$(A.StringTranslateExtension_tr(_this.localKey), _null, _null, _null, theme.textTheme.bodyLarge, _null, _null), B.SizedBox_null_16_null_null], type$.JSArray_Widget);
           if (_this.onErrorAction != null)
             t1.push(A.ElevatedButton$(A.Text$(A.StringTranslateExtension_tr("common.retry"), _null, _null, _null, _null, _null, _null), new A.AppException_buildCustomDialog_closure(_this, context), _null));
-          return A.Column$(t1, B.CrossAxisAlignment_2, B.MainAxisAlignment_0, B.MainAxisSize_0);
+          return new A.Padding(B.EdgeInsets_16_16_16_16, A.Column$(t1, B.CrossAxisAlignment_2, B.MainAxisAlignment_0, B.MainAxisSize_0), _null);
         case 1:
           t1 = theme.colorScheme;
           t2 = t1._onErrorContainer;
@@ -101122,7 +101122,6 @@
             case 5:
               // returning from await.
               response = $async$result;
-              A.print__debugPrintThrottled$closure().call$1("[User] " + J.toString$0$(response.data));
               $async$self._user = response.data;
               $async$next.push(4);
               // goto finally
