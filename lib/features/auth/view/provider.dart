@@ -93,6 +93,7 @@ class AuthProvider extends ChangeNotifier{
 
   try {
     final response = await _service.completeStudent(data);
+    debugPrint("[User] ${response.data.toString()}");
     _user = response.data; // 2. Теперь _user заполнена (isComplete() вернет true)
   } finally {
     _isLoading = false;

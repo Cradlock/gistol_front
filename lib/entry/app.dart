@@ -51,6 +51,7 @@ class _MyAppState extends State<MyApp> {
     final authProvider = context.read<AuthProvider>();
     final appProvider = context.read<AppProvider>();
     
+    
     _router = AppRouter.createRouter(authProvider, appProvider);
   }
 
@@ -59,6 +60,7 @@ class _MyAppState extends State<MyApp> {
     // При смене языка/темы перестраивается MaterialApp, но _router остаётся тем же!
     return MaterialApp.router(
       routerConfig: _router,
+      debugShowCheckedModeBanner: false,
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
       locale: context.locale,
