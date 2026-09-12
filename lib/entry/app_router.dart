@@ -49,7 +49,8 @@ class AppRouter {
   final isProfileComplete = authProvider.isComplete();
   
   final currentLocation = state.matchedLocation;
-
+   debugPrint("[redirect router] completed profile:$isProfileComplete");
+  
   // 1. Пока идет асинхронная проверка — не дергаем навигацию
   if (isLoading) return null;
 
@@ -73,7 +74,7 @@ class AppRouter {
     }
     return null; // Уже на /complete — останавливаем редирект!
   }
-
+  
   if (isLoggingIn || isCompletingProfile || currentLocation == '/') {
     return '/home';
   }

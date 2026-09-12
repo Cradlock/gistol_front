@@ -99721,6 +99721,7 @@
       t2 = t1._user;
       isProfileComplete = t1.isComplete$0();
       currentLocation = state.matchedLocation;
+      A.print__debugPrintThrottled$closure().call$1("[redirect router] completed profile:" + isProfileComplete);
       if (isLoading)
         return _null;
       isLoggingIn = currentLocation === "/login";
