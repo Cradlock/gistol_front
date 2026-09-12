@@ -74,7 +74,6 @@ class AppRouter {
     return null; // Уже на /complete — останавливаем редирект!
   }
 
-  // 4. Авторизован И профиль ЗАПОЛНЕН -> не пускаем на /login, /complete и /
   if (isLoggingIn || isCompletingProfile || currentLocation == '/') {
     return '/home';
   }

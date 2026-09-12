@@ -100963,29 +100963,56 @@
       return A._asyncStartSync($async$saveTokens$2, $async$completer);
     },
     signWithTelegram$1(context) {
+      return this.signWithTelegram$body$AuthProvider(context);
+    },
+    signWithTelegram$body$AuthProvider(context) {
       var $async$goto = 0,
         $async$completer = A._makeAsyncAwaitCompleter(type$.void),
-        $async$self = this, t1, tokens;
+        $async$handler = 1, $async$errorStack = [], $async$next = [], $async$self = this, response, tokens;
       var $async$signWithTelegram$1 = A._wrapJsFunctionForAsync(function($async$errorCode, $async$result) {
-        if ($async$errorCode === 1)
-          return A._asyncRethrow($async$result, $async$completer);
+        if ($async$errorCode === 1) {
+          $async$errorStack.push($async$result);
+          $async$goto = $async$handler;
+        }
         for (;;)
           switch ($async$goto) {
             case 0:
               // Function start
-              $async$goto = 2;
+              $async$self._isLoading = true;
+              $async$handler = 2;
+              $async$goto = 5;
               return A._asyncAwait($async$self._service.loginWithTelegram$1(context), $async$signWithTelegram$1);
-            case 2:
+            case 5:
               // returning from await.
-              t1 = $async$result.data;
-              tokens = t1.tokens;
-              $async$goto = 3;
+              response = $async$result;
+              tokens = response.data.tokens;
+              $async$goto = 6;
               return A._asyncAwait($async$self.saveTokens$2(tokens._access_token, tokens._refresh_token), $async$signWithTelegram$1);
-            case 3:
+            case 6:
               // returning from await.
-              $async$self._user = t1.user;
+              $async$self._user = response.data.user;
+              $async$next.push(4);
+              // goto finally
+              $async$goto = 3;
+              break;
+            case 2:
+              // uncaught
+              $async$next = [1];
+            case 3:
+              // finally
+              $async$handler = 1;
+              $async$self._isLoading = false;
+              $async$self.notifyListeners$0();
+              // goto the next finally handler
+              $async$goto = $async$next.pop();
+              break;
+            case 4:
+              // after finally
               // implicit return
               return A._asyncReturn(null, $async$completer);
+            case 1:
+              // rethrow
+              return A._asyncRethrow($async$errorStack.at(-1), $async$completer);
           }
       });
       return A._asyncStartSync($async$signWithTelegram$1, $async$completer);

@@ -46,12 +46,17 @@ class AuthProvider extends ChangeNotifier{
   
 
   Future<void> signWithTelegram(BuildContext context) async {
+    _isLoading = true;
+    try{ 
     final response = await _service.loginWithTelegram(context);
-
     final tokens = response.data!.tokens;
     await saveTokens(tokens.access_token, tokens.refresh_token);
-
+    
     _user = response.data!.user;
+    } finally {
+    _isLoading = false;
+    notifyListeners();
+    }
   }
   
 
