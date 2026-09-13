@@ -7,18 +7,10 @@ import 'package:app_front/features/auth/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class TelegramAuthBtn extends StatefulWidget {
-  
-  @override
-    State<TelegramAuthBtn> createState() {
-      return _TelegramAuthBtn();
-    }
-}
-
-class _TelegramAuthBtn extends State<TelegramAuthBtn>{
+class TelegramAuthBtn extends StatelessWidget {
   
 
-  Future<void> _submit() async {
+  Future<void> _submit(BuildContext context) async {
     final AuthProvider authProvider = context.read<AuthProvider>();
    
     try{ 
@@ -32,12 +24,11 @@ class _TelegramAuthBtn extends State<TelegramAuthBtn>{
 
   @override
   Widget build(BuildContext context) {
-
-    final AuthProvider authProvider = context.watch()<AuthProvider>();
+final isLoading = context.watch<AuthProvider>().isLoading;
     return ElevatedButton.icon(
-      onPressed: authProvider.isLoading ? null : _submit, 
+      onPressed: isLoading ? null : () => _submit(context), 
 
-      icon: LocalLoaderWrapper(isLoading: authProvider.isLoading,child: Icon(Icons.telegram)),
+      icon: LocalLoaderWrapper(isLoading: isLoading,child: Icon(Icons.telegram)),
       label: const Text('Войти через Telegram'),
     );
   }
