@@ -2,8 +2,10 @@
 
 
 import 'package:app_front/core/core.dart';
+import 'package:app_front/core/strings.dart';
 import 'package:app_front/core/widgets/loader_wrapper.dart';
 import 'package:app_front/features/auth/auth.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -25,12 +27,11 @@ class TelegramAuthBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 final isLoading = context.watch<AuthProvider>().isLoading;
-    return ElevatedButton.icon(
+    return LocalLoaderWrapper( isLoading:  isLoading,child:AppBtn(
       onPressed: isLoading ? null : () => _submit(context), 
-
-      icon: LocalLoaderWrapper(isLoading: isLoading,child: Icon(Icons.telegram)),
-      label: const Text('Войти через Telegram'),
-    );
+      icon: Icons.telegram,
+      text: AppStrings.auth.sign_with_telegram.tr(),
+    ));
   }
 }
 

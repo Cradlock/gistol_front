@@ -49,7 +49,9 @@ class AuthStrings {
 
   static const String _ns = "auth.";
   static String _k(String key) => "$_ns$key";
-
+  
+  String get sign_with_telegram => _k("sign_with_tg");
+  
   // Ошибки авторизации Telegram
   String get platform_not_support_error => _k("platform_not_support_error");
   String get user_cancelled => _k("user_cancelled");
