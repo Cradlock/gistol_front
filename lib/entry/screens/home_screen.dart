@@ -5,6 +5,6 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text("Нахер пошел!!!");
+    return Text("");
   }
 }

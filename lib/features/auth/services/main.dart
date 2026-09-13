@@ -35,6 +35,9 @@ class AuthService {
     if(res.statusCode == 400 || res.statusCode == 401){
       throw InvalidTelegramTokens();  
     }
+    if(res.statusCode == 403){
+      throw AccountWasDeleted(); 
+    }
 
     return res;
   

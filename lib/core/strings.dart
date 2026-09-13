@@ -57,7 +57,7 @@ class AuthStrings {
   String get config_invalid => _k("config_invalid");
   String get internal_error => _k("internal_error");
   String get network_error => _k("network_error");
-  
+  String get account_was_deleted => _k("account_was_deleted_please_ask_admin"); 
   String get invalid_token_error => _k("invalid_token_error");
   String get error_invalid_profile_data => _k("error_invalid_profile_data");
   String get error_session_expired => _k("error_session_expired");

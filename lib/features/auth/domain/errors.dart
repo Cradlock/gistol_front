@@ -212,6 +212,15 @@ class NotConfirmedAccount extends AppException {
 
 }
 
+/// Аккаунт был удален 
+class AccountWasDeleted extends AppException {
+  AccountWasDeleted() 
+    : super(
+      displayType: ExceptDisplayType.modal,
+      localKey: AppStrings.auth.account_was_deleted
+    );
+}
+
 /// 4. Ошибка валидации анкеты студента (HTTP 400 / 422 на student/complete)
 class InvalidProfileDataException extends AppException {
   InvalidProfileDataException({super.onErrorAction})

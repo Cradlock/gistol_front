@@ -33,7 +33,7 @@ class _TelegramAuthBtn extends State<TelegramAuthBtn>{
   @override
   Widget build(BuildContext context) {
 
-    final AuthProvider authProvider = context.read<AuthProvider>();
+    final AuthProvider authProvider = context.watch()<AuthProvider>();
     return ElevatedButton.icon(
       onPressed: authProvider.isLoading ? null : _submit, 
 
