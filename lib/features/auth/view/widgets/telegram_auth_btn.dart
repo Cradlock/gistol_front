@@ -27,10 +27,10 @@ class TelegramAuthBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 final isLoading = context.watch<AuthProvider>().isLoading;
-    return LocalLoaderWrapper( isLoading:  isLoading,child:AppBtn(
+    return LocalLoaderWrapper( isLoading:  isLoading,child:ElevatedButton.icon(
       onPressed: isLoading ? null : () => _submit(context), 
-      icon: Icons.telegram,
-      text: AppStrings.auth.sign_with_telegram.tr(),
+      icon: Icon(Icons.telegram),
+      label: Text(AppStrings.auth.sign_with_telegram.tr()),
     ));
   }
 }
