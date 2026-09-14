@@ -35,6 +35,7 @@ class AppRouter {
         builder: (context, state, child) => Mainlayout(child: child),
         routes: [
           GoRoute(path: '/home', builder: (context, state) => const HomeScreen()),
+          GoRoute(path: '/profile', builder: (context, state) => const AccountScreen()),
           GoRoute(path: '/settings', builder: (context, state) => const SettingsScreen())
         ]
       ),

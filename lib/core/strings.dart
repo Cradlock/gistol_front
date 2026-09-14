@@ -5,6 +5,7 @@ class AppStrings {
   static const common = CommonStrings();
   static const auth = AuthStrings();
   static const settings = SettingsStrings();
+  static const profile = ProfileStrings();
 }
 
 class CommonStrings {
@@ -42,7 +43,23 @@ class SettingsStrings {
   
   String get darkmode => _k("darkmode");
   String get langmode => _k("langmode");
+  String get title => _k("title");
  
+}
+
+class ProfileStrings {
+  const ProfileStrings();
+
+  static const String _ns = "profile.";
+  static String _k(String key) => "$_ns$key";
+
+  String get year => _k("year");
+  String get group => _k("group");
+  String get scores => _k("scores");
+  String get settings => _k("settings");
+  String get logout => _k("logout");
+  String get taskHistory => _k("task_history");
+  String get taskHistoryEmpty => _k("task_history_empty");
 }
 class AuthStrings {
   const AuthStrings();

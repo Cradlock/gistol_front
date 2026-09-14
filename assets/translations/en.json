@@ -22,7 +22,18 @@
   
   "settings": {
     "settings_darkmode": "Dark mode",
-    "settings_langmode": "Language"
+    "settings_langmode": "Language",
+    "title": "Settings"
+  },
+
+  "profile": {
+    "year": "Year",
+    "group": "Group",
+    "scores": "Scores",
+    "settings": "Settings",
+    "logout": "Log out",
+    "task_history": "Task history",
+    "task_history_empty": "Task history is empty"
   },
   
   "errors": {

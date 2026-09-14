@@ -22,7 +22,18 @@
   
   "settings": {
     "settings_darkmode": "Темная тема",
-    "settings_langmode": "Язык"
+    "settings_langmode": "Язык",
+    "title": "Настройки"
+  },
+
+  "profile": {
+    "year": "Курс",
+    "group": "Группа",
+    "scores": "Баллы",
+    "settings": "Настройки",
+    "logout": "Выйти",
+    "task_history": "История задач",
+    "task_history_empty": "История задач пока пуста"
   },
   
   "errors": {

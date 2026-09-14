@@ -87,7 +87,16 @@ class AuthProvider extends ChangeNotifier{
   }
   
   
- Future<void> completeProfile(UserCompleteRequest data) async {
+  Future<void> logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('access_token');
+    await prefs.remove('refresh_token');
+    _user = null;
+    currentError = null;
+    notifyListeners();
+  }
+
+  Future<void> completeProfile(UserCompleteRequest data) async {
   _isLoading = true;
   notifyListeners(); // 1. GoRouter узнает о старте загрузки
 
