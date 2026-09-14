@@ -1,5 +1,6 @@
 
 
+import 'package:app_front/core/strings.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'spinner.dart';
@@ -90,12 +91,12 @@ Future<void> _handleOk() async {
                 if (widget.isCancel)
                   TextButton(
                     onPressed: () => Navigator.pop(context, false),
-                    child: Text('cancel'.tr()),
+                    child: Text(AppStrings.common.cancel.tr()),
                   ),
                 if (widget.isOk)
                   TextButton(
                     onPressed: _handleOk,
-                    child: Text('ok'.tr()),
+                    child: Text(AppStrings.common.ok.tr()),
                   ),
               ],
       ),

@@ -1,6 +1,6 @@
 
-import 'package:app_front/entry/app_router.dart';
 import 'package:app_front/entry/domain/nav_item.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -40,7 +40,7 @@ class _NavBarDesktop extends State<NavBarDesktop> {
           return NavigationRailDestination(
             icon: Icon(item.icon), 
             selectedIcon: Icon(item.selectedIcon),
-            label: Text(item.label)
+            label: Text(item.label.tr())
           );
         }).toList()
       );

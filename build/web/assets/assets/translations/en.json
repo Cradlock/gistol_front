@@ -1,4 +1,21 @@
 {
+  "common": {
+    "cancel": "Cancel",
+    "ok": "OK",
+    "yes": "Yes",
+    "exit": "Exit",
+    "save": "Save",
+    "create": "Create",
+    "error_blank_input": "This field cannot be empty",
+    "submit": "Submit",
+    "retry": "Retry",
+    "from": "From",
+    "to": "To",
+    "error_no_internet": "No internet connection",
+    "error_server_error": "Server error",
+    "error_timeout": "Request timed out"
+  },
+
   "navigation": {
     "menu_title": "Menu",
     "home_btn": "Home",
@@ -6,27 +23,50 @@
     "settings_btn": "Settings",
     "account_btn": "Account"
   },
-  
+
   "auth": {
     "login_btn": "Login",
     "signup_btn": "Sign Up",
-    "login_telegram": "Login with telegram",
-    "sign": "Sign...",
-    "retry": "Retry"
+    "login_telegram": "Login with Telegram",
+    "sign_with_tg": "Login with Telegram",
+    "sign": "Signing in...",
+    "retry": "Retry",
+    "platform_not_support_error": "Platform is not supported",
+    "user_cancelled": "Sign-in was cancelled",
+    "script_not_loaded": "Failed to load the auth script",
+    "config_invalid": "Invalid auth configuration",
+    "internal_error": "Internal error",
+    "network_error": "Network error",
+    "account_was_deleted_please_ask_admin": "This account was deleted. Please contact an admin",
+    "invalid_token_error": "Invalid Telegram credentials",
+    "error_invalid_profile_data": "Invalid profile data",
+    "error_session_expired": "Session expired. Please sign in again",
+    "not_confirmed_account": "Account is not confirmed",
+    "name_label": "Name",
+    "surname_label": "Surname",
+    "year_label": "Year",
+    "group_label": "Group",
+    "please_select_other_year": "Please select another year",
+    "complete_data_please": "Complete your profile",
+    "complete_name_error": "Enter your name",
+    "complete_surname_error": "Enter your surname",
+    "complete_year_error": "Select a year",
+    "complete_group_error": "Select a group"
   },
-  
+
   "documents": {
     "terms_title": "Terms of Service",
     "privacy_title": "Privacy Policy"
   },
-  
+
   "settings": {
-    "settings_darkmode": "Dark mode",
-    "settings_langmode": "Language",
-    "title": "Settings"
+    "title": "Settings",
+    "darkmode": "Dark mode",
+    "langmode": "Language"
   },
 
   "profile": {
+    "title": "Profile",
     "year": "Year",
     "group": "Group",
     "scores": "Scores",
@@ -35,24 +75,34 @@
     "task_history": "Task history",
     "task_history_empty": "Task history is empty"
   },
-  
+
+  "tasks": {
+    "title": "Tasks",
+    "empty": "No tasks yet"
+  },
+
+  "exams": {
+    "title": "Exams",
+    "empty": "No exams yet"
+  },
+
   "errors": {
     "system": {
-      "no_auth": "User not authorized (not tokens)",
-      "session_expired": "Auth session expired. Need login",
+      "no_auth": "User not authorized (no tokens)",
+      "session_expired": "Auth session expired. Please log in",
       "server_trouble": "Server error"
     },
     "network": {
-      "no_connection": "Not internet connections",
-      "no_connection_label": "Oops! no internet"
+      "no_connection": "No internet connection",
+      "no_connection_label": "Oops! No internet"
     },
     "telegram": {
       "sign_failed": "Failed to log in via Telegram",
-      "wrong_args":"Invalid arguments", 
-      "canceled": "User cancel action"
+      "wrong_args": "Invalid arguments",
+      "canceled": "User cancelled the action"
     },
     "platform": {
-      "unsupported":"Unsupported platform"
+      "unsupported": "Unsupported platform"
     }
   }
 }

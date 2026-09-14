@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:app_front/core/core.dart';
+import 'package:app_front/core/strings.dart';
 import 'package:app_front/entry/entry.dart';
 import 'package:app_front/features/auth/auth.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -67,7 +68,7 @@ class _NoInternetScreenState extends State<NoConnectiontScreen>{
               const SizedBox(height: 24),
 
               Text(
-                "errors.network.no_connection_label".tr(),
+                AppStrings.common.error_no_internet.tr(),
                 style: Theme.of(context).textTheme.titleMedium
               ),
               const SizedBox(height: 12),
@@ -84,7 +85,7 @@ ElevatedButton.icon(
           ),
         )
       : const Icon(Icons.refresh),
-  label: Text("auth.retry".tr()),
+  label: Text(AppStrings.common.retry.tr()),
   // Если _isRetrying true, передаем null — кнопка автоматически станет серой и неактивной
   onPressed: _isRetrying ? null : _retryConnection,
 ),           ] 

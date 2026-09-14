@@ -5,8 +5,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class AccountScreen extends StatelessWidget {
-  const AccountScreen({super.key});
+class ProfileScreen extends StatelessWidget {
+  const ProfileScreen({super.key});
 
   String _initials(User user) {
     final surname = user.surname?.trim() ?? '';

@@ -141,7 +141,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
     try {
       await context.read<AuthProvider>().completeProfile(data);
       // При использовании GoRouter с подпиской на AuthProvider,
-      // редирект на /home произойдёт автоматически из-за обновления состояния пользователя.
+      // редирект на /profile произойдёт автоматически из-за обновления состояния пользователя.
     } on AppException catch (e) {
       ErrorHandler.handle(e);
     } finally {

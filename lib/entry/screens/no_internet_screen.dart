@@ -1,10 +1,10 @@
 import 'dart:async';
 
+import 'package:app_front/core/strings.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
-import 'package:easy_localization/easy_localization.dart';
 
 
 
@@ -62,14 +62,14 @@ class _NoInternetScreenState extends State<NoInternetScreen>{
               const SizedBox(height: 24),
 
               Text(
-                "errors.network.no_connection_label".tr(),
+                AppStrings.common.error_no_internet.tr(),
                 style: Theme.of(context).textTheme.titleMedium
               ),
               const SizedBox(height: 12),
   
               ElevatedButton.icon(
                 icon: const Icon(Icons.refresh),
-                label: Text("auth.retry".tr()),
+                label: Text(AppStrings.common.retry.tr()),
                 onPressed: _retryConnection,
               ),
             ] 

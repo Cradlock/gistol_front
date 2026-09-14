@@ -109,7 +109,7 @@ class SettingsPanel extends StatelessWidget {
           child: Column(
             children: [
               SwitchListTile(
-                title: Text('settings.settings_darkmode'.tr()),
+                title: Text(AppStrings.settings.darkmode.tr()),
                 secondary: Icon(
                   settingsProvider.isDarkMode
                       ? Icons.dark_mode
@@ -119,7 +119,7 @@ class SettingsPanel extends StatelessWidget {
                 onChanged: settingsProvider.toggleTheme,
               ),
               ListTile(
-                title: Text('settings.settings_langmode'.tr()),
+                title: Text(AppStrings.settings.langmode.tr()),
                 leading: const Icon(Icons.language),
                 trailing: Text(
                   currentLanguageName,

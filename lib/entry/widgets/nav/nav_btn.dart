@@ -1,5 +1,6 @@
 
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -51,8 +52,8 @@ class NavBtn extends StatelessWidget {
             ),
             const SizedBox(height: 4),
             Text(
-              label,
-              style:  fonts.titleSmall
+              label.tr(),
+              style: fonts.titleSmall,
             )
           ])
         ),

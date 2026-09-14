@@ -1,4 +1,21 @@
 {
+  "common": {
+    "cancel": "Отмена",
+    "ok": "ОК",
+    "yes": "Да",
+    "exit": "Выход",
+    "save": "Сохранить",
+    "create": "Создать",
+    "error_blank_input": "Поле не должно быть пустым",
+    "submit": "Отправить",
+    "retry": "Повторить",
+    "from": "От",
+    "to": "До",
+    "error_no_internet": "Нет интернет-соединения",
+    "error_server_error": "Ошибка сервера",
+    "error_timeout": "Превышено время ожидания"
+  },
+
   "navigation": {
     "menu_title": "Меню",
     "home_btn": "Главная",
@@ -6,27 +23,50 @@
     "settings_btn": "Настройки",
     "account_btn": "Аккаунт"
   },
-  
+
   "auth": {
     "login_btn": "Войти",
     "signup_btn": "Регистрация",
     "login_telegram": "Войти через Telegram",
+    "sign_with_tg": "Войти через Telegram",
     "sign": "Вход...",
-    "retry": "Повторить"
+    "retry": "Повторить",
+    "platform_not_support_error": "Платформа не поддерживается",
+    "user_cancelled": "Вход отменён",
+    "script_not_loaded": "Не удалось загрузить скрипт авторизации",
+    "config_invalid": "Неверная конфигурация авторизации",
+    "internal_error": "Внутренняя ошибка",
+    "network_error": "Ошибка сети",
+    "account_was_deleted_please_ask_admin": "Аккаунт удалён. Обратитесь к администратору",
+    "invalid_token_error": "Недействительные данные Telegram",
+    "error_invalid_profile_data": "Неверные данные профиля",
+    "error_session_expired": "Сессия истекла. Войдите снова",
+    "not_confirmed_account": "Аккаунт не подтверждён",
+    "name_label": "Имя",
+    "surname_label": "Фамилия",
+    "year_label": "Курс",
+    "group_label": "Группа",
+    "please_select_other_year": "Выберите другой курс",
+    "complete_data_please": "Заполните данные профиля",
+    "complete_name_error": "Введите имя",
+    "complete_surname_error": "Введите фамилию",
+    "complete_year_error": "Выберите курс",
+    "complete_group_error": "Выберите группу"
   },
-  
+
   "documents": {
     "terms_title": "Условия использования",
     "privacy_title": "Политика конфиденциальности"
   },
-  
+
   "settings": {
-    "settings_darkmode": "Темная тема",
-    "settings_langmode": "Язык",
-    "title": "Настройки"
+    "title": "Настройки",
+    "darkmode": "Тёмная тема",
+    "langmode": "Язык"
   },
 
   "profile": {
+    "title": "Профиль",
     "year": "Курс",
     "group": "Группа",
     "scores": "Баллы",
@@ -35,7 +75,17 @@
     "task_history": "История задач",
     "task_history_empty": "История задач пока пуста"
   },
-  
+
+  "tasks": {
+    "title": "Задачи",
+    "empty": "Задач пока нет"
+  },
+
+  "exams": {
+    "title": "Экзамены",
+    "empty": "Экзаменов пока нет"
+  },
+
   "errors": {
     "system": {
       "no_auth": "Пользователь не авторизован (отсутствуют токены)",
@@ -48,11 +98,11 @@
     },
     "telegram": {
       "sign_failed": "Не удалось войти через Telegram",
-      "wrong_args":"Неправильные данные для Telegram",
-      "canceled":"Пользователь отменил действие"
+      "wrong_args": "Неправильные данные для Telegram",
+      "canceled": "Пользователь отменил действие"
     },
     "platform": {
-      "unsupported":"Платформа не поддерживается"
+      "unsupported": "Платформа не поддерживается"
     }
   }
 }
