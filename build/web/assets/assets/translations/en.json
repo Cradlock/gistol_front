@@ -73,7 +73,9 @@
     "settings": "Settings",
     "logout": "Log out",
     "task_history": "Task history",
-    "task_history_empty": "Task history is empty"
+    "task_history_empty": "Task history is empty",
+    "exam_history": "Exam history",
+    "exam_history_empty": "Exam history is empty"
   },
 
   "tasks": {
@@ -100,7 +102,21 @@
 
   "exams": {
     "title": "Exams",
-    "empty": "No exams yet"
+    "empty": "No exams available right now",
+    "question": "Question",
+    "your_answer": "Your answer",
+    "answer_placeholder": "Write your answer",
+    "submitted": "Exam submitted",
+    "already_submitted": "You have already submitted this exam",
+    "unavailable": "The exam is unavailable or its time is up",
+    "request_error": "Unable to load exams",
+    "duration_minutes": "{} min.",
+    "submit_confirm": "Submit the exam? You will not be able to change answers afterwards.",
+    "saving": "Saving…",
+    "no_answer": "No answer",
+    "status_pending": "Pending review",
+    "status_reviewed": "Reviewed",
+    "status_expired": "Expired"
   },
 
   "errors": {

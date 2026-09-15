@@ -5,6 +5,7 @@ import 'package:app_front/entry/entry.dart';
 import 'package:app_front/features/auth/auth.dart';
 import 'package:app_front/features/settings/settings.dart';
 import 'package:app_front/features/tasks/view/provider.dart';
+import 'package:app_front/features/exams/view/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -30,6 +31,7 @@ class MainApp extends StatelessWidget {
         ChangeNotifierProvider<SettingsProvider>.value(value: settingsProvider),
         ChangeNotifierProvider<AuthProvider>.value(value: authProvider),
         ChangeNotifierProvider<TasksProvider>(create: (_) => TasksProvider()),
+        ChangeNotifierProvider<ExamsProvider>(create: (_) => ExamsProvider()),
       ],
       // Передаем управление в ядро приложения
       child: const MyApp(),

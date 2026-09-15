@@ -1,28 +1,27 @@
-
-
-
-
-
-// lib/core/api/auth_interceptor.dart
-
 import 'dart:async';
 
-import 'package:app_front/core/core.dart';
 import 'package:app_front/features/auth/domain/auth.dart';
-import 'package:app_front/features/auth/domain/errors.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 class AuthInterceptor extends Interceptor {
-  // Нам нужен отдельный чистый экземпляр Dio для запроса /refresh.
-  // Если использовать тот же самый Dio, где висит этот интерцептор,
-  // мы уйдем в бесконечную рекурсию (зациклимся).
-  final Dio _refreshDio = Dio(BaseOptions(baseUrl: dotenv.get("BASE_URL")));
+  AuthInterceptor()
+    : _refreshDio = Dio(
+        BaseOptions(
+          baseUrl: dotenv.get('BASE_URL'),
+          connectTimeout: const Duration(seconds: 30),
+          receiveTimeout: const Duration(seconds: 30),
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+        ),
+      );
 
-  bool _isRefreshing = false;
-  
+  final Dio _refreshDio;
+  Future<String>? _ongoingRefresh;
+
   @override
   Future<void> onRequest(
     RequestOptions options,
@@ -30,91 +29,121 @@ class AuthInterceptor extends Interceptor {
   ) async {
     final prefs = await SharedPreferences.getInstance();
     final accessToken = prefs.getString('access_token');
-    
-    // Если токен есть в базе, автоматически лепим его ко всем запросам
+
     if (accessToken != null && accessToken.isNotEmpty) {
       options.headers['Authorization'] = 'Bearer $accessToken';
     }
 
-    return handler.next(options); // Пускаем запрос дальше
-  }
-    
-  Completer<void>? _refreshCompleter;
-
-@override
-Future<void> onError(
-  DioException err,
-  ErrorInterceptorHandler handler,
-) async {
-  if (err.response?.statusCode != 401) {
-    return handler.next(err);
+    return handler.next(options);
   }
 
-  // Если обновление уже идет другим запросом — встаем в очередь ожидания
-  if (_isRefreshing) {
-    if (_refreshCompleter != null) {
-      await _refreshCompleter!.future;
-      return _retryRequest(err, handler);
+  @override
+  Future<void> onError(
+    DioException err,
+    ErrorInterceptorHandler handler,
+  ) async {
+    if (err.response?.statusCode != 401) {
+      return handler.next(err);
     }
-    return handler.next(err);
-  }   
 
-  _isRefreshing = true;
-  _refreshCompleter = Completer<void>(); // Инициализируем барьер для остальных запросов
-
-  try {
-    final prefs = await SharedPreferences.getInstance();
-    final refreshToken = prefs.getString('refresh_token');
-
-    if (refreshToken == null || refreshToken.isEmpty) {
+    if (_isRefreshCall(err.requestOptions) ||
+        err.requestOptions.extra['auth_retried'] == true) {
       await _handleLogout();
       return handler.next(err);
     }
 
-    final response = await _refreshDio.post<Map<String, dynamic>>(
-      '/api/auth/refresh',
-      options: Options(headers: {'Authorization': 'Bearer $refreshToken'}), 
-      data: RefreshRequest(refresh_token: refreshToken).toJson(),
-    );      
-
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      final tokens = RefreshResponse.converter(response.data);
-
-      await prefs.setString('access_token', tokens.access_token);
-      await prefs.setString('refresh_token', tokens.refresh_token);
-
-      // Разблокируем все ожидающие запросы
-      _refreshCompleter?.complete();
-
-      return await _retryRequest(err, handler, newToken: tokens.access_token);
+    try {
+      final accessToken = await _queuedRefresh();
+      return _retryRequest(err, handler, accessToken);
+    } on _RefreshAuthFailure {
+      await _handleLogout();
+      return handler.next(err);
+    } catch (_) {
+      return handler.next(err);
     }
-  } catch (e) {
-    _refreshCompleter?.completeError(e);
-    await _handleLogout();
-    return handler.next(err);
-  } finally {
-    _isRefreshing = false;
-    _refreshCompleter = null; // Сбрасываем барьер
   }
-} 
+
+  bool _isRefreshCall(RequestOptions options) =>
+      options.path.contains('auth/refresh');
+
+  Future<String> _queuedRefresh() {
+    final existing = _ongoingRefresh;
+    if (existing != null) return existing;
+
+    final future = _refreshAccessToken();
+    _ongoingRefresh = future;
+    future.whenComplete(() {
+      if (identical(_ongoingRefresh, future)) {
+        _ongoingRefresh = null;
+      }
+    });
+    return future;
+  }
+
+  Future<String> _refreshAccessToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    final refreshToken = prefs.getString('refresh_token');
+
+    if (refreshToken == null || refreshToken.isEmpty) {
+      throw _RefreshAuthFailure();
+    }
+
+    try {
+      final response = await _refreshDio.post<Map<String, dynamic>>(
+        '/api/auth/refresh',
+        options: Options(headers: {'Authorization': 'Bearer $refreshToken'}),
+        data: RefreshRequest(refresh_token: refreshToken).toJson(),
+      );
+
+      final status = response.statusCode ?? 0;
+      if (status < 200 || status >= 300) {
+        if (status == 401 || status == 403) {
+          throw _RefreshAuthFailure();
+        }
+        throw StateError('Refresh failed with $status');
+      }
+
+      final tokens = RefreshResponse.converter(response.data);
+      await prefs.setString('access_token', tokens.access_token);
+      if (tokens.refresh_token.isNotEmpty) {
+        await prefs.setString('refresh_token', tokens.refresh_token);
+      }
+      return tokens.access_token;
+    } on _RefreshAuthFailure {
+      rethrow;
+    } on DioException catch (error) {
+      final status = error.response?.statusCode;
+      if (status == 401 || status == 403) {
+        throw _RefreshAuthFailure();
+      }
+      rethrow;
+    }
+  }
+
   Future<void> _retryRequest(
     DioException err,
-    ErrorInterceptorHandler handler, {
-    String? newToken,
-  }) async {
-    final prefs = await SharedPreferences.getInstance();
-    final token = newToken ?? prefs.getString('access_token');
-
+    ErrorInterceptorHandler handler,
+    String accessToken,
+  ) async {
     final requestOptions = err.requestOptions;
-    requestOptions.headers['Authorization'] = 'Bearer $token';
+    requestOptions.headers['Authorization'] = 'Bearer $accessToken';
+    requestOptions.extra['auth_retried'] = true;
 
-    final cloneDio = Dio(BaseOptions(baseUrl: requestOptions.baseUrl));
+    final cloneDio = Dio(
+      BaseOptions(
+        baseUrl: requestOptions.baseUrl,
+        connectTimeout: const Duration(seconds: 30),
+        receiveTimeout: const Duration(seconds: 30),
+      ),
+    );
     try {
       final response = await cloneDio.request(
         requestOptions.path,
         options: Options(
           method: requestOptions.method,
           headers: requestOptions.headers,
+          extra: requestOptions.extra,
+          contentType: requestOptions.contentType,
         ),
         data: requestOptions.data,
         queryParameters: requestOptions.queryParameters,
@@ -129,7 +158,7 @@ Future<void> onError(
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('access_token');
     await prefs.remove('refresh_token');
-    
   }
 }
 
+class _RefreshAuthFailure implements Exception {}

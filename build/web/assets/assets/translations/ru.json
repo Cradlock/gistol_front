@@ -73,7 +73,9 @@
     "settings": "Настройки",
     "logout": "Выйти",
     "task_history": "История задач",
-    "task_history_empty": "История задач пока пуста"
+    "task_history_empty": "История задач пока пуста",
+    "exam_history": "История экзаменов",
+    "exam_history_empty": "История экзаменов пока пуста"
   },
 
   "tasks": {
@@ -100,7 +102,21 @@
 
   "exams": {
     "title": "Экзамены",
-    "empty": "Экзаменов пока нет"
+    "empty": "Сейчас нет доступных экзаменов",
+    "question": "Вопрос",
+    "your_answer": "Ваш ответ",
+    "answer_placeholder": "Напишите ответ",
+    "submitted": "Экзамен отправлен",
+    "already_submitted": "Вы уже сдали этот экзамен",
+    "unavailable": "Экзамен недоступен или время вышло",
+    "request_error": "Не удалось загрузить экзамены",
+    "duration_minutes": "{} мин.",
+    "submit_confirm": "Отправить экзамен? После этого ответы изменить нельзя.",
+    "saving": "Сохранение…",
+    "no_answer": "Нет ответа",
+    "status_pending": "На проверке",
+    "status_reviewed": "Проверен",
+    "status_expired": "Истёк"
   },
 
   "errors": {

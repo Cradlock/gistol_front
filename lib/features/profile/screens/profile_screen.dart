@@ -1,6 +1,7 @@
 import 'package:app_front/core/strings.dart';
 import 'package:app_front/features/auth/auth.dart';
 import 'package:app_front/features/settings/settings.dart';
+import 'package:app_front/features/exams/view/widgets/exam_history_sheet.dart';
 import 'package:app_front/features/tasks/view/widgets/task_history_sheet.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +31,21 @@ class ProfileScreen extends StatelessWidget {
         borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
       ),
       builder: (_) => const SafeArea(child: TaskHistorySheet()),
+    );
+  }
+
+  void _openExamHistory(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
+    showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      showDragHandle: true,
+      backgroundColor: colors.surfaceContainerLow,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+      ),
+      builder: (_) => const SafeArea(child: ExamHistorySheet()),
     );
   }
 
@@ -132,6 +148,15 @@ class ProfileScreen extends StatelessWidget {
                       ),
                       title: Text(AppStrings.profile.taskHistory.tr()),
                       onTap: () => _openTaskHistory(context),
+                    ),
+                    Divider(height: 1, color: colors.outlineVariant),
+                    ListTile(
+                      leading: Icon(
+                        Icons.menu_book_outlined,
+                        color: colors.onSurfaceVariant,
+                      ),
+                      title: Text(AppStrings.profile.examHistory.tr()),
+                      onTap: () => _openExamHistory(context),
                     ),
                   ],
                 ),

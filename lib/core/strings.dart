@@ -55,6 +55,8 @@ class ProfileStrings {
   String get logout => _k("logout");
   String get taskHistory => _k("task_history");
   String get taskHistoryEmpty => _k("task_history_empty");
+  String get examHistory => _k("exam_history");
+  String get examHistoryEmpty => _k("exam_history_empty");
 }
 
 class AuthStrings {
@@ -99,6 +101,20 @@ class ExamString {
 
   String get title => _k("title");
   String get empty => _k("empty");
+  String get question => _k("question");
+  String get yourAnswer => _k("your_answer");
+  String get answerPlaceholder => _k("answer_placeholder");
+  String get submitted => _k("submitted");
+  String get alreadySubmitted => _k("already_submitted");
+  String get unavailable => _k("unavailable");
+  String get requestError => _k("request_error");
+  String get durationMinutes => _k("duration_minutes");
+  String get submitConfirm => _k("submit_confirm");
+  String get saving => _k("saving");
+  String get noAnswer => _k("no_answer");
+  String get statusPending => _k("status_pending");
+  String get statusReviewed => _k("status_reviewed");
+  String get statusExpired => _k("status_expired");
 }
 
 class TasksString {

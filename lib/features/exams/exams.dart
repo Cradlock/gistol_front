@@ -1,2 +1,9 @@
-
+export 'domain/errors.dart';
+export 'domain/exam.dart';
 export 'screens/exams_screen.dart';
+export 'services/exams_service.dart';
+export 'view/provider.dart';
+export 'view/widgets/exam_history_sheet.dart';
+export 'view/widgets/exam_take_sheet.dart';
+export 'view/widgets/exam_tile.dart';
+export 'view/widgets/exams_list.dart';
