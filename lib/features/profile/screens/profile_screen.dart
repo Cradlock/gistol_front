@@ -1,6 +1,7 @@
 import 'package:app_front/core/strings.dart';
 import 'package:app_front/features/auth/auth.dart';
 import 'package:app_front/features/settings/settings.dart';
+import 'package:app_front/features/tasks/view/widgets/task_history_sheet.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -11,7 +12,8 @@ class ProfileScreen extends StatelessWidget {
   String _initials(User user) {
     final surname = user.surname?.trim() ?? '';
     final name = user.name?.trim() ?? '';
-    final letters = '${surname.isNotEmpty ? surname[0] : ''}'
+    final letters =
+        '${surname.isNotEmpty ? surname[0] : ''}'
         '${name.isNotEmpty ? name[0] : ''}';
     return letters.toUpperCase();
   }
@@ -21,39 +23,13 @@ class ProfileScreen extends StatelessWidget {
 
     showModalBottomSheet<void>(
       context: context,
+      isScrollControlled: true,
       showDragHandle: true,
       backgroundColor: colors.surfaceContainerLow,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
       ),
-      builder: (context) {
-        return SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(24, 8, 24, 32),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  Icons.history_edu_outlined,
-                  size: 48,
-                  color: colors.onSurfaceVariant,
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  AppStrings.profile.taskHistory.tr(),
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  AppStrings.profile.taskHistoryEmpty.tr(),
-                  style: Theme.of(context).textTheme.bodyMedium,
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
-          ),
-        );
-      },
+      builder: (_) => const SafeArea(child: TaskHistorySheet()),
     );
   }
 

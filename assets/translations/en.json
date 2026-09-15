@@ -78,7 +78,24 @@
 
   "tasks": {
     "title": "Tasks",
-    "empty": "No tasks yet"
+    "empty": "No available unanswered tasks",
+    "question": "Task",
+    "your_answer": "Your answer",
+    "answer_placeholder": "Write your answer",
+    "answer_sent": "Answer submitted",
+    "already_answered": "You have already answered this task",
+    "unavailable": "The task is unavailable or its deadline has passed",
+    "request_error": "Unable to load tasks",
+    "urgency_critical": "Critical",
+    "urgency_urgent": "Urgent",
+    "urgency_soon": "Soon",
+    "urgency_normal": "On track",
+    "minutes_left": "{} min. left",
+    "hours_left": "{} hr. left",
+    "days_left": "{} days left",
+    "status_pending": "Pending review",
+    "status_positive": "Accepted",
+    "status_negative": "Rejected"
   },
 
   "exams": {

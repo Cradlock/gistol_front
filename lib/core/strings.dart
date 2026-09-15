@@ -1,5 +1,3 @@
-
-
 class AppStrings {
   static const common = CommonStrings();
   static const auth = AuthStrings();
@@ -111,4 +109,21 @@ class TasksString {
 
   String get title => _k("title");
   String get empty => _k("empty");
+  String get question => _k("question");
+  String get yourAnswer => _k("your_answer");
+  String get answerPlaceholder => _k("answer_placeholder");
+  String get answerSent => _k("answer_sent");
+  String get alreadyAnswered => _k("already_answered");
+  String get unavailable => _k("unavailable");
+  String get requestError => _k("request_error");
+  String get critical => _k("urgency_critical");
+  String get urgent => _k("urgency_urgent");
+  String get soon => _k("urgency_soon");
+  String get normal => _k("urgency_normal");
+  String get minutesLeft => _k("minutes_left");
+  String get hoursLeft => _k("hours_left");
+  String get daysLeft => _k("days_left");
+  String get statusPending => _k("status_pending");
+  String get statusPositive => _k("status_positive");
+  String get statusNegative => _k("status_negative");
 }

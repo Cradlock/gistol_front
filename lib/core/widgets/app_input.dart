@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -22,6 +20,7 @@ class AppInput extends StatelessWidget {
   final Widget? suffixIcon;
   final FocusNode? focusNode;
   final List<TextInputFormatter>? formatters;
+  final int maxLines;
 
   const AppInput({
     super.key,
@@ -39,7 +38,8 @@ class AppInput extends StatelessWidget {
     this.obscureText = false,
     this.prefixIcon,
     this.suffixIcon,
-    this.focusNode
+    this.focusNode,
+    this.maxLines = 1,
   });
 
   @override
@@ -50,8 +50,10 @@ class AppInput extends StatelessWidget {
     final borderStyle = OutlineInputBorder(
       borderRadius: BorderRadius.circular(16),
       borderSide: BorderSide(
-        color: errorText != null 
-            ? theme.colorScheme.error // Красная рамка при ошибке
+        color: errorText != null
+            ? theme
+                  .colorScheme
+                  .error // Красная рамка при ошибке
             : (borderColor ?? theme.colorScheme.outline.withOpacity(0.5)),
         width: borderWidth,
       ),
@@ -63,21 +65,24 @@ class AppInput extends StatelessWidget {
       onTap: onTap,
       inputFormatters: formatters,
       obscureText: obscureText,
+      maxLines: obscureText ? 1 : maxLines,
       focusNode: focusNode,
-      style: TextStyle(
-        fontSize: fontSize ?? 14.0,
-      ),
+      style: TextStyle(fontSize: fontSize ?? 14.0),
       decoration: InputDecoration(
         hintText: placeholder,
         prefixIcon: prefixIcon,
         suffixIcon: suffixIcon,
         errorText: errorText, // <--- 2. Передаем ошибку в декоратор
-        contentPadding: innerPadding ?? const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        contentPadding:
+            innerPadding ??
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         border: borderStyle,
         enabledBorder: borderStyle,
         focusedBorder: borderStyle.copyWith(
           borderSide: BorderSide(
-            color: errorText != null ? theme.colorScheme.error : theme.colorScheme.primary,
+            color: errorText != null
+                ? theme.colorScheme.error
+                : theme.colorScheme.primary,
             width: borderWidth + 0.5,
           ),
         ),
@@ -87,10 +92,7 @@ class AppInput extends StatelessWidget {
     );
 
     if (width != null) {
-      return SizedBox(
-        width: width,
-        child: inputField,
-      );
+      return SizedBox(width: width, child: inputField);
     }
 
     return inputField;

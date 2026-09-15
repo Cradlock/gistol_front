@@ -78,7 +78,24 @@
 
   "tasks": {
     "title": "Задачи",
-    "empty": "Задач пока нет"
+    "empty": "Нет доступных неотвеченных задач",
+    "question": "Задание",
+    "your_answer": "Ваш ответ",
+    "answer_placeholder": "Напишите ответ",
+    "answer_sent": "Ответ отправлен",
+    "already_answered": "Вы уже ответили на эту задачу",
+    "unavailable": "Задача недоступна или срок ответа истёк",
+    "request_error": "Не удалось загрузить задачи",
+    "urgency_critical": "Критично",
+    "urgency_urgent": "Срочно",
+    "urgency_soon": "Скоро",
+    "urgency_normal": "Есть время",
+    "minutes_left": "Осталось {} мин.",
+    "hours_left": "Осталось {} ч.",
+    "days_left": "Осталось {} дн.",
+    "status_pending": "На проверке",
+    "status_positive": "Зачтено",
+    "status_negative": "Отклонено"
   },
 
   "exams": {

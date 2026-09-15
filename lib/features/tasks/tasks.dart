@@ -1,2 +1,9 @@
-
+export 'domain/errors.dart';
+export 'domain/task.dart';
 export 'screens/tasks_screen.dart';
+export 'services/tasks_service.dart';
+export 'view/provider.dart';
+export 'view/widgets/task_answer_sheet.dart';
+export 'view/widgets/task_history_sheet.dart';
+export 'view/widgets/task_tile.dart';
+export 'view/widgets/tasks_list.dart';
