@@ -17,9 +17,15 @@ class TelegramAuthBtn extends StatelessWidget {
    
     try{ 
       await authProvider.signWithTelegram(context);
-
-    } on AppException catch(error) {
-      ErrorHandler.handle(error);
+    } on AppException catch (error) {
+      if (!context.mounted) return;
+      ErrorHandler.handle(error, context: context);
+    } catch (error) {
+      if (!context.mounted) return;
+      ErrorHandler.handle(
+        TelegramInternalException(error.toString()),
+        context: context,
+      );
     }
 
   }

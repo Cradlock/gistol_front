@@ -15,15 +15,21 @@ class TelegramAuthResponse {
   });
 
   factory TelegramAuthResponse.converter(dynamic data){
-    final map = data as Map<String,dynamic>;
-    
+    if (data is! Map) {
+      throw const FormatException('Telegram auth payload must be an object');
+    }
+    final map = Map<String, dynamic>.from(data);
+    final userPayload = map['user'];
+    if (userPayload == null) {
+      throw const FormatException('Telegram auth response is missing user');
+    }
 
     return TelegramAuthResponse(
-      tokens: RefreshResponse(
-        access_token: map["access_token"], 
-        refresh_token: map["refresh_token"]
-      ),
-      user: User.converter(map['user'])
+      tokens: RefreshResponse.converter({
+        'access_token': map['access_token'],
+        'refresh_token': map['refresh_token'],
+      }),
+      user: User.converter(userPayload),
     );
   }
 

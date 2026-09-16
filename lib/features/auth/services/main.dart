@@ -30,13 +30,23 @@ class AuthService {
 
     TelegramAuthRequest data = TelegramAuthRequest(idToken: idToken);
     
-    final res = await _api.post<TelegramAuthResponse>("auth/telegram",data: data, converter: TelegramAuthResponse.converter);
-    
-    if(res.statusCode == 400 || res.statusCode == 401){
-      throw InvalidTelegramTokens();  
+    final res = await _api.post<TelegramAuthResponse>(
+      "auth/telegram",
+      data: data,
+      converter: TelegramAuthResponse.converter,
+    );
+
+    if (res.statusCode == 400 || res.statusCode == 401) {
+      throw InvalidTelegramTokens();
     }
-    if(res.statusCode == 403){
-      throw AccountWasDeleted(); 
+    if (res.statusCode == 403) {
+      throw AccountWasDeleted();
+    }
+    if (res.statusCode == 409) {
+      throw TelegramInternalException(res.errorMessage);
+    }
+    if (!res.isSuccess || res.data == null) {
+      throw TelegramInternalException(res.errorMessage);
     }
 
     return res;
@@ -73,6 +83,9 @@ class AuthService {
     );
 
       if (response.statusCode == 400 || response.statusCode == 422) {
+        throw InvalidProfileDataException();
+      }
+      if (!response.isSuccess || response.data == null) {
         throw InvalidProfileDataException();
       }
 

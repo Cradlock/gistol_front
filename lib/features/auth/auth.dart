@@ -2,6 +2,7 @@
 
 export 'domain/user.dart';
 export 'domain/user_data.dart';
+export 'domain/errors.dart';
 
 export 'screens/login_screen.dart';
 

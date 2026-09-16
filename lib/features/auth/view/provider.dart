@@ -30,11 +30,12 @@ class AuthProvider extends ChangeNotifier{
     final user = _user;
     if (user == null) return false;
 
-    return user.year != null && user.name != null && 
-         user.name!.isNotEmpty &&
-         user.surname != null &&
-         user.surname!.isNotEmpty &&
-         user.group != null;
+    return user.year != null &&
+        user.name != null &&
+        user.name!.isNotEmpty &&
+        user.surname != null &&
+        user.surname!.isNotEmpty &&
+        user.groupId != null;
   }
   
 
@@ -48,26 +49,39 @@ class AuthProvider extends ChangeNotifier{
   Future<void> signWithTelegram(BuildContext context) async {
     _isLoading = true;
     notifyListeners();
-    try{ 
-    final response = await _service.loginWithTelegram(context);
-    final tokens = response.data!.tokens;
-    await saveTokens(tokens.access_token, tokens.refresh_token);
-    
-    _user = response.data!.user;
+    try {
+      final response = await _service.loginWithTelegram(context);
+      if (!response.isSuccess || response.data == null) {
+        throw TelegramInternalException(response.errorMessage);
+      }
+      final tokens = response.data!.tokens;
+      await saveTokens(tokens.access_token, tokens.refresh_token);
+      _user = response.data!.user;
+    } on AppException {
+      rethrow;
+    } catch (error, stackTrace) {
+      debugPrint('Telegram login failed: $error\n$stackTrace');
+      throw TelegramInternalException(error.toString());
     } finally {
-    _isLoading = false;
-    notifyListeners();
+      _isLoading = false;
+      notifyListeners();
     }
   }
   
 
   Future<List<int>> initDataComplete() async {
       final result = await _service.getYears();
+      if (!result.isSuccess || result.data == null) {
+        throw InvalidProfileDataException();
+      }
       return result.data!.years;
   } 
   
   Future<List<Group>?> getGroups(int year) async { 
       final result = await _service.getGroups(year);
+      if (!result.isSuccess || result.data == null) {
+        throw InvalidProfileDataException();
+      }
       return result.data!.groups;
   }
 
@@ -97,17 +111,22 @@ class AuthProvider extends ChangeNotifier{
   }
 
   Future<void> completeProfile(UserCompleteRequest data) async {
-  _isLoading = true;
-  notifyListeners(); // 1. GoRouter узнает о старте загрузки
+    _isLoading = true;
+    notifyListeners();
 
-  try {
-    final response = await _service.completeStudent(data);
-    _user = response.data; // 2. Теперь _user заполнена (isComplete() вернет true)
-  } finally {
-    _isLoading = false;
-    notifyListeners(); // 3. GoRouter повторно вызывает redirect!
+    try {
+      final response = await _service.completeStudent(data);
+      if (!response.isSuccess || response.data == null) {
+        throw InvalidProfileDataException();
+      }
+      _user = response.data;
+    } on AppException {
+      rethrow;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
-}
   AuthProvider(){}
 
 

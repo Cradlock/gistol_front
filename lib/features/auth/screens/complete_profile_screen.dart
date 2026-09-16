@@ -56,7 +56,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
         });
       }
     } on AppException catch (e) {
-      ErrorHandler.handle(e);
+      if (mounted) ErrorHandler.handle(e, context: context);
     }
   }
 
@@ -85,7 +85,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
         }
       }
     } on AppException catch (e) {
-      ErrorHandler.handle(e);
+      if (mounted) ErrorHandler.handle(e, context: context);
     } finally {
       if (mounted) {
         setState(() {
@@ -143,7 +143,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
       // При использовании GoRouter с подпиской на AuthProvider,
       // редирект на /profile произойдёт автоматически из-за обновления состояния пользователя.
     } on AppException catch (e) {
-      ErrorHandler.handle(e);
+      if (mounted) ErrorHandler.handle(e, context: context);
     } finally {
       if (mounted) {
         setState(() {
