@@ -78,6 +78,7 @@ class AuthStrings {
   String get error_invalid_profile_data => _k("error_invalid_profile_data");
   String get error_session_expired => _k("error_session_expired");
   String get not_confirmed_account => _k("not_confirmed_account");
+  String get not_confirmed_pages_blocked => _k("not_confirmed_pages_blocked");
 
   String get name_label => _k("name_label");
   String get surname_label => _k("surname_label");

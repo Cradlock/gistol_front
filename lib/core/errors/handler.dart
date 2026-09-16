@@ -9,6 +9,7 @@ import 'package:app_front/entry/app_router.dart';
 import 'package:provider/provider.dart';
 
 import './domain.dart';
+import 'package:app_front/core/strings.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
@@ -48,13 +49,27 @@ class ErrorHandler {
 
                     break;
                   case ExceptDisplayType.toast:
-                    ScaffoldMessenger.of(targetContext) 
+                    final media = MediaQuery.of(targetContext);
+                    final pinTop = error.localKey ==
+                        AppStrings.auth.not_confirmed_pages_blocked;
+                    final snackHeight = 96.0;
+                    ScaffoldMessenger.of(targetContext)
                       ..hideCurrentSnackBar()
                       ..showSnackBar(
                         SnackBar(
                           elevation: 4,
                           behavior: SnackBarBehavior.floating,
-                          margin: const EdgeInsets.all(16),
+                          dismissDirection: pinTop
+                              ? DismissDirection.up
+                              : DismissDirection.down,
+                          margin: pinTop
+                              ? EdgeInsets.fromLTRB(
+                                  16,
+                                  media.padding.top + 8,
+                                  16,
+                                  media.size.height - media.padding.top - snackHeight - 24,
+                                )
+                              : const EdgeInsets.all(16),
                           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),

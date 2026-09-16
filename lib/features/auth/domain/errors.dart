@@ -202,14 +202,13 @@ class UnauthenticatedException extends AppException {
         );
 }
 
-/// Не потвержденный аккаунт
+/// Не подтверждённый аккаунт
 class NotConfirmedAccount extends AppException {
-  NotConfirmedAccount() 
-    : super(
-      displayType: ExceptDisplayType.toast,
-      localKey: AppStrings.auth.not_confirmed_account 
-    );
-
+  NotConfirmedAccount()
+      : super(
+          displayType: ExceptDisplayType.toast,
+          localKey: AppStrings.auth.not_confirmed_pages_blocked,
+        );
 }
 
 /// Аккаунт был удален 

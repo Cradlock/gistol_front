@@ -18,10 +18,12 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 class AuthProvider extends ChangeNotifier{
   User? _user = null;
   AppException? currentError;
-  bool _isLoading = false; 
+  bool _isLoading = false;
+  DateTime? _notConfirmedToastAt; 
 
   bool get isLoading => _isLoading;
   bool get isLogged => _user != null;
+  bool get isConfirmed => _user?.confirmed == true;
   User? get user => _user;
   
   final AuthService _service = AuthService();
@@ -107,7 +109,19 @@ class AuthProvider extends ChangeNotifier{
     await prefs.remove('refresh_token');
     _user = null;
     currentError = null;
+    _notConfirmedToastAt = null;
     notifyListeners();
+  }
+
+  void warnNotConfirmed() {
+    if (isConfirmed) return;
+    final now = DateTime.now();
+    final last = _notConfirmedToastAt;
+    if (last != null && now.difference(last) < const Duration(seconds: 2)) {
+      return;
+    }
+    _notConfirmedToastAt = now;
+    ErrorHandler.handle(NotConfirmedAccount());
   }
 
   Future<void> completeProfile(UserCompleteRequest data) async {
