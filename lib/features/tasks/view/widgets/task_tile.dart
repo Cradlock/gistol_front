@@ -86,6 +86,13 @@ class TaskTile extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(task.content, maxLines: 3, overflow: TextOverflow.ellipsis),
+              if (task.groupTitles.isNotEmpty) ...[
+                const SizedBox(height: 8),
+                Text(
+                  '${AppStrings.profile.group.tr()}: ${task.groupsLabel}',
+                  style: theme.textTheme.bodySmall,
+                ),
+              ],
               const SizedBox(height: 12),
               Row(
                 children: [

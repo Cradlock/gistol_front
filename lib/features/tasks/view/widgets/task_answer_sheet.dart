@@ -75,6 +75,13 @@ class _TaskAnswerSheetState extends State<TaskAnswerSheet> {
             ),
             const SizedBox(height: 12),
             Text(widget.task.content),
+            if (widget.task.groupTitles.isNotEmpty) ...[
+              const SizedBox(height: 12),
+              Text(
+                '${AppStrings.profile.group.tr()}: ${widget.task.groupsLabel}',
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+            ],
             const SizedBox(height: 20),
             AppInput(
               controller: _controller,

@@ -20,7 +20,8 @@ class StudentTask {
   final int id;
   final String title;
   final String content;
-  final int groupId;
+  final List<int> groupIds;
+  final List<String> groupTitles;
   final DateTime startAt;
   final DateTime endAt;
   final int points;
@@ -29,7 +30,8 @@ class StudentTask {
     required this.id,
     required this.title,
     required this.content,
-    required this.groupId,
+    required this.groupIds,
+    required this.groupTitles,
     required this.startAt,
     required this.endAt,
     required this.points,
@@ -37,16 +39,35 @@ class StudentTask {
 
   factory StudentTask.converter(dynamic raw) {
     final json = raw as Map<String, dynamic>;
+    final groups = json['groups'] as List<dynamic>? ?? const [];
+    final titles = groups
+        .map((item) {
+          if (item is Map<String, dynamic>) {
+            return (item['title'] as String?)?.trim() ?? '';
+          }
+          return '';
+        })
+        .where((title) => title.isNotEmpty)
+        .toList();
+    final rawIds = json['group_ids'] as List<dynamic>?;
+    final groupIds = rawIds != null
+        ? rawIds.map((item) => (item as num).toInt()).toList()
+        : [
+            if (json['group_id'] is num) (json['group_id'] as num).toInt(),
+          ];
     return StudentTask(
       id: json['id'] as int,
       title: json['title'] as String,
       content: json['content'] as String,
-      groupId: json['group_id'] as int,
+      groupIds: groupIds,
+      groupTitles: titles,
       startAt: DateTime.parse(json['start_at'] as String),
       endAt: DateTime.parse(json['end_at'] as String),
       points: json['points'] as int,
     );
   }
+
+  String get groupsLabel => groupTitles.join(', ');
 }
 
 class StudentTaskListResponse {
