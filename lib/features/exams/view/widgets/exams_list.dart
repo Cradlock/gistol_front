@@ -38,9 +38,10 @@ class _ExamsListState extends State<ExamsList> {
 
   Future<void> _open(ExamSummary exam) async {
     final provider = context.read<ExamsProvider>();
+    if (provider.openingExamId != null) return;
     try {
       final take = await provider.openExam(exam);
-      if (!mounted) return;
+      if (take == null || !mounted) return;
       await showExamTakeSheet(context, take);
     } on Exception catch (error) {
       if (mounted) ErrorHandler.handle(error, context: context);
@@ -73,8 +74,12 @@ class _ExamsListState extends State<ExamsList> {
       );
     }
 
+    final openingId = provider.openingExamId;
+
     return RefreshIndicator(
-      onRefresh: () => provider.fetchExams(refresh: true),
+      onRefresh: openingId == null
+          ? () => provider.fetchExams(refresh: true)
+          : () async {},
       child: ListView.separated(
         controller: _controller,
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
@@ -88,7 +93,11 @@ class _ExamsListState extends State<ExamsList> {
             );
           }
           final exam = provider.exams[index];
-          return ExamTile(exam: exam, onOpen: () => _open(exam));
+          return ExamTile(
+            exam: exam,
+            loading: openingId == exam.id,
+            onOpen: openingId == null ? () => _open(exam) : null,
+          );
         },
       ),
     );

@@ -13,7 +13,7 @@ class ExamsProvider extends ChangeNotifier {
   SessionTake? currentTake;
 
   bool isExamsLoading = false;
-  bool isOpening = false;
+  int? openingExamId;
   bool isSaving = false;
   bool isSubmitting = false;
   bool isHistoryLoading = false;
@@ -47,16 +47,13 @@ class ExamsProvider extends ChangeNotifier {
     }
   }
 
-  Future<SessionTake> openExam(ExamSummary exam) async {
+  Future<SessionTake?> openExam(ExamSummary exam) async {
+    if (openingExamId != null) return null;
     if (!exam.hasStarted) {
       throw ExamNotStartedException();
     }
-    if (isOpening) {
-      final current = currentTake;
-      if (current != null && current.examId == exam.id) return current;
-    }
 
-    isOpening = true;
+    openingExamId = exam.id;
     notifyListeners();
     try {
       final started = (await _service.startExam(exam.id)).data!;
@@ -67,7 +64,7 @@ class ExamsProvider extends ChangeNotifier {
       exams.removeWhere((item) => item.id == exam.id);
       rethrow;
     } finally {
-      isOpening = false;
+      openingExamId = null;
       notifyListeners();
     }
   }
