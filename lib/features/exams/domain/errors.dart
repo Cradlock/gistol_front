@@ -24,3 +24,11 @@ class ExamUnavailableException extends AppException {
         localKey: AppStrings.exams.unavailable,
       );
 }
+
+class ExamNotStartedException extends AppException {
+  ExamNotStartedException()
+    : super(
+        displayType: ExceptDisplayType.toast,
+        localKey: AppStrings.exams.notStarted,
+      );
+}

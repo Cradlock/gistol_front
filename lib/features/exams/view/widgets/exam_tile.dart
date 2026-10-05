@@ -9,30 +9,19 @@ class ExamTile extends StatelessWidget {
 
   const ExamTile({super.key, required this.exam, required this.onOpen});
 
-  String _remainingText() {
-    final left = exam.deadline.difference(DateTime.now());
-    if (left.isNegative) {
-      return AppStrings.tasks.minutesLeft.tr(args: ['0']);
+  String _scheduleText() {
+    final start = DateFormat('dd.MM.yyyy HH:mm').format(exam.startAt.toLocal());
+    if (!exam.hasStarted) {
+      return AppStrings.exams.startsAt.tr(args: [start]);
     }
-    if (left.inMinutes < 60) {
-      return AppStrings.tasks.minutesLeft.tr(args: ['${left.inMinutes}']);
-    }
-    if (left.inHours < 48) {
-      return AppStrings.tasks.hoursLeft.tr(args: ['${left.inHours}']);
-    }
-    return AppStrings.tasks.daysLeft.tr(args: ['${left.inDays}']);
+    return start;
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colors = theme.colorScheme;
-    final left = exam.deadline.difference(DateTime.now());
-    final color = left <= const Duration(hours: 1)
-        ? colors.error
-        : left <= const Duration(days: 1)
-        ? colors.tertiary
-        : colors.primary;
+    final color = exam.hasStarted ? colors.primary : colors.tertiary;
 
     return Card(
       elevation: 0,
@@ -60,8 +49,7 @@ class ExamTile extends StatelessWidget {
                   const SizedBox(width: 6),
                   Expanded(
                     child: Text(
-                      '${_remainingText()} · '
-                      '${DateFormat('dd.MM.yyyy HH:mm').format(exam.deadline.toLocal())}',
+                      _scheduleText(),
                       style: theme.textTheme.bodySmall,
                     ),
                   ),

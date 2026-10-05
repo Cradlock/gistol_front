@@ -44,6 +44,8 @@ class ExamSummary {
   final int durationMinutes;
   final DateTime deadline;
 
+  bool get hasStarted => !startAt.isAfter(DateTime.now());
+
   factory ExamSummary.converter(dynamic raw) {
     final json = raw as Map<String, dynamic>;
     return ExamSummary(
@@ -82,10 +84,7 @@ class StudentChoice {
 
   factory StudentChoice.converter(dynamic raw) {
     final json = raw as Map<String, dynamic>;
-    return StudentChoice(
-      id: json['id'] as int,
-      text: json['text'] as String,
-    );
+    return StudentChoice(id: json['id'] as int, text: json['text'] as String);
   }
 }
 
@@ -122,7 +121,11 @@ class StudentQuestion {
 }
 
 class StudentSavedAnswer {
-  const StudentSavedAnswer({required this.questionId, this.choiceId, this.text});
+  const StudentSavedAnswer({
+    required this.questionId,
+    this.choiceId,
+    this.text,
+  });
 
   final int questionId;
   final int? choiceId;

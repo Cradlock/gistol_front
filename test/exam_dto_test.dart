@@ -2,6 +2,28 @@ import 'package:app_front/features/exams/domain/exam.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  test('exam summary is upcoming until start_at', () {
+    final upcoming = ExamSummary(
+      id: 1,
+      title: 'Midterm',
+      theme: 'Algebra',
+      startAt: DateTime.now().add(const Duration(hours: 1)),
+      durationMinutes: 60,
+      deadline: DateTime.now().add(const Duration(hours: 2)),
+    );
+    final started = ExamSummary(
+      id: 2,
+      title: 'Quiz',
+      theme: 'Algebra',
+      startAt: DateTime.now().subtract(const Duration(minutes: 5)),
+      durationMinutes: 60,
+      deadline: DateTime.now().add(const Duration(minutes: 55)),
+    );
+
+    expect(upcoming.hasStarted, isFalse);
+    expect(started.hasStarted, isTrue);
+  });
+
   test('choice answer upsert sends only choice_id', () {
     const request = AnswerUpsertRequest(choiceId: 11);
 

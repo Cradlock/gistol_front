@@ -112,6 +112,8 @@
     "unavailable": "The exam is unavailable or its time is up",
     "request_error": "Unable to load exams",
     "duration_minutes": "{} min.",
+    "starts_at": "Starts at {}",
+    "not_started": "The exam has not started yet",
     "submit_confirm": "Submit the exam? You will not be able to change answers afterwards.",
     "saving": "Saving…",
     "no_answer": "No answer",

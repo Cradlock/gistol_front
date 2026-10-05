@@ -110,6 +110,8 @@ class ExamString {
   String get unavailable => _k("unavailable");
   String get requestError => _k("request_error");
   String get durationMinutes => _k("duration_minutes");
+  String get startsAt => _k("starts_at");
+  String get notStarted => _k("not_started");
   String get submitConfirm => _k("submit_confirm");
   String get saving => _k("saving");
   String get noAnswer => _k("no_answer");

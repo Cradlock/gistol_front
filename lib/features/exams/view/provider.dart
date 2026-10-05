@@ -48,6 +48,9 @@ class ExamsProvider extends ChangeNotifier {
   }
 
   Future<SessionTake> openExam(ExamSummary exam) async {
+    if (!exam.hasStarted) {
+      throw ExamNotStartedException();
+    }
     if (isOpening) {
       final current = currentTake;
       if (current != null && current.examId == exam.id) return current;
