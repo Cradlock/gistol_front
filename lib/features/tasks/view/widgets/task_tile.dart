@@ -1,5 +1,6 @@
 import 'package:app_front/core/strings.dart';
 import 'package:app_front/features/tasks/domain/task.dart';
+import 'package:app_front/features/tasks/view/widgets/locked_task_text.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
@@ -59,7 +60,7 @@ class TaskTile extends StatelessWidget {
               Row(
                 children: [
                   Expanded(
-                    child: Text(
+                    child: LockedTaskText(
                       task.title,
                       style: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w600,
@@ -85,7 +86,11 @@ class TaskTile extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 8),
-              Text(task.content, maxLines: 3, overflow: TextOverflow.ellipsis),
+              LockedTaskText(
+                task.content,
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
+              ),
               if (task.groupTitles.isNotEmpty) ...[
                 const SizedBox(height: 8),
                 Text(

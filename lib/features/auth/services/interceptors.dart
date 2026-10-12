@@ -6,6 +6,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthInterceptor extends Interceptor {
+  static AuthInterceptor? _active;
+
   AuthInterceptor()
     : _refreshDio = Dio(
         BaseOptions(
@@ -17,9 +19,18 @@ class AuthInterceptor extends Interceptor {
             'Accept': 'application/json',
           },
         ),
-      );
+      ) {
+    _active = this;
+  }
 
   final Dio _refreshDio;
+
+  static Future<bool> refreshStoredSession() {
+    final active = _active;
+    if (active == null) return Future.value(false);
+    return active._refreshStoredSession();
+  }
+
   Future<String>? _ongoingRefresh;
 
   @override
@@ -30,7 +41,8 @@ class AuthInterceptor extends Interceptor {
     final prefs = await SharedPreferences.getInstance();
     final accessToken = prefs.getString('access_token');
 
-    if (accessToken != null && accessToken.isNotEmpty) {
+    final isRefresh = _isRefreshCall(options);
+    if (!isRefresh && accessToken != null && accessToken.isNotEmpty) {
       options.headers['Authorization'] = 'Bearer $accessToken';
     }
 
@@ -65,6 +77,20 @@ class AuthInterceptor extends Interceptor {
 
   bool _isRefreshCall(RequestOptions options) =>
       options.path.contains('auth/refresh');
+
+  Future<bool> _refreshStoredSession() async {
+    final prefs = await SharedPreferences.getInstance();
+    final refreshToken = prefs.getString('refresh_token');
+    if (refreshToken == null || refreshToken.isEmpty) return false;
+
+    try {
+      await _queuedRefresh();
+      return true;
+    } on _RefreshAuthFailure {
+      await _handleLogout();
+      return false;
+    }
+  }
 
   Future<String> _queuedRefresh() {
     final existing = _ongoingRefresh;

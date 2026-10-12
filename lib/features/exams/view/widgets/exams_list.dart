@@ -96,7 +96,9 @@ class _ExamsListState extends State<ExamsList> {
           return ExamTile(
             exam: exam,
             loading: openingId == exam.id,
-            onOpen: openingId == null ? () => _open(exam) : null,
+            onOpen: openingId == null && exam.hasStarted
+                ? () => _open(exam)
+                : null,
           );
         },
       ),

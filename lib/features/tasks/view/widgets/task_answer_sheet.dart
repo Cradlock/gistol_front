@@ -1,7 +1,9 @@
 import 'package:app_front/core/core.dart';
 import 'package:app_front/core/strings.dart';
 import 'package:app_front/features/tasks/domain/task.dart';
+import 'package:app_front/features/tasks/domain/task_paste_guard.dart';
 import 'package:app_front/features/tasks/view/provider.dart';
+import 'package:app_front/features/tasks/view/widgets/locked_task_text.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -69,12 +71,12 @@ class _TaskAnswerSheetState extends State<TaskAnswerSheet> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            LockedTaskText(
               widget.task.title,
               style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(height: 12),
-            Text(widget.task.content),
+            LockedTaskText(widget.task.content),
             if (widget.task.groupTitles.isNotEmpty) ...[
               const SizedBox(height: 12),
               Text(
@@ -88,7 +90,13 @@ class _TaskAnswerSheetState extends State<TaskAnswerSheet> {
               placeholder: AppStrings.tasks.answerPlaceholder.tr(),
               errorText: _error,
               maxLines: 5,
-              formatters: [LengthLimitingTextInputFormatter(255)],
+              formatters: [
+                TaskTextPasteGuard(
+                  title: widget.task.title,
+                  content: widget.task.content,
+                ),
+                LengthLimitingTextInputFormatter(255),
+              ],
               onChanged: (_) {
                 if (_error != null) setState(() => _error = null);
               },

@@ -1,5 +1,6 @@
 import 'package:app_front/core/strings.dart';
 import 'package:app_front/features/tasks/domain/task.dart';
+import 'package:app_front/features/tasks/view/widgets/locked_task_text.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
@@ -32,7 +33,7 @@ class TaskHistoryTile extends StatelessWidget {
       color: colors.surfaceContainerLow,
       clipBehavior: Clip.antiAlias,
       child: ExpansionTile(
-        title: Text(item.taskTitle),
+        title: LockedTaskText(item.taskTitle),
         subtitle: Text(
           '${DateFormat('dd.MM.yyyy HH:mm').format(item.submittedAt.toLocal())}'
           ' · $label',
@@ -46,7 +47,10 @@ class TaskHistoryTile extends StatelessWidget {
             style: theme.textTheme.labelLarge,
           ),
           const SizedBox(height: 4),
-          Align(alignment: Alignment.centerLeft, child: Text(item.taskContent)),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: LockedTaskText(item.taskContent),
+          ),
           const SizedBox(height: 12),
           Text(
             AppStrings.tasks.yourAnswer.tr(),

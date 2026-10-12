@@ -1,5 +1,5 @@
-
 import 'package:app_front/core/core.dart';
+import 'package:app_front/core/errors/common.dart';
 import 'package:app_front/entry/entry.dart';
 import 'package:app_front/features/auth/auth.dart';
 import 'package:app_front/features/auth/domain/errors.dart';
@@ -13,21 +13,19 @@ import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-
-
-class AuthProvider extends ChangeNotifier{
+class AuthProvider extends ChangeNotifier {
   User? _user = null;
   AppException? currentError;
   bool _isLoading = false;
-  DateTime? _notConfirmedToastAt; 
+  DateTime? _notConfirmedToastAt;
 
   bool get isLoading => _isLoading;
   bool get isLogged => _user != null;
   bool get isConfirmed => _user?.confirmed == true;
   User? get user => _user;
-  
+
   final AuthService _service = AuthService();
-  
+
   bool isComplete() {
     final user = _user;
     if (user == null) return false;
@@ -39,14 +37,12 @@ class AuthProvider extends ChangeNotifier{
         user.surname!.isNotEmpty &&
         user.groupId != null;
   }
-  
 
-  Future<void> saveTokens(String access,String refresh) async {
+  Future<void> saveTokens(String access, String refresh) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('access_token', access);
     await prefs.setString('refresh_token', refresh);
-  } 
-  
+  }
 
   Future<void> signWithTelegram(BuildContext context) async {
     _isLoading = true;
@@ -69,40 +65,71 @@ class AuthProvider extends ChangeNotifier{
       notifyListeners();
     }
   }
-  
 
   Future<List<int>> initDataComplete() async {
-      final result = await _service.getYears();
-      if (!result.isSuccess || result.data == null) {
-        throw InvalidProfileDataException();
-      }
-      return result.data!.years;
-  } 
-  
-  Future<List<Group>?> getGroups(int year) async { 
-      final result = await _service.getGroups(year);
-      if (!result.isSuccess || result.data == null) {
-        throw InvalidProfileDataException();
-      }
-      return result.data!.groups;
+    final result = await _service.getYears();
+    if (!result.isSuccess || result.data == null) {
+      throw InvalidProfileDataException();
+    }
+    return result.data!.years;
   }
 
+  Future<List<Group>?> getGroups(int year) async {
+    final result = await _service.getGroups(year);
+    if (!result.isSuccess || result.data == null) {
+      throw InvalidProfileDataException();
+    }
+    return result.data!.groups;
+  }
 
   Future<void> checkLoginStatus() async {
-      _isLoading = true;
-      notifyListeners();
-      try{
+    _isLoading = true;
+    notifyListeners();
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final refreshToken = prefs.getString('refresh_token');
+      final accessToken = prefs.getString('access_token');
+      final hasRefresh = refreshToken != null && refreshToken.isNotEmpty;
+      final hasAccess = accessToken != null && accessToken.isNotEmpty;
+
+      if (!hasRefresh && !hasAccess) {
+        _user = null;
+        return;
+      }
+
+      if (hasRefresh) {
+        final refreshed = await AuthInterceptor.refreshStoredSession();
+        if (!refreshed) {
+          _user = null;
+          return;
+        }
+      }
+
       final response = await _service.me();
+      if (!response.isSuccess || response.data == null) {
+        _user = null;
+        return;
+      }
       _user = response.data;
-      } catch (e) {
-        rethrow;
-      } finally {
+    } on UnauthenticatedException {
+      _user = null;
+    } on DioException catch (error) {
+      _user = null;
+      if (error.type == DioExceptionType.connectionError) {
+        throw NoInternetException();
+      }
+      if (error.type == DioExceptionType.connectionTimeout ||
+          error.type == DioExceptionType.sendTimeout ||
+          error.type == DioExceptionType.receiveTimeout) {
+        throw TimeoutException();
+      }
+      throw ServerException();
+    } finally {
       _isLoading = false;
       notifyListeners();
-      }
+    }
   }
-  
-  
+
   Future<void> logout() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('access_token');
@@ -141,8 +168,6 @@ class AuthProvider extends ChangeNotifier{
       notifyListeners();
     }
   }
-  AuthProvider(){}
 
-
+  AuthProvider() {}
 }
-
