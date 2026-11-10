@@ -20,7 +20,7 @@ jobs:
       - run: flutter pub get
       - run: flutter analyze
       - run: flutter test
-      - run: flutter build web --release --base-href "/имя-репозитория/"
+      - run: flutter build web --release --base-href "/gistol_front/"
       - uses: actions/upload-pages-artifact@v3
         with:
           path: build/web
