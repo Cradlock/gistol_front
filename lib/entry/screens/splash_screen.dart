@@ -1,4 +1,5 @@
 import 'package:app_front/core/core.dart';
+import 'package:app_front/core/strings.dart';
 import 'package:app_front/core/widgets/app_btn.dart';
 import 'package:app_front/core/widgets/app_icon.dart';
 import 'package:app_front/features/auth/auth.dart';
