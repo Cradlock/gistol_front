@@ -22,18 +22,32 @@ class AuthRedirect {
 const _publicRoutes = {'/service', '/policy'};
 const _unconfirmedAllowedRoutes = {'/profile', '/settings'};
 
+/// Решает, куда направить пользователя в зависимости от состояния сессии.
+///
+/// [isInitialized] — стартовая проверка токенов уже завершилась. Пока она не
+/// закончилась, «не вошёл» и «ещё не проверили» неразличимы, поэтому нельзя
+/// отправлять на /login: пользователь остаётся на splash (`/`), где и идёт
+/// проверка. Дальше, когда состояние известно, он попадает на логин, в анкету
+/// или в профиль.
 AuthRedirect resolveAuthRedirect({
+  required bool isInitialized,
   required bool isLoading,
   required bool isLoggedIn,
   required bool isProfileComplete,
   required bool isConfirmed,
   required String location,
 }) {
+  final isPublicRoute = _publicRoutes.contains(location);
+
+  if (!isInitialized) {
+    if (location == '/' || isPublicRoute) return const AuthRedirect(null);
+    return const AuthRedirect('/');
+  }
+
   if (isLoading) return const AuthRedirect(null);
 
   final isLoggingIn = location == '/login';
   final isCompletingProfile = location == '/complete';
-  final isPublicRoute = _publicRoutes.contains(location);
 
   if (!isLoggedIn) {
     if (!isLoggingIn && !isPublicRoute) {
@@ -86,7 +100,7 @@ class AppRouter {
       debugLogDiagnostics: true,
       refreshListenable: authProvider,
       routes: [
-        GoRoute(path: '/', builder: (context, state) => SplashScreen()),
+        GoRoute(path: '/', builder: (context, state) => const SplashScreen()),
         ShellRoute(
           builder: (context, state, child) => Mainlayout(child: child),
           routes: [
@@ -103,6 +117,7 @@ class AppRouter {
       ],
       redirect: (BuildContext context, GoRouterState state) {
         final result = resolveAuthRedirect(
+          isInitialized: authProvider.isInitialized,
           isLoading: authProvider.isLoading,
           isLoggedIn: authProvider.isLogged,
           isProfileComplete: authProvider.isComplete(),

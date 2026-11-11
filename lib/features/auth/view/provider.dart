@@ -17,9 +17,17 @@ class AuthProvider extends ChangeNotifier {
   User? _user = null;
   AppException? currentError;
   bool _isLoading = false;
+  bool _isInitialized = false;
   DateTime? _notConfirmedToastAt;
 
   bool get isLoading => _isLoading;
+
+  /// Стартовая проверка токенов завершилась и известно, есть ли сессия.
+  /// Пока `false`, «не вошёл» и «ещё не проверили» неразличимы, поэтому
+  /// роутер держит пользователя на splash и не уводит его на логин.
+  /// Остаётся `false`, если проверку сорвала сеть или сервер: тогда splash
+  /// предлагает повторить, а не выбрасывает человека с живыми токенами на логин.
+  bool get isInitialized => _isInitialized;
   bool get isLogged => _user != null;
   bool get isConfirmed => _user?.confirmed == true;
   User? get user => _user;
@@ -82,39 +90,37 @@ class AuthProvider extends ChangeNotifier {
     return result.data!.groups;
   }
 
+  /// Пользователь из сохранённых токенов или `null`, если сессии нет.
+  /// Сетевые сбои и ошибки сервера пробрасываются исключением.
+  Future<User?> _restoreSession() async {
+    final prefs = await SharedPreferences.getInstance();
+    final refreshToken = prefs.getString('refresh_token');
+    final accessToken = prefs.getString('access_token');
+    final hasRefresh = refreshToken != null && refreshToken.isNotEmpty;
+    final hasAccess = accessToken != null && accessToken.isNotEmpty;
+
+    if (!hasRefresh && !hasAccess) return null;
+
+    if (hasRefresh) {
+      final refreshed = await AuthInterceptor.refreshStoredSession();
+      if (!refreshed) return null;
+    }
+
+    final response = await _service.me();
+    if (!response.isSuccess || response.data == null) return null;
+    return response.data;
+  }
+
   Future<void> checkLoginStatus() async {
     _isLoading = true;
     notifyListeners();
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final refreshToken = prefs.getString('refresh_token');
-      final accessToken = prefs.getString('access_token');
-      final hasRefresh = refreshToken != null && refreshToken.isNotEmpty;
-      final hasAccess = accessToken != null && accessToken.isNotEmpty;
-
-      if (!hasRefresh && !hasAccess) {
-        _user = null;
-        return;
-      }
-
-      if (hasRefresh) {
-        final refreshed = await AuthInterceptor.refreshStoredSession();
-        if (!refreshed) {
-          _user = null;
-          return;
-        }
-      }
-
-      final response = await _service.me();
-      if (!response.isSuccess || response.data == null) {
-        _user = null;
-        return;
-      }
-      _user = response.data;
+      _user = await _restoreSession();
+      _isInitialized = true;
     } on UnauthenticatedException {
       _user = null;
+      _isInitialized = true;
     } on DioException catch (error) {
-      _user = null;
       if (error.type == DioExceptionType.connectionError) {
         throw NoInternetException();
       }
