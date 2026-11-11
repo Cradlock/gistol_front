@@ -1,78 +1,81 @@
-
-
-
-
 import 'package:app_front/core/core.dart';
+import 'package:app_front/core/widgets/app_btn.dart';
 import 'package:app_front/core/widgets/app_icon.dart';
 import 'package:app_front/features/auth/auth.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart'; 
+import 'package:provider/provider.dart';
 
+/// Стартовый экран. Проверяет сохранённые токены, а куда пойдёт пользователь
+/// (логин, анкета, профиль), решает роутер, как только проверка завершится:
+/// он слушает [AuthProvider] и до этого момента держит всех на `/`.
 class SplashScreen extends StatefulWidget {
-  
+  const SplashScreen({super.key});
+
   @override
-    State<SplashScreen> createState() {
-      return _SplashScreen();
-    }
+  State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreen extends State<SplashScreen>{
+class _SplashScreenState extends State<SplashScreen> {
+  bool _failed = false;
 
-@override
+  @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      init();
-    });
+    WidgetsBinding.instance.addPostFrameCallback((_) => _init());
   }
 
-Future<void> init() async {
-  final provider = context.read<AuthProvider>();  
-  
-  try{
-    await provider.checkLoginStatus();
-  } on AppException catch (error) {
-    ErrorHandler.handle(error);
+  Future<void> _init() async {
+    if (!mounted) return;
+    final provider = context.read<AuthProvider>();
+    if (_failed) setState(() => _failed = false);
+
+    try {
+      await provider.checkLoginStatus();
+    } on AppException catch (error) {
+      if (!mounted) return;
+      setState(() => _failed = true);
+      ErrorHandler.handle(error);
+    } catch (error, stackTrace) {
+      debugPrint('Startup auth check failed: $error\n$stackTrace');
+      if (mounted) setState(() => _failed = true);
+    }
   }
-}
 
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.colorScheme;
 
-@override
-Widget build(BuildContext context) {
-  final theme = Theme.of(context);
-  final colors = theme.colorScheme;
-
-  return Scaffold(
-    backgroundColor: colors.surface, 
-    body: Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          // Контейнер для логотипа, адаптирующийся под тему
-          const AppIcon(size: 120), 
-          const SizedBox(height: 32),
-          
-          // Текст названия академии, использующий шрифты из темы
-          Text(
-            "Gistology Academy",
-            style: theme.textTheme.titleLarge?.copyWith(
-              fontWeight: FontWeight.bold,
-              color: colors.onSurface, // Адаптивный цвет текста
+    return Scaffold(
+      backgroundColor: colors.surface,
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const AppIcon(size: 120),
+            const SizedBox(height: 32),
+            Text(
+              "Gistology Academy",
+              style: theme.textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: colors.onSurface,
+              ),
             ),
-          ),
-          const SizedBox(height: 24),
-          
-          // Нативный спиннер загрузки
-          CircularProgressIndicator(
-            strokeWidth: 3,
-            // Спиннер красится в главный цвет текущей темы
-            valueColor: AlwaysStoppedAnimation<Color>(colors.primary),
-          ),
-        ],
+            const SizedBox(height: 24),
+            if (_failed)
+              AppBtn(
+                text: AppStrings.common.retry.tr(),
+                onPressed: _init,
+              )
+            else
+              CircularProgressIndicator(
+                strokeWidth: 3,
+                valueColor: AlwaysStoppedAnimation<Color>(colors.primary),
+              ),
+          ],
+        ),
       ),
-    ),
-  );
-}
+    );
+  }
 }
